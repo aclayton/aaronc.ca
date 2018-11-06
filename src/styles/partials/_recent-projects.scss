@@ -1,0 +1,22 @@
+#recent-projects {
+  .projects {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+  }
+
+  .project {
+      display: grid;
+      justify-content: center;
+      align-items: center;
+
+      img {
+        width: 360px;
+      }
+
+      p {
+        text-align: center;
+        margin-top: $spacer*3
+      }
+  }
+}

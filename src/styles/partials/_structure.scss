@@ -1,0 +1,85 @@
+body,
+html,
+#app,
+#app>.row,
+#app>.row>div {
+  height: 100%;
+}
+
+#app {
+  font-family: 'Roboto', Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#nav-side-shade {
+  background-color: rgba(0,0,0,.3);
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 500;
+}
+
+#nav-side {
+  position: fixed;
+  z-index: 1000;
+  border-right: 10px solid #eeeeee;
+  background-color: rgb(250,250,250);
+  padding: 0;
+  display: grid;
+  justify-content: center;
+  align-items: center;
+
+  nav {
+    text-align: center;
+    a {
+      display: block;
+      &.router-link-exact-active {
+        font-weight: 900;
+      }
+    }
+  }
+}
+
+#page-side {
+  padding: 0;
+  * {
+    transition: all .25s ease-in-out;
+  }
+}
+
+.mobile-toggle {
+  display: block;
+  position: absolute;
+  top: 0;
+  right: 0;
+
+  .btn {
+    font-size: 36px;
+  }
+
+  .fa-icon {
+    width: 12px;
+    height: 32px;
+  }
+}
+
+#nav-side-blocker {
+  display: none;
+}
+
+// MEDIA ADJUSTMENTS
+// -------------------------------
+@include media-breakpoint-up(md) {
+  .mobile-toggle {
+    display: none;
+  }
+  #nav-side-blocker {
+    display: block;
+  }
+  #nav-side-shade {
+    display: none;
+  }
+}
