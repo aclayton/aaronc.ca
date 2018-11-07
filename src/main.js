@@ -12,6 +12,15 @@ Vue.component('icon', Icon)
 
 Vue.config.productionTip = false
 
+router.beforeEach((to, from, next) => {
+  if (window.innerWidth < 768) {
+    store.commit('UPDATE_UI_MENU', false)
+  } else {
+    store.commit('UPDATE_UI_MENU', true)
+  }
+  next();
+});
+
 new Vue({
   router,
   store,
