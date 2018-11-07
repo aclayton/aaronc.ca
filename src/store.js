@@ -14,13 +14,13 @@ export default new Vuex.Store({
     projects: [
       {
         _id: 1,
-        name: 'logo',
-        imgMain: '/img/ac.svg',
-        descShort: 'More to come...',
-        descLong: '',
-        githubLink: '',
-        projectLink: '',
-        insideLink: 'projects/ac-logo'
+        // name: 'logo',
+        // imgMain: '/img/ac.svg',
+        // descShort: 'More to come...',
+        // descLong: '',
+        // githubLink: '',
+        // projectLink: '',
+        // insideLink: 'projects/ac-logo'
       }
     ],
     ui: {
@@ -34,6 +34,11 @@ export default new Vuex.Store({
     UPDATE_UI_MENU (state, value) {
       state.ui.menuActive = value
     }
+  },
+  actions: {
+    // toggleNav(state) {
+    //
+    // }
   },
   getters: {
     projects: state => {

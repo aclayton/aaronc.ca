@@ -29,19 +29,19 @@ export default {
       'projects'
     ])
   },
-  mounted() {
-    this.$nextTick(() => {
-      window.addEventListener('resize', this.handleResize)
-      this.handleResize()
-    })
-  },
-  destroyed() {
-    window.removeEventListener('resize', this.handleResize)
-  },
-  methods: {
-    handleResize() {
-      this.portfolioItemStyle.height = `${window.innerHeight}px`;
-    }
-  }
+  // mounted() {
+  //   this.$nextTick(() => {
+  //     window.addEventListener('resize', this.handleResize)
+  //     this.handleResize()
+  //   })
+  // },
+  // destroyed() {
+  //   window.removeEventListener('resize', this.handleResize)
+  // },
+  // methods: {
+  //   handleResize() {
+  //     this.portfolioItemStyle.height = `${window.innerHeight}px`;
+  //   }
+  // }
 }
 </script>

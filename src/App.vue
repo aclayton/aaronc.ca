@@ -4,10 +4,16 @@
 
       <div :class="navClasses" id="nav-side-blocker"></div>
       <div :class="navClasses" id="nav-side">
+        <div class="nav-header">
+          <h1><strong>Aaron Clayton</strong></h1>
+          <h2>Front-end Developer</h2>
+          <p>Producing high quality responsive websites and exceptional user experience</p>
+        </div>
         <navigation></navigation>
         <b-btn variant="primary" href="/doc/aaron-clayton.pdf" target="_blank">
           <icon name="file-download" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Resumé
         </b-btn>
+        <availability />
       </div>
       <div @click="toggleNav" v-if="ui.menuActive" id="nav-side-shade"></div>
 
@@ -26,13 +32,15 @@
 
 <script>
 import Navigation from '@/components/Navigation.vue'
+import Availability from '@/components/Availability'
 import 'vue-awesome/icons/ellipsis-v'
 import 'vue-awesome/icons/file-download'
 import { mapGetters } from 'vuex'
 
 export default {
   components: {
-    Navigation
+    Navigation,
+    Availability
   },
   computed: {
     ...mapGetters([

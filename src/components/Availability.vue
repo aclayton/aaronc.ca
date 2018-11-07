@@ -1,6 +1,6 @@
 <template>
   <div id="availability">
-
+    {{ availability.msg }}
   </div>
 </template>
 
