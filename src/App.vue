@@ -2,14 +2,14 @@
   <b-container fluid id="app">
     <b-row>
 
-      <div :class="navSideClass" id="nav-side-blocker"></div>
-      <div :class="navSideClass" id="nav-side">
+      <div :class="navClasses" id="nav-side-blocker"></div>
+      <div :class="navClasses" id="nav-side">
         <navigation></navigation>
         <b-btn variant="primary" href="/doc/aaron-clayton.pdf" target="_blank">
           <icon name="file-download" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Resumé
         </b-btn>
       </div>
-      <div @click="toggleNav" v-if="menuActive" id="nav-side-shade"></div>
+      <div @click="toggleNav" v-if="ui.menuActive" id="nav-side-shade"></div>
 
       <b-col id="page-side">
         <div class="mobile-toggle" style="text-align: right;">
@@ -28,25 +28,17 @@
 import Navigation from '@/components/Navigation.vue'
 import 'vue-awesome/icons/ellipsis-v'
 import 'vue-awesome/icons/file-download'
+import { mapGetters } from 'vuex'
+
 export default {
   components: {
     Navigation
   },
-  data() {
-    return {
-      menuActive: true
-    }
-  },
   computed: {
-    navSideClass: function() {
-      if (!this.menuActive) {
-        //hide
-        return ['animated', 'slideOutLeft']
-      } else {
-        //show
-        return ['col-10', 'col-md-4', 'col-lg-4', 'animated', 'slideInLeft']
-      }
-    }
+    ...mapGetters([
+      'ui',
+      'navClasses'
+    ])
   },
   mounted() {
     this.$nextTick(() => {
@@ -60,16 +52,16 @@ export default {
   methods: {
     handleResize() {
       if (window.innerWidth < 768) {
-        this.menuActive = false
+        this.$store.commit('UPDATE_UI_MENU', false)
       } else {
-        this.menuActive = true
+        this.$store.commit('UPDATE_UI_MENU', true)
       }
     },
     toggleNav() {
-      if (this.menuActive == true) {
-        this.menuActive = false
+      if (this.ui.menuActive == true) {
+        this.$store.commit('UPDATE_UI_MENU', false)
       } else {
-        this.menuActive = true
+        this.$store.commit('UPDATE_UI_MENU', true)
       }
     }
   }
