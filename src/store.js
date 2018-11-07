@@ -35,11 +35,6 @@ export default new Vuex.Store({
       state.ui.menuActive = value
     }
   },
-  actions: {
-    // toggleNav(state) {
-    //
-    // }
-  },
   getters: {
     projects: state => {
       return state.projects

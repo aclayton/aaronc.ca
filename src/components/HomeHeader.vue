@@ -1,14 +1,23 @@
 <template>
 
   <header id="header-home" :style="homeHeaderStyle">
-    <img src="/img/ac-white.svg" />
-    <h1><strong>Aaron Clayton</strong></h1>
-    <h2>Front-end Developer</h2>
-    <p>Producing high quality responsive websites and exceptional user experience</p>
+    <div class="logo">
+      <img src="/img/ac-white.svg" />
+    </div>
+    <div class="main-msg">
+      <h1><strong>Aaron Clayton</strong></h1>
+      <h2>Front-end Developer</h2>
+      <p>Producing high quality responsive websites and exceptional user experience</p>
+    </div>
+    <b-btn variant="link">
+      view recent work<br />
+      <icon name="chevron-down" />
+    </b-btn>
   </header>
 
 </template>
 <script>
+import 'vue-awesome/icons/chevron-down'
 export default {
   name: 'HomeHeader',
 
@@ -39,10 +48,3 @@ export default {
   }
 }
 </script>
-<style scoped lang="scss">
-  #header-home {
-    background-color: #007bff;
-    padding: 0 15px;
-    color: #fff;
-  }
-</style>

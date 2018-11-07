@@ -1,0 +1,15 @@
+#header-home {
+  background-color: $primary;
+  padding: 15px;
+  color: $white;
+  text-align: center;
+  display: grid;
+  align-items: center;
+  justify-content: center;
+  img {
+    max-width: 50%;
+  }
+  .btn {
+    color: $white;
+  }
+}
