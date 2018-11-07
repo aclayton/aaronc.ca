@@ -4,11 +4,6 @@
 
       <div :class="navClasses" id="nav-side-blocker"></div>
       <div :class="navClasses" id="nav-side">
-        <div class="nav-header">
-          <h1><strong>Aaron Clayton</strong></h1>
-          <h2>Front-end Developer</h2>
-          <p>Producing high quality responsive websites and exceptional user experience</p>
-        </div>
         <navigation></navigation>
         <b-btn variant="primary" href="/doc/aaron-clayton.pdf" target="_blank">
           <icon name="file-download" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Resumé

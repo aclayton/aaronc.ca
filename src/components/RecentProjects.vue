@@ -4,9 +4,10 @@
     <ul class="projects">
       <li :style="portfolioItemStyle" v-for="project in projects" :key="project._id" class="project" :class="`project-${project._id}`">
         <div class="project-details">
-            <img style="max-width: 100%;" :src="project.imgMain" alt="" />
-            <h2 class="hide">{{ project.name }}</h2>
-            <p>{{ project.descShort}}</p>
+          <router-link :to="{ name: 'project', params: { _id: project._id }}" class="img-wrap">
+            <img :src="project.imgMain" alt="" />
+          </router-link>
+          <h2 class="hide">{{ project.name }}</h2>
         </div>
       </li>
     </ul>
@@ -19,7 +20,7 @@ export default {
   data() {
     return {
       portfolioItemStyle: {
-        height: 0,
+        height: '100%',
         overflow: 'hidden'
       }
     }
@@ -29,19 +30,19 @@ export default {
       'projects'
     ])
   },
-  // mounted() {
-  //   this.$nextTick(() => {
-  //     window.addEventListener('resize', this.handleResize)
-  //     this.handleResize()
-  //   })
-  // },
-  // destroyed() {
-  //   window.removeEventListener('resize', this.handleResize)
-  // },
-  // methods: {
-  //   handleResize() {
-  //     this.portfolioItemStyle.height = `${window.innerHeight}px`;
-  //   }
-  // }
+  mounted() {
+    this.$nextTick(() => {
+      window.addEventListener('resize', this.handleResize)
+      this.handleResize()
+    })
+  },
+  destroyed() {
+    window.removeEventListener('resize', this.handleResize)
+  },
+  methods: {
+    handleResize() {
+      this.portfolioItemStyle.height = `${window.innerHeight}px`;
+    }
+  }
 }
 </script>

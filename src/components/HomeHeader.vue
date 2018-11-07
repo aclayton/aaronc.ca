@@ -11,7 +11,7 @@
     </div>
     <b-btn variant="link">
       view recent work<br />
-      <icon name="chevron-down" />
+      <icon class="animated pulse infinite" name="chevron-down" />
     </b-btn>
   </header>
 

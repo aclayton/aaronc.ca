@@ -22,6 +22,11 @@ export default new Router({
       path: '/contact',
       name: 'contact',
       component: () => import(/* webpackChunkName: "contact" */ './views/Contact.vue')
+    },
+    {
+      path: '/project/:_id',
+      name: 'project',
+      component: () => import(/* webpackChunkName: "project" */ './views/PortfolioItem.vue')
     }
   ]
 })

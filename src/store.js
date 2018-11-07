@@ -5,7 +5,6 @@ import VuexPersistence from 'vuex-persist'
 Vue.use(Vuex)
 
 const vuexLocal = new VuexPersistence({
-  supportCircular: true,
   storage: window.localStorage
 })
 
@@ -14,13 +13,20 @@ export default new Vuex.Store({
     projects: [
       {
         _id: 1,
-        // name: 'logo',
-        // imgMain: '/img/ac.svg',
-        // descShort: 'More to come...',
-        // descLong: '',
-        // githubLink: '',
-        // projectLink: '',
-        // insideLink: 'projects/ac-logo'
+        name: 'svg-machine.com',
+        imgMain: '/img/svg-machine.png',
+        descShort: 'A little app to help make libraries of svg files, and export definition files.',
+        descLong: '',
+        githubLink: 'https://github.com/aclayton/svg-machine',
+        projectLink: 'https://www.svg-machine.com'
+      },
+      {
+        _id: 2,
+        name: 'The Logo'
+      },
+      {
+        _id: 3,
+        name: 'Nia Data Exchange'
       }
     ],
     ui: {
@@ -38,6 +44,11 @@ export default new Vuex.Store({
   getters: {
     projects: state => {
       return state.projects
+    },
+    projectById: state => {
+      return id => {
+        return state.projects.find(project => project._id === id)
+      }
     },
     ui: state => {
       return state.ui

@@ -9,14 +9,22 @@
       display: grid;
       justify-content: center;
       align-items: center;
+      text-align: center;
 
       img {
-        width: 360px;
+        max-width: 50%;
       }
 
       p {
         text-align: center;
         margin-top: $spacer*3
       }
+  }
+
+  .project-1 {
+    background-color: #181d23;
+  }
+  .project-2 {
+    background-color: $danger;
   }
 }

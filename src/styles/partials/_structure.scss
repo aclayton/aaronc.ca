@@ -46,18 +46,19 @@ html,
 #page-side {
   padding: 0;
   * {
-    transition: all .25s ease-in-out;
+    transition: all .125s ease-in-out;
   }
 }
 
 .mobile-toggle {
   display: block;
-  position: absolute;
+  position: fixed;
   top: 0;
   right: 0;
 
   .btn {
     font-size: 36px;
+    color: rgba(255,255,255,.5);
   }
 
   .fa-icon {
@@ -67,6 +68,10 @@ html,
 }
 
 #nav-side-blocker {
+  display: none;
+}
+
+.nav-header {
   display: none;
 }
 
@@ -81,5 +86,8 @@ html,
   }
   #nav-side-shade {
     display: none;
+  }
+  .nav-header {
+    display: block;
   }
 }
