@@ -5,11 +5,19 @@
       <li :style="portfolioItemStyle" v-for="project in projects" :key="project._id" class="project" :id="`project-${project._id}`">
         <div class="project-details">
           <!-- <router-link :to="{ name: 'project', params: { _id: project._id }}" class="img-wrap"> -->
-            <img :src="project.imgMain" alt="" />
-          <!-- </router-link> -->
           <h2 class="hide">{{ project.name }}</h2>
+          <img :src="project.imgMain" alt="" />
+          <div class="button-row mt-4">
+            <b-btn v-if="project.projectLink" :href="project.projectLink" target="_blank" variant="outline-secondary" size="sm">
+              <icon name="external-link-alt" /> View the Project
+            </b-btn>&nbsp;&nbsp;&nbsp;&nbsp;
+            <b-btn  v-if="project.githubLink" :href="project.githubLink" target="_blank" variant="outline-secondary" size="sm">
+              <icon name="brands/github" /> View the Code
+            </b-btn>
+          </div>
+          <!-- </router-link> -->
         </div>
-        <b-btn variant="link" v-scroll-to="project.scrollToId">
+        <b-btn variant="link" class="btn-scroll" v-scroll-to="project.scrollToId">
           {{ project.scrollToText }}<br />
           <icon v-if="project.scrollToText != 'Top'" class="animated pulse infinite" name="chevron-down" />
         </b-btn>
@@ -19,6 +27,8 @@
 </template>
 <script>
 import { mapGetters } from 'vuex'
+import 'vue-awesome/icons/brands/github'
+import 'vue-awesome/icons/external-link-alt'
 export default {
   name: 'RecentProjects',
   data() {

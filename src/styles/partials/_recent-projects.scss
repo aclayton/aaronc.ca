@@ -23,8 +23,16 @@
 
   #project-1 {
     background-color: #181d23;
+
+    .btn-scroll {
+      color: $white;
+    }
   }
   #project-2 {
     background-color: $danger;
+    
+    .btn-scroll {
+      color: $white;
+    }
   }
 }
