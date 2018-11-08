@@ -63,7 +63,7 @@ export default new Vuex.Store({
       if (!state.ui.menuActive) {
         return ['animated', 'slideOutLeft']
       } else {
-        return ['col-10', 'col-md-4', 'col-lg-4', 'animated', 'slideInLeft']
+        return ['col-10', 'col-md-4', 'col-lg-3', 'animated', 'slideInLeft']
       }
     },
     availability: state => {

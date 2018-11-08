@@ -8,11 +8,16 @@
     <div role="main">
 
       <b-row>
-        <b-col cols="3">
+        <b-col cols="4" class="col-sm-3">
           <img style="max-width: 100%;" src="https://avatars.githubusercontent.com/aclayton" />
         </b-col>
         <b-col>
           <p>A self-motivated web development professional with in depth knowledge and proficiency in <strong>Vuejs/Vuex</strong>, <strong>Node</strong>, <strong>MongoDB</strong>. My varied work experience has provided me with the liberty to design and develop cutting edge websites that deliver on impact, functionality and accessibility.</p>
+          <div class="text-right">
+            <b-btn variant="primary" href="/doc/aaron-clayton.pdf" target="_blank">
+              <icon name="file-download" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Resumé
+            </b-btn>
+          </div>
         </b-col>
       </b-row>
 
@@ -58,6 +63,22 @@
 
         </b-col>
       </b-row>
+      <hr />
+      <b-row>
+        <b-col>
+          <h2><strong>More...</strong></h2>
+          <p>
+            Phat ipsum dolor sit i'm in the shizzle, consectetuer adipiscing shut the shizzle up. Stuff shizzlin dizzle velizzle, things yippiyo, suscipit shiznit, crazy vizzle, for sure. Shizzle my nizzle crocodizzle own yo' tortizzle. Sizzle daahng dawg. Its fo rizzle izzle dolor dapibus sizzle tempizzle tempor. Maurizzle pellentesque nibh sizzle boom shackalack. I'm in the shizzle izzle tortor. Pellentesque check it out rhoncizzle nisi. In habitasse platea that's the shizzle. Get down get down dapibizzle. Fo tellus da bomb, pretizzle eu, mattizzle ac, eleifend vitae, nunc. Gangsta suscipizzle. Fizzle sempizzle shit sizzle we gonna chung.
+          </p>
+          <p>
+            Phasellizzle its fo rizzle volutpat ma nizzle. Ut boom shackalack adipiscing the bizzle. Donizzle sizzle break yo neck, yall. Uhuh ... yih! sapizzle massa, ultrices nizzle, go to hizzle yo mamma, fermentum quis, pede. Ghetto da bomb hizzle. Etiam break yo neck, yall ornare ante. Mauris pimpin'. Vestibulizzle dope pede its fo rizzle nibh commodo commodo. Mammasay mammasa mamma oo sa ipsizzle dolor sizzle fo shizzle, consectetizzle nizzle brizzle. Sed izzle mi. Dope mi sizzle, check it out izzle, mammasay mammasa mamma oo sa a, eleifend gangster, shut the shizzle up.
+          </p>
+        </b-col>
+      </b-row>
+
+      <footer>
+
+      </footer>
 
     </div>
   </div>

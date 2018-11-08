@@ -5,9 +5,6 @@
       <div :class="navClasses" id="nav-side-blocker"></div>
       <div :class="navClasses" id="nav-side">
         <navigation></navigation>
-        <b-btn variant="primary" href="/doc/aaron-clayton.pdf" target="_blank">
-          <icon name="file-download" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Resumé
-        </b-btn>
         <availability />
       </div>
       <div @click="toggleNav" v-if="ui.menuActive" id="nav-side-shade"></div>

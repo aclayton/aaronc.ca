@@ -47,6 +47,12 @@ html,
   }
 }
 
+.about {
+  .progress-bar {
+    font-size: 10px;
+  }
+}
+
 #page-side {
   padding: 0;
 }
@@ -90,5 +96,10 @@ html,
   }
   .nav-header {
     display: block;
+  }
+  .about {
+    .progress-bar {
+      font-size: 12px;
+    }
   }
 }
