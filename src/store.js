@@ -18,15 +18,21 @@ export default new Vuex.Store({
         descShort: 'A little app to help make libraries of svg files, and export definition files.',
         descLong: '',
         githubLink: 'https://github.com/aclayton/svg-machine',
-        projectLink: 'https://www.svg-machine.com'
+        projectLink: 'https://www.svg-machine.com',
+        scrollToId: '#project-2',
+        scrollToText: 'Next'
       },
       {
         _id: 2,
-        name: 'The Logo'
+        name: 'The Logo',
+        scrollToId: '#project-3',
+        scrollToText: 'Next'
       },
       {
         _id: 3,
-        name: 'Nia Data Exchange'
+        name: 'Nia Data Exchange',
+        scrollToId: '#header-home',
+        scrollToText: 'Top'
       }
     ],
     ui: {

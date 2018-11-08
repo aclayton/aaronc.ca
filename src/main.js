@@ -6,20 +6,24 @@ import './registerServiceWorker'
 import BootstrapVue from 'bootstrap-vue'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import Icon from 'vue-awesome/components/Icon.vue'
+import VueScrollTo from 'vue-scrollto'
 
 Vue.use(BootstrapVue)
+Vue.use(VueScrollTo)
 Vue.component('icon', Icon)
 
 Vue.config.productionTip = false
 
 router.beforeEach((to, from, next) => {
+
   if (window.innerWidth < 768) {
     store.commit('UPDATE_UI_MENU', false)
   } else {
     store.commit('UPDATE_UI_MENU', true)
   }
-  next();
-});
+
+  next()
+})
 
 new Vue({
   router,

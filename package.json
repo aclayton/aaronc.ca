@@ -13,6 +13,7 @@
     "vue": "^2.5.17",
     "vue-awesome": "^3.2.0",
     "vue-router": "^3.0.1",
+    "vue-scrollto": "^2.13.0",
     "vuex": "^3.0.1",
     "vuex-persist": "^2.0.0"
   },

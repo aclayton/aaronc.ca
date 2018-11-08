@@ -9,7 +9,7 @@
       <h2>Front-end Developer</h2>
       <p>Producing high quality responsive websites and exceptional user experience</p>
     </div>
-    <b-btn variant="link">
+    <b-btn variant="link" v-scroll-to="'#recent-projects'">
       view recent work<br />
       <icon class="animated pulse infinite" name="chevron-down" />
     </b-btn>

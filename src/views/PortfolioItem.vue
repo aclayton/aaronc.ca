@@ -1,27 +1,20 @@
 <template>
   <div id="project">
-    PROJECT ITEM {{ $route.params._id }}
-
-    Project Name: {{ currentProject.name }}
+    PROJECT ID: {{ $route.params._id }}<br />
+    PROJECT NAME: {{ currentProject.name }}
   </div>
 </template>
 <script>
 import { mapGetters } from 'vuex'
-
 export default {
   name: 'PortfolioItem',
-  data() {
-    return {
-      currentProject: {}
-    }
-  },
   computed: {
+    currentProject: function() {
+      return this.projectById(this.$route.params._id)
+    },
     ...mapGetters([
       'projectById'
     ])
-  },
-  mounted() {
-    this.currentProject = this.projectById(this.$route.params._id)
   }
 }
 </script>
