@@ -1,5 +1,5 @@
 <template>
-  <div id="project">
+  <div v-if="projects.length" id="project">
     PROJECT ID: {{ $route.params._id }}<br />
     PROJECT NAME: {{ currentProject.name }}
   </div>
@@ -13,7 +13,8 @@ export default {
       return this.projectById(this.$route.params._id)
     },
     ...mapGetters([
-      'projectById'
+      'projectById',
+      'projects'
     ])
   }
 }
