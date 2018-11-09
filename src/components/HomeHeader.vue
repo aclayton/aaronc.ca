@@ -2,7 +2,9 @@
 
   <header id="header-home" :style="homeHeaderStyle">
     <div class="logo">
-      <img src="/img/ac-white.svg" />
+      <!-- <img src="/img/ac-white.svg" /> -->
+
+      <logo color="#ffffff" style="max-width: 50%" alt="" />
     </div>
     <div class="main-msg">
       <h1><strong>Aaron Clayton</strong></h1>
@@ -18,8 +20,13 @@
 </template>
 <script>
 import 'vue-awesome/icons/chevron-down'
+import Logo from '@/components/logo.vue'
 export default {
   name: 'HomeHeader',
+
+  components: {
+    Logo
+  },
 
   data() {
     return {

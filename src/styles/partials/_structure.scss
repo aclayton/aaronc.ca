@@ -6,8 +6,34 @@ html,
   height: 100%;
 }
 
-[role=main] {
+[role="main"] {
   padding: $spacer*2 5% 0 5%;
+}
+
+
+
+
+#availability {
+  border-top: 1px solid #eee;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: $spacer;
+  background: transparentize($primary, .96);
+
+  img {
+    max-width: 54px;
+  }
+
+  p {
+    line-height: 1;
+    margin: 0;
+  }
+
+  .no-pad-right {
+    padding-right: 0;
+  }
 }
 
 #app {

@@ -1,7 +1,7 @@
 <template>
   <div class="about">
     <header style="text-align: center; background-color: #007bff;">
-      <img src="/img/ac-white.svg" style="max-width: 200px;" class="mt-4 mb-4" alt="" />
+      <logo color="#ffffff" style="max-width: 200px;" class="mt-4 mb-4" alt="" />
       <h1 style="color: #fff;"><strong>About Aaron</strong></h1>
       <h2 style="color: #fff;" class="pb-4">Front-end Developer</h2>
     </header>
@@ -9,7 +9,7 @@
 
       <b-row>
         <b-col cols="4" class="col-sm-3">
-          <img style="max-width: 100%;" src="https://avatars.githubusercontent.com/aclayton" />
+          <b-img thumbnail fluid src="https://avatars.githubusercontent.com/aclayton" />
         </b-col>
         <b-col>
           <p>A self-motivated web development professional with in depth knowledge and proficiency in <strong>Vuejs/Vuex</strong>, <strong>Node</strong>, <strong>MongoDB</strong>. My varied work experience has provided me with the liberty to design and develop cutting edge websites that deliver on impact, functionality and accessibility.</p>
@@ -83,3 +83,13 @@
     </div>
   </div>
 </template>
+<script>
+import Logo from '@/components/logo.vue'
+
+export default {
+  name: 'about',
+  components: {
+    Logo
+  }
+}
+</script>

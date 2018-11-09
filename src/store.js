@@ -1,12 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-// import VuexPersistence from 'vuex-persist'
 
 Vue.use(Vuex)
-
-// const vuexLocal = new VuexPersistence({
-//   storage: window.localStorage
-// })
 
 export default new Vuex.Store({
   state: {
@@ -39,7 +34,7 @@ export default new Vuex.Store({
       menuActive: true
     },
     availability: {
-      msg: 'Aaron is currently available for hire.'
+      msg: 'Aaron is a self-motivated web development professional, available for projects large and small.'
     }
   },
   mutations: {
@@ -69,6 +64,5 @@ export default new Vuex.Store({
     availability: state => {
       return state.availability
     }
-  },
-  // plugins: [vuexLocal.plugin]
+  }
 })

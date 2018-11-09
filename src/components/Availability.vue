@@ -1,6 +1,14 @@
 <template>
   <div id="availability">
-    {{ availability.msg }}
+    <b-row>
+      <b-col cols="3" class="no-pad-right">
+        <b-img fluid src="https://avatars.githubusercontent.com/aclayton" />
+      </b-col>
+      <b-col>
+        <p><small>{{ availability.msg }}</small></p>
+      </b-col>
+    </b-row>
+
   </div>
 </template>
 
