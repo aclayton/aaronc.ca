@@ -2,7 +2,7 @@
   <div id="availability">
     <b-row>
       <b-col cols="3" class="no-pad-right">
-        <b-img fluid src="https://avatars.githubusercontent.com/aclayton" />
+        <b-img alt="Aaron's GitHub Avatar" fluid src="https://avatars.githubusercontent.com/aclayton" />
       </b-col>
       <b-col>
         <p><small>{{ availability.msg }}</small></p>
