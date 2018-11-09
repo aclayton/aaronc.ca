@@ -20,7 +20,7 @@ html,
   left: 0;
   width: 100%;
   padding: $spacer;
-  background: transparentize($primary, .96);
+  background-color: transparentize($primary, .96);
 
   img {
     max-width: 54px;
@@ -76,6 +76,9 @@ html,
 .about {
   .progress-bar {
     font-size: 10px;
+    svg {
+      display: none;
+    }
   }
 }
 
@@ -88,10 +91,11 @@ html,
   position: fixed;
   top: 0;
   right: 0;
+  z-index: 1000;
 
   .btn {
     font-size: 36px;
-    color: rgba(255,255,255,.5);
+    color: rgba(200,200,200,.5);
   }
 
   .fa-icon {
@@ -126,6 +130,9 @@ html,
   .about {
     .progress-bar {
       font-size: 12px;
+      svg {
+        display: inline-block;
+      }
     }
   }
 }

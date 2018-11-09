@@ -2,8 +2,8 @@
   <div class="about">
     <header style="text-align: center; background-color: #007bff;">
       <logo color="#ffffff" style="max-width: 200px;" class="mt-4 mb-4" alt="" />
-      <h1 style="color: #fff;"><strong>About Aaron</strong></h1>
-      <h2 style="color: #fff;" class="pb-4">Front-end Developer</h2>
+      <h1 style="color: #ffffff;"><strong>About Aaron</strong></h1>
+      <h2 style="color: #ffffff;" class="pb-4">Front-end Developer</h2>
     </header>
     <div role="main">
 
@@ -29,36 +29,46 @@
 
           <label>Markup</label>
           <b-progress height="1.6rem" class="mb-3">
-            <b-progress-bar :value="25" variant="success"><strong>HTML 5</strong></b-progress-bar>
-            <b-progress-bar :value="25" variant="warning"><strong>WCAG / Section 508</strong></b-progress-bar>
-            <b-progress-bar :value="25" variant="primary"><strong>Clean Semantics</strong></b-progress-bar>
-            <b-progress-bar :value="25" variant="secondary"><strong>SEO</strong></b-progress-bar>
+            <b-progress-bar :value="20" variant="success"><strong>
+              <icon name="brands/html5" /> HTML 5
+            </strong></b-progress-bar>
+            <b-progress-bar :value="35" variant="warning"><strong>WCAG / Section 508</strong></b-progress-bar>
+            <b-progress-bar :value="30" variant="primary"><strong>Clean Semantics</strong></b-progress-bar>
+            <b-progress-bar :value="15" variant="secondary"><strong>SEO</strong></b-progress-bar>
           </b-progress>
           <label>Javascript</label>
           <b-progress height="1.6rem" class="mb-3">
-            <b-progress-bar :value="16.66" variant="info"><strong>Vue/Vuex</strong></b-progress-bar>
-            <b-progress-bar :value="16.66" variant="danger"><strong>AngularJS</strong></b-progress-bar>
-            <b-progress-bar :value="16.66" variant="dark"><strong>Node</strong></b-progress-bar>
-            <b-progress-bar :value="16.66" variant="success"><strong>Webpack</strong></b-progress-bar>
-            <b-progress-bar :value="16.66" variant="secondary"><strong>ES6</strong></b-progress-bar>
-            <b-progress-bar :value="16.66" variant="primary"><strong>Babel</strong></b-progress-bar>
+            <b-progress-bar :value="16.66" variant="info"><strong>
+              <icon name="brands/vuejs" /> Vue/Vuex
+            </strong></b-progress-bar>
+            <b-progress-bar :value="16.66" variant="danger"><strong>
+              <icon name="brands/angular" /> AngularJS
+            </strong></b-progress-bar>
+            <b-progress-bar :value="16.66" variant="dark"><strong>
+              <icon name="brands/node-js" /> Node
+            </strong></b-progress-bar>
+            <b-progress-bar :value="16.66" variant="secondary"><strong>Webpack</strong></b-progress-bar>
+            <b-progress-bar :value="16.66" variant="success"><strong>ES6</strong></b-progress-bar>
+            <b-progress-bar :value="16.66" variant="warning"><strong>Babel</strong></b-progress-bar>
           </b-progress>
           <label>Styling</label>
           <b-progress height="1.6rem" class="mb-3">
-            <b-progress-bar :value="20" variant="info"><strong>Custom</strong></b-progress-bar>
-            <b-progress-bar :value="20" variant="danger"><strong>Bootstrap (3/4)</strong></b-progress-bar>
-            <b-progress-bar :value="20" variant="dark"><strong>Material Design</strong></b-progress-bar>
-            <b-progress-bar :value="20" variant="success"><strong>SCSS</strong></b-progress-bar>
-            <b-progress-bar :value="20" variant="secondary"><strong>OOCSS</strong></b-progress-bar>
+            <b-progress-bar :value="20" variant="dark"><strong>Custom</strong></b-progress-bar>
+            <b-progress-bar :value="25" variant="primary"><strong>Bootstrap (3/4)</strong></b-progress-bar>
+            <b-progress-bar :value="25" variant="danger"><strong>Material Design</strong></b-progress-bar>
+            <b-progress-bar :value="15" variant="warning"><strong>
+              <icon name="brands/sass" /> SCSS
+            </strong></b-progress-bar>
+            <b-progress-bar :value="15" variant="info"><strong>OOCSS</strong></b-progress-bar>
           </b-progress>
           <label>Other</label>
           <b-progress height="1.6rem" class="mb-3">
-            <b-progress-bar :value="20" variant="info"><strong>MongoDB</strong></b-progress-bar>
-            <b-progress-bar :value="20" variant="danger"><strong>PWA</strong></b-progress-bar>
-            <b-progress-bar :value="20" variant="dark"><strong>Service Workers</strong></b-progress-bar>
-            <b-progress-bar :value="20" variant="success"><strong>Apache Cordova</strong></b-progress-bar>
-            <b-progress-bar :value="20" variant="secondary"><strong>Git</strong></b-progress-bar>
-            <b-progress-bar :value="20" variant="secondary"><strong>OAuth</strong></b-progress-bar>
+            <b-progress-bar :value="20" variant="success"><strong>MongoDB</strong></b-progress-bar>
+            <b-progress-bar :value="13" variant="dark"><strong>PWA</strong></b-progress-bar>
+            <b-progress-bar :value="32" variant="danger"><strong>Service Workers</strong></b-progress-bar>
+            <b-progress-bar :value="29" variant="primary"><strong>Apache Cordova</strong></b-progress-bar>
+            <b-progress-bar :value="9" variant="info"><strong>Git</strong></b-progress-bar>
+            <b-progress-bar :value="17" variant="secondary"><strong>OAuth</strong></b-progress-bar>
           </b-progress>
 
         </b-col>
@@ -66,13 +76,15 @@
       <hr />
       <b-row>
         <b-col>
-          <h2><strong>More...</strong></h2>
+          <h2><strong>Learn More...</strong></h2>
           <p>
-            Phat ipsum dolor sit i'm in the shizzle, consectetuer adipiscing shut the shizzle up. Stuff shizzlin dizzle velizzle, things yippiyo, suscipit shiznit, crazy vizzle, for sure. Shizzle my nizzle crocodizzle own yo' tortizzle. Sizzle daahng dawg. Its fo rizzle izzle dolor dapibus sizzle tempizzle tempor. Maurizzle pellentesque nibh sizzle boom shackalack. I'm in the shizzle izzle tortor. Pellentesque check it out rhoncizzle nisi. In habitasse platea that's the shizzle. Get down get down dapibizzle. Fo tellus da bomb, pretizzle eu, mattizzle ac, eleifend vitae, nunc. Gangsta suscipizzle. Fizzle sempizzle shit sizzle we gonna chung.
+            If you’d like to find out more about how I work and my process of working with clients, please visit the contact page and give a little information about the project you have in mind.
           </p>
-          <p>
-            Phasellizzle its fo rizzle volutpat ma nizzle. Ut boom shackalack adipiscing the bizzle. Donizzle sizzle break yo neck, yall. Uhuh ... yih! sapizzle massa, ultrices nizzle, go to hizzle yo mamma, fermentum quis, pede. Ghetto da bomb hizzle. Etiam break yo neck, yall ornare ante. Mauris pimpin'. Vestibulizzle dope pede its fo rizzle nibh commodo commodo. Mammasay mammasa mamma oo sa ipsizzle dolor sizzle fo shizzle, consectetizzle nizzle brizzle. Sed izzle mi. Dope mi sizzle, check it out izzle, mammasay mammasa mamma oo sa a, eleifend gangster, shut the shizzle up.
-          </p>
+          <div style="text-align: right; margin-bottom: 60px;">
+            <b-btn to="contact" variant="primary">
+              <icon name="mobile-alt" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Contact
+            </b-btn>
+          </div>
         </b-col>
       </b-row>
 
@@ -85,7 +97,12 @@
 </template>
 <script>
 import Logo from '@/components/logo.vue'
-
+import 'vue-awesome/icons/brands/html5'
+import 'vue-awesome/icons/brands/vuejs'
+import 'vue-awesome/icons/brands/angular'
+import 'vue-awesome/icons/brands/node-js'
+import 'vue-awesome/icons/brands/sass'
+import 'vue-awesome/icons/mobile-alt'
 export default {
   name: 'about',
   components: {

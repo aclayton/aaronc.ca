@@ -2,8 +2,6 @@
 
   <header id="header-home" :style="homeHeaderStyle">
     <div class="logo">
-      <!-- <img src="/img/ac-white.svg" /> -->
-
       <logo color="#ffffff" style="max-width: 50%" alt="" />
     </div>
     <div class="main-msg">
