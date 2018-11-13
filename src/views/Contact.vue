@@ -82,7 +82,7 @@ export default {
       fetch('/contact', {
         method: 'POST',
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: this.encodeURI({
+        body: encodeURI({
           'form-name': 'contact',
           ...this.form
         })
