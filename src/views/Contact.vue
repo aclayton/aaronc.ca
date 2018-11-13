@@ -10,14 +10,14 @@
     <b-alert variant="danger"
              dismissible
              :show="showError"
-             @dismissed="dismissError">
+             @dismissed="clearForm">
       We are sorry, but there seems to be an error getting this form sent...
     </b-alert>
 
     <b-alert variant="success"
              dismissible
              :show="showSuccess"
-             @dismissed="dismissSuccess">
+             @dismissed="clearForm">
       Your message has been sent.
     </b-alert>
 
@@ -116,14 +116,6 @@ export default {
   },
 
   methods: {
-    dismissSuccess() {
-      this.clearForm()
-      this.status = 'ready'
-    },
-    dismissError() {
-      this.clearForm()
-      this.status = 'ready'
-    },
     clearForm() {
       this.form = {
         name: '',
@@ -131,6 +123,7 @@ export default {
         phone: '',
         message: ''
       }
+      this.status = 'ready'
     },
     encode(data) {
       return Object.keys(data)
