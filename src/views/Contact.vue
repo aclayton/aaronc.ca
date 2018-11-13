@@ -30,7 +30,7 @@
       data-netlify-honeypot="bot-field"
       name="contact">
 
-      <input type="hidden" name="form-name" value="contactForm" />
+      <!-- <input type="hidden" name="form-name" value="contactForm" /> -->
 
       <b-form-group label="Your Name" label-for="formName">
         <b-form-input id="formName"
@@ -133,11 +133,11 @@ export default {
         .join('&');
     },
     handleSubmit () {
-      fetch('/', {
+      fetch('/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: this.encode({
-          'form-name': 'contactForm',
+          'form-name': 'contact',
           ...this.form
         })
       })

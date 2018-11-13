@@ -1,1 +1,2 @@
-/*    /index.html   200
+# Redirect default Netlify subdomain to primary domain
+https://serene-mestorf-1d4b53.netlify.com/* https://www.aaronc.ca/:splat 301!
