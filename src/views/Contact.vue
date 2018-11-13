@@ -68,19 +68,25 @@ export default {
   data() {
     return {
       show: true,
-      form: {}
+      form: {
+        name: '',
+        email: '',
+        phone: '',
+        message: ''
+      }
     }
   },
 
   methods: {
     handleSubmit () {
-      fetch('/', {
+      fetch('/contact', {
         method: 'POST',
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: this.encode({
-          'form-name': 'contact',
-          ...this.form
-        })
+        // body: this.encode({
+        //   'form-name': 'contact',
+        //   ...this.form
+        // })
+        body: JSON.stringify(this.form)
       })
       .then(() => {
         this.$router.push('thanks')
