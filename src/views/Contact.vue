@@ -76,12 +76,16 @@ export default {
       }
     }
   },
+
   methods: {
     handleSubmit () {
       fetch('/', {
         method: 'POST',
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: encodeURI({ 'form-name': 'contact', this.form })
+        body: encodeURI({
+          'form-name': 'contact',
+          ...this.form
+        })
       })
       .then(() => {
         this.$router.push('thanks')
