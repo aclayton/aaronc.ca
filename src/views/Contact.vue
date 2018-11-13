@@ -20,7 +20,7 @@
       <b-form-group label="Your Name" label-for="formName">
         <b-form-input id="formName"
                       type="text"
-                      @input="ev => form.name = ev.target.value"
+                      v-model="form.name"
                       required
                       placeholder="eg. Aaron Clayton (required)">
         </b-form-input>
@@ -29,7 +29,7 @@
       <b-form-group label="Your Email" label-for="formMail">
         <b-form-input id="formMail"
                       type="email"
-                      @input="ev => form.email = ev.target.value"
+                      v-model="form.email"
                       required
                       placeholder="eg. aaronc@protonmail.ch (required)">
         </b-form-input>
@@ -38,14 +38,14 @@
       <b-form-group label="Your Phone#" label-for="formPhone">
         <b-form-input id="formPhone"
                       type="text"
-                      @input="ev => form.phone = ev.target.value"
+                      v-model="form.phone"
                       placeholder="eg. 289-213-3228 (optional)">
         </b-form-input>
       </b-form-group>
 
       <b-form-group label="Your Message" label-for="formMessage">
         <b-form-textarea id="formMessage"
-                     @input="ev => form.message = ev.target.value"
+                     v-model="form.message"
                      placeholder="The long and short of it..."
                      :rows="3"
                      :max-rows="6">
@@ -83,12 +83,12 @@ export default {
         .map(
           key => `${encodeURIComponent(key)}=${encodeURIComponent(data[key])}`
         )
-        .join("&");
+        .join('&');
     },
     handleSubmit () {
       fetch('/', {
         method: 'POST',
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: this.encode({
           'form-name': 'contactForm',
           ...this.form
