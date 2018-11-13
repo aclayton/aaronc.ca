@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Home from './views/Home.vue'
+import Success from './views/Success.vue'
+import Failure from './views/Failure.vue'
 
 Vue.use(Router)
 
@@ -22,6 +24,16 @@ export default new Router({
       path: '/contact',
       name: 'contact',
       component: () => import(/* webpackChunkName: "contact" */ './views/Contact.vue')
+    },
+    {
+      path: '/thanks',
+      name: 'success',
+      component: Success
+    },
+    {
+      path: '/fail',
+      name: 'fail',
+      component: Failure
     },
     {
       path: '/project/:_id',
