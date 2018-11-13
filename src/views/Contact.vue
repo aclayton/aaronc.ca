@@ -18,19 +18,16 @@
              dismissible
              :show="showSuccess"
              @dismissed="clearForm">
-      Your message has been sent.
+      Your message has been sent!
     </b-alert>
 
     <b-form
       id="contactForm"
       @submit.prevent="handleSubmit"
       v-if="status === 'ready'"
-      method="post"
-      data-netlify="true"
-      data-netlify-honeypot="bot-field"
-      name="contact">
+      method="post">
 
-      <!-- <input type="hidden" name="form-name" value="contactForm" /> -->
+      <input type="hidden" name="form-name" value="contact" />
 
       <b-form-group label="Your Name" label-for="formName">
         <b-form-input id="formName"
