@@ -15,12 +15,12 @@
       data-netlify-honeypot="bot-field"
       name="contact">
 
-      <input type="hidden" name="form-name" value="contact" />
+      <input type="hidden" name="form-name" value="contactForm" />
 
       <b-form-group label="Your Name" label-for="formName">
         <b-form-input id="formName"
                       type="text"
-                      v-model="form.name"
+                      @input="ev => form.name = ev.target.value"
                       required
                       placeholder="eg. Aaron Clayton (required)">
         </b-form-input>
@@ -29,7 +29,7 @@
       <b-form-group label="Your Email" label-for="formMail">
         <b-form-input id="formMail"
                       type="email"
-                      v-model="form.email"
+                      @input="ev => form.email = ev.target.value"
                       required
                       placeholder="eg. aaronc@protonmail.ch (required)">
         </b-form-input>
@@ -38,14 +38,14 @@
       <b-form-group label="Your Phone#" label-for="formPhone">
         <b-form-input id="formPhone"
                       type="text"
-                      v-model="form.phone"
+                      @input="ev => form.phone = ev.target.value"
                       placeholder="eg. 289-213-3228 (optional)">
         </b-form-input>
       </b-form-group>
 
       <b-form-group label="Your Message" label-for="formMessage">
         <b-form-textarea id="formMessage"
-                     v-model="form.message"
+                     @input="ev => form.message = ev.target.value"
                      placeholder="The long and short of it..."
                      :rows="3"
                      :max-rows="6">
@@ -78,12 +78,19 @@ export default {
   },
 
   methods: {
+    encode(data) {
+      return Object.keys(data)
+        .map(
+          key => `${encodeURIComponent(key)}=${encodeURIComponent(data[key])}`
+        )
+        .join("&");
+    },
     handleSubmit () {
       fetch('/', {
         method: 'POST',
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: encodeURI({
-          'form-name': 'contact',
+        body: this.encode({
+          'form-name': 'contactForm',
           ...this.form
         })
       })
