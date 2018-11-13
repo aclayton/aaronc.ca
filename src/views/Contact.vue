@@ -6,10 +6,25 @@
       <h2 style="color: #ffffff;" class="pb-4">Front-end Developer</h2>
     </header>
 
+
+    <b-alert variant="danger"
+             dismissible
+             :show="showError"
+             @dismissed="dismissError">
+      We are sorry, but there seems to be an error getting this form sent...
+    </b-alert>
+
+    <b-alert variant="success"
+             dismissible
+             :show="showSuccess"
+             @dismissed="dismissSuccess">
+      Your message has been sent.
+    </b-alert>
+
     <b-form
       id="contactForm"
       @submit.prevent="handleSubmit"
-      v-if="show"
+      v-if="status === 'ready'"
       method="post"
       data-netlify="true"
       data-netlify-honeypot="bot-field"
@@ -65,9 +80,11 @@ export default {
   components: {
     Logo
   },
+
   data() {
     return {
       show: true,
+      status: '',
       form: {
         name: '',
         email: '',
@@ -77,7 +94,44 @@ export default {
     }
   },
 
+  computed: {
+    showError: function() {
+      if ( this.status === 'error' ) {
+        return true
+      } else {
+        return false
+      }
+    },
+    showSuccess: function() {
+      if ( this.status === 'success' ) {
+        return true
+      } else {
+        return false
+      }
+    }
+  },
+
+  mounted() {
+    this.status = 'ready'
+  },
+
   methods: {
+    dismissSuccess() {
+      this.clearForm()
+      this.status = 'ready'
+    },
+    dismissError() {
+      this.clearForm()
+      this.status = 'ready'
+    },
+    clearForm() {
+      this.form = {
+        name: '',
+        email: '',
+        phone: '',
+        message: ''
+      }
+    },
     encode(data) {
       return Object.keys(data)
         .map(
@@ -86,7 +140,7 @@ export default {
         .join('&');
     },
     handleSubmit () {
-      fetch('/contact', {
+      fetch('/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: this.encode({
@@ -95,10 +149,10 @@ export default {
         })
       })
       .then(() => {
-        this.$router.push('thanks')
+        this.status = 'success'
       })
       .catch(() => {
-        this.$router.push('fail')
+        this.status = 'error'
       })
     }
   }
