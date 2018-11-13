@@ -15,7 +15,7 @@
       data-netlify-honeypot="bot-field"
       name="contact">
 
-      <input type="hidden" name="contact" value="ask-team-vue" />
+      <input type="hidden" name="form-name" value="contact" />
 
       <b-form-group label="Your Name" label-for="formName">
         <b-form-input id="formName"
