@@ -26,9 +26,14 @@
       @submit.prevent="handleSubmit"
       v-if="status === 'ready'"
       method="post"
-      netlify="true">
+      data-netlify="true"
+      data-netlify-honeypot="bot-field">
 
       <input type="hidden" name="form-name" value="contact" />
+
+      <p class="hidden">
+        <label>Don’t fill this out if you're human: <input name="bot-field" /></label>
+      </p>
 
       <b-form-group label="Your Name" label-for="formName">
         <b-form-input id="formName"
@@ -125,7 +130,7 @@ export default {
         .join('&');
     },
     handleSubmit () {
-      fetch('/index.html', {
+      fetch('/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: this.encode({
