@@ -25,7 +25,6 @@
       id="contactForm"
       @submit.prevent="handleSubmit"
       v-if="status === 'ready'"
-      method="post"
       data-netlify="true"
       data-netlify-honeypot="bot-field">
 
