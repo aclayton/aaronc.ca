@@ -23,13 +23,16 @@
 
     <b-form
       id="contactForm"
-      >
+      method="post"
+      netlify
+      data-netlify-honeypot="bot-field"
+      @submit.prevent="handleSubmit">
 
       <input type="hidden" name="form-name" value="contact" />
-<!--
+
       <p class="hidden">
         <label>Don’t fill this out if you're human: <input name="bot-field" /></label>
-      </p> -->
+      </p>
 
       <b-form-group label="Your Name" label-for="formName">
         <b-form-input id="formName"
@@ -66,7 +69,7 @@
         </b-form-textarea>
       </b-form-group>
 
-      <b-button @click.prevent="handleSubmit" type="submit" variant="primary">Submit</b-button>
+      <b-button type="submit" variant="primary">Submit</b-button>
 
     </b-form>
 
@@ -126,7 +129,7 @@ export default {
         .join('&');
     },
     handleSubmit () {
-      fetch('/', {
+      fetch('/contact/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: this.encode({
