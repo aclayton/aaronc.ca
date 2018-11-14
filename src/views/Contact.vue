@@ -1,11 +1,11 @@
 <template>
   <div class="contact">
+
     <header style="text-align: center; background-color: #007bff;">
       <logo color="#ffffff" style="max-width: 200px;" class="mt-4 mb-4" alt="" />
       <h1 style="color: #ffffff;"><strong>Contact Aaron</strong></h1>
       <h2 style="color: #ffffff;" class="pb-4">Front-end Developer</h2>
     </header>
-
 
     <b-alert variant="danger"
              dismissible
@@ -24,7 +24,7 @@
     <b-form
       id="contactForm"
       method="post"
-      netlify
+      data-netlify="true"
       data-netlify-honeypot="bot-field"
       @submit.prevent="handleSubmit">
 
@@ -37,7 +37,8 @@
       <b-form-group label="Your Name" label-for="formName">
         <b-form-input id="formName"
                       type="text"
-                      v-model="form.name"
+                      :value="form.name"
+                      @input="ev => form.name = ev.target.value"
                       required
                       placeholder="eg. Aaron Clayton (required)">
         </b-form-input>
@@ -46,7 +47,8 @@
       <b-form-group label="Your Email" label-for="formMail">
         <b-form-input id="formMail"
                       type="email"
-                      v-model="form.email"
+                      :value="form.email"
+                      @input="ev => form.email = ev.target.value"
                       required
                       placeholder="eg. aaronc@protonmail.ch (required)">
         </b-form-input>
@@ -55,14 +57,16 @@
       <b-form-group label="Your Phone#" label-for="formPhone">
         <b-form-input id="formPhone"
                       type="text"
-                      v-model="form.phone"
+                      :value="form.phone"
+                      @input="ev => form.phone = ev.target.value"
                       placeholder="eg. 289-213-3228 (optional)">
         </b-form-input>
       </b-form-group>
 
       <b-form-group label="Your Message" label-for="formMessage">
         <b-form-textarea id="formMessage"
-                     v-model="form.message"
+                     :value="form.message"
+                     @input="ev => form.message = ev.target.value"
                      placeholder="The long and short of it..."
                      :rows="3"
                      :max-rows="6">
