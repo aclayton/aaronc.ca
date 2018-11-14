@@ -25,7 +25,8 @@
       id="contactForm"
       @submit.prevent="handleSubmit"
       v-if="status === 'ready'"
-      method="post">
+      method="post"
+      netlify="true">
 
       <input type="hidden" name="form-name" value="contact" />
 
@@ -93,18 +94,12 @@ export default {
 
   computed: {
     showError: function() {
-      if ( this.status === 'error' ) {
-        return true
-      } else {
-        return false
-      }
+      if ( this.status === 'error' ) { return true
+      } else { return false }
     },
     showSuccess: function() {
-      if ( this.status === 'success' ) {
-        return true
-      } else {
-        return false
-      }
+      if ( this.status === 'success' ) { return true
+      } else { return false }
     }
   },
 
@@ -138,12 +133,8 @@ export default {
           ...this.form
         })
       })
-      .then(() => {
-        this.status = 'success'
-      })
-      .catch(() => {
-        this.status = 'error'
-      })
+      .then(() => { this.status = 'success' })
+      .catch(() => { this.status = 'error' })
     }
   }
 }

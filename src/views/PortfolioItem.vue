@@ -18,5 +18,4 @@ export default {
     ])
   }
 }
-// /*    /index.html   200
 </script>
