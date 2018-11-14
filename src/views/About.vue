@@ -23,11 +23,11 @@
             <b-col>
 
               <div class="text-right">
-                <b-btn variant="dark" href="https://github.com/aclayton" target="_blank">
+                <b-btn class="btn-github mr-2" variant="dark" size="sm" href="https://github.com/aclayton" target="_blank">
                   <icon name="brands/github" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;GitHub
                 </b-btn>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <b-btn variant="primary" href="/doc/aaron-clayton.pdf" target="_blank">
+
+                <b-btn variant="primary" size="sm" href="/doc/aaron-clayton.pdf" target="_blank">
                   <icon name="file-download" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Resumé
                 </b-btn>
               </div>
@@ -102,7 +102,7 @@
               <icon name="mobile-alt" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Contact
             </b-btn> -->
 
-            <b-btn class="btn-call" variant="link" href="tel:289-213-3228">Call Me: <span>289-213-3228</span></b-btn>
+            <b-btn class="btn-call" variant="outline-secondary" href="tel:289-213-3228">Call Me: <span>289-213-3228</span></b-btn>
 
           </div>
         </b-col>

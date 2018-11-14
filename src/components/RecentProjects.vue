@@ -6,12 +6,15 @@
         <div class="project-details">
           <!-- <router-link :to="{ name: 'project', params: { _id: project._id }}" class="img-wrap"> -->
           <h2 class="hide">{{ project.name }}</h2>
-          <img :src="project.imgMain" alt="" />
-          <div class="button-row mt-4">
-            <b-btn v-if="project.projectLink" :href="project.projectLink" target="_blank" variant="outline-secondary" size="sm">
+          <img v-if="project.imgMain" :src="project.imgMain" alt="" />
+          <div v-if="project.descLong">
+            <p>{{ project.descLong }}</p>
+          </div>
+          <div v-if="project.projectLink || project.githubLink" class="button-row mt-4">
+            <b-btn class="mr-4" v-if="project.projectLink" :href="project.projectLink" target="_blank" variant="outline-secondary" size="sm">
               <icon name="external-link-alt" /> View the Project
-            </b-btn>&nbsp;&nbsp;&nbsp;&nbsp;
-            <b-btn  v-if="project.githubLink" :href="project.githubLink" target="_blank" variant="outline-secondary" size="sm">
+            </b-btn>
+            <b-btn  class="btn-gh" v-if="project.githubLink" :href="project.githubLink" target="_blank" variant="outline-secondary" size="sm">
               <icon name="brands/github" /> View the Code
             </b-btn>
           </div>

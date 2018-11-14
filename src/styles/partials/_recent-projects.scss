@@ -10,6 +10,7 @@
       justify-content: center;
       align-items: center;
       text-align: center;
+      padding: 0 $spacer*2;
 
       img {
         max-width: 50%;
@@ -30,7 +31,16 @@
   }
   #project-2 {
     background-color: $danger;
-    
+
+    p {
+      color: $white;
+    }
+
+    .btn-gh {
+      color: $white;
+      border-color: $white;
+    }
+
     .btn-scroll {
       color: $white;
     }

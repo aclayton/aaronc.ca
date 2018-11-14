@@ -14,15 +14,18 @@ export default new Vuex.Store({
         descLong: '',
         githubLink: 'https://github.com/aclayton/svg-machine',
         projectLink: 'https://www.svg-machine.com',
-        scrollToId: '#header-home',
-        scrollToText: 'Top'
+        scrollToId: '#project-2',
+        scrollToText: 'Next'
       },
-      // {
-      //   _id: 2,
-      //   name: 'The Logo',
-      //   scrollToId: '#project-3',
-      //   scrollToText: 'Next'
-      // },
+      {
+        _id: 2,
+        name: 'More to come',
+        imgMain: '/img/Octocat.png',
+        githubLink: 'https://github.com/aclayton',
+        scrollToId: '#header-home',
+        scrollToText: 'Top',
+        descLong: `There's more to come, but in the mean time check out my GitHub.`
+      },
       // {
       //   _id: 3,
       //   name: 'Nia Data Exchange',
@@ -34,7 +37,7 @@ export default new Vuex.Store({
       menuActive: true
     },
     availability: {
-      msg: 'Aaron is a self-motivated web development professional, available for projects large and small.'
+      msg: 'Aaron is a self-motivated web development professional, available for hire, or projects large and small.'
     }
   },
   mutations: {
