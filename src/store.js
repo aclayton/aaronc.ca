@@ -14,21 +14,21 @@ export default new Vuex.Store({
         descLong: '',
         githubLink: 'https://github.com/aclayton/svg-machine',
         projectLink: 'https://www.svg-machine.com',
-        scrollToId: '#project-2',
-        scrollToText: 'Next'
-      },
-      {
-        _id: 2,
-        name: 'The Logo',
-        scrollToId: '#project-3',
-        scrollToText: 'Next'
-      },
-      {
-        _id: 3,
-        name: 'Nia Data Exchange',
         scrollToId: '#header-home',
         scrollToText: 'Top'
-      }
+      },
+      // {
+      //   _id: 2,
+      //   name: 'The Logo',
+      //   scrollToId: '#project-3',
+      //   scrollToText: 'Next'
+      // },
+      // {
+      //   _id: 3,
+      //   name: 'Nia Data Exchange',
+      //   scrollToId: '#header-home',
+      //   scrollToText: 'Top'
+      // }
     ],
     ui: {
       menuActive: true

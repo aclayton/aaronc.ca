@@ -13,11 +13,28 @@
         </b-col>
         <b-col>
           <p>A self-motivated web development professional with in depth knowledge and proficiency in <strong>Vuejs/Vuex</strong>, <strong>Node</strong>, <strong>MongoDB</strong>. My varied work experience has provided me with the liberty to design and develop cutting edge websites that deliver on impact, functionality and accessibility.</p>
-          <div class="text-right">
-            <b-btn variant="primary" href="/doc/aaron-clayton.pdf" target="_blank">
-              <icon name="file-download" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Resumé
-            </b-btn>
-          </div>
+
+          <b-row>
+            <!-- <b-col> -->
+
+              <!-- <b-btn class="btn-call" variant="link" href="tel:289-213-3228">Call Me: <span>289-213-3228</span></b-btn> -->
+
+            <!-- </b-col> -->
+            <b-col>
+
+              <div class="text-right">
+                <b-btn variant="dark" href="https://github.com/aclayton" target="_blank">
+                  <icon name="brands/github" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;GitHub
+                </b-btn>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <b-btn variant="primary" href="/doc/aaron-clayton.pdf" target="_blank">
+                  <icon name="file-download" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Resumé
+                </b-btn>
+              </div>
+
+            </b-col>
+
+          </b-row>
         </b-col>
       </b-row>
 
@@ -81,9 +98,12 @@
             If you’d like to find out more about how I work and my process of working with clients, please visit the contact page and give a little information about the project you have in mind.
           </p>
           <div style="text-align: right; margin-bottom: 60px;">
-            <b-btn to="contact" variant="primary">
+            <!-- <b-btn to="contact" variant="primary">
               <icon name="mobile-alt" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Contact
-            </b-btn>
+            </b-btn> -->
+
+            <b-btn class="btn-call" variant="link" href="tel:289-213-3228">Call Me: <span>289-213-3228</span></b-btn>
+
           </div>
         </b-col>
       </b-row>
@@ -103,6 +123,7 @@ import 'vue-awesome/icons/brands/angular'
 import 'vue-awesome/icons/brands/node-js'
 import 'vue-awesome/icons/brands/sass'
 import 'vue-awesome/icons/mobile-alt'
+import 'vue-awesome/icons/brands/github'
 export default {
   name: 'about',
   components: {
