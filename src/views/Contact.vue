@@ -24,7 +24,6 @@
     <b-form
       id="contactForm"
       @submit.prevent="handleSubmit"
-      v-if="status === 'ready'"
       data-netlify="true"
       data-netlify-honeypot="bot-field">
 
@@ -129,7 +128,7 @@ export default {
         .join('&');
     },
     handleSubmit () {
-      fetch('/contact', {
+      fetch('/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: this.encode({
