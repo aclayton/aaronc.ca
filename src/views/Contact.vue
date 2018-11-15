@@ -38,7 +38,7 @@
         <b-form-input id="formName"
                       type="text"
                       :value="form.name"
-                      @input="ev => form.name = ev.target.value"
+                      @input="$event => form.name = $event"
                       required
                       placeholder="eg. Aaron Clayton (required)">
         </b-form-input>
@@ -48,7 +48,7 @@
         <b-form-input id="formMail"
                       type="email"
                       :value="form.email"
-                      @input="ev => form.email = ev.target.value"
+                      @input="$event => form.email = $event"
                       required
                       placeholder="eg. aaronc@protonmail.ch (required)">
         </b-form-input>
@@ -58,7 +58,7 @@
         <b-form-input id="formPhone"
                       type="text"
                       :value="form.phone"
-                      @input="ev => form.phone = ev.target.value"
+                      @input="$event => form.phone = $event"
                       placeholder="eg. 289-213-3228 (optional)">
         </b-form-input>
       </b-form-group>
@@ -66,7 +66,7 @@
       <b-form-group label="Your Message" label-for="formMessage">
         <b-form-textarea id="formMessage"
                      :value="form.message"
-                     @input="ev => form.message = ev.target.value"
+                     @input="$event => form.message = $event"
                      placeholder="The long and short of it..."
                      :rows="3"
                      :max-rows="6">
@@ -116,6 +116,9 @@ export default {
   },
 
   methods: {
+    log(e) {
+      console.log(e)
+    },
     clearForm() {
       this.form = {
         name: '',
