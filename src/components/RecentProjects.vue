@@ -1,14 +1,14 @@
 <template>
-  <div id="recent-projects">
+  <div id="recent-projects" class="container-fluid no-pad">
     <h1 class="hide">Recent Projects</h1>
-    <ul class="projects">
-      <li :style="portfolioItemStyle" v-for="project in projects" :key="project._id" class="project" :id="`project-${project._id}`">
+    <ul class="projects row">
+      <li :style="portfolioItemStyle" v-for="project in projects" :key="project._id" class="project col-md" :id="`project-${project._id}`">
         <div class="project-details">
           <!-- <router-link :to="{ name: 'project', params: { _id: project._id }}" class="img-wrap"> -->
           <h2 class="hide">{{ project.name }}</h2>
           <img v-if="project.imgMain" :src="project.imgMain" alt="" />
-          <div v-if="project.descLong">
-            <p>{{ project.descLong }}</p>
+          <div v-if="project.descShort">
+            <p>{{ project.descShort }}</p>
           </div>
           <div v-if="project.projectLink || project.githubLink" class="button-row mt-4">
             <b-btn class="mr-4" v-if="project.projectLink" :href="project.projectLink" target="_blank" variant="outline-secondary" size="sm">
@@ -20,7 +20,7 @@
           </div>
           <!-- </router-link> -->
         </div>
-        <b-btn variant="link" class="btn-scroll" v-scroll-to="project.scrollToId">
+        <b-btn variant="link" class="btn-scroll" v-if="project.scrollToId" v-scroll-to="project.scrollToId">
           {{ project.scrollToText }}<br />
           <icon v-if="project.scrollToText != 'Top'" class="animated pulse infinite" name="chevron-down" />
         </b-btn>

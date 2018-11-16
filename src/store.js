@@ -10,7 +10,7 @@ export default new Vuex.Store({
         _id: 1,
         name: 'svg-machine.com',
         imgMain: '/img/svg-machine.png',
-        descShort: 'A little app to help make libraries of svg files, and export definition files.',
+        descShort: 'A little app to help make libraries of svgs, and export definition files.',
         descLong: '',
         githubLink: 'https://github.com/aclayton/svg-machine',
         projectLink: 'https://www.svg-machine.com',
@@ -22,9 +22,9 @@ export default new Vuex.Store({
         name: 'More to come',
         imgMain: '/img/Octocat.png',
         githubLink: 'https://github.com/aclayton',
-        scrollToId: '#header-home',
-        scrollToText: 'Top',
-        descLong: `There's more to come, but in the mean time check out my GitHub.`
+        // scrollToId: '#header-home',
+        // scrollToText: 'Next',
+        descShort: `There's more to come, but in the mean time check out my GitHub.`
       },
       // {
       //   _id: 3,

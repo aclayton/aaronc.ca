@@ -18,7 +18,18 @@
 
       p {
         text-align: center;
-        margin-top: $spacer*3
+        margin-top: $spacer*3;
+        color: $white;
+      }
+
+      .btn {
+        color: $white;
+        border-color: $white;
+      }
+
+      .btn-link {
+        border: 0;
+        display: block;
       }
   }
 
@@ -31,18 +42,13 @@
   }
   #project-2 {
     background-color: $danger;
+  }
+}
 
-    p {
-      color: $white;
-    }
-
-    .btn-gh {
-      color: $white;
-      border-color: $white;
-    }
-
-    .btn-scroll {
-      color: $white;
+@include media-breakpoint-up(md) {
+  #recent-projects .project {
+    .btn-link {
+      display: none;
     }
   }
 }

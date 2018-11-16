@@ -1,0 +1,19 @@
+#skills {
+  .progress-bar {
+    font-size: 10px;
+    svg {
+      display: none;
+    }
+  }
+}
+
+@include media-breakpoint-up(md) {
+  #skills {
+    .progress-bar {
+      font-size: 12px;
+      svg {
+        display: inline-block;
+      }
+    }
+  }
+}

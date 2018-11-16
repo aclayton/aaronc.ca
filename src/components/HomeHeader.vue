@@ -1,6 +1,6 @@
 <template>
 
-  <header id="header-home" :style="homeHeaderStyle">
+  <header id="header-home" :style="homeHeaderStyle" class="container-fluid">
     <div class="logo">
       <logo color="#ffffff" style="max-width: 50%" alt="" />
     </div>
@@ -18,7 +18,7 @@
 </template>
 <script>
 import 'vue-awesome/icons/chevron-down'
-import Logo from '@/components/logo.vue'
+import Logo from '@/components/Logo.vue'
 export default {
   name: 'HomeHeader',
 

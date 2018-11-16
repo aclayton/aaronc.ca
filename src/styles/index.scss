@@ -17,8 +17,12 @@
 @import './partials/_recent-projects';
 @import './partials/_home-header';
 
-// Global
+// Utility
 // ---------------------------------------------------------
 .hide {
   display: none !important;
+}
+
+.no-pad {
+  padding: 0;
 }

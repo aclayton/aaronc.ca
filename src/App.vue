@@ -1,38 +1,33 @@
 <template>
-  <b-container fluid id="app">
-    <b-row>
-
-      <div :class="navClasses" id="nav-side-blocker"></div>
-      <div :class="navClasses" id="nav-side">
-        <navigation></navigation>
-        <availability />
-      </div>
-      <div @click="toggleNav" v-if="ui.menuActive" id="nav-side-shade"></div>
-
-      <b-col id="page-side">
-        <div class="mobile-toggle" style="text-align: right;">
-          <b-btn @click="toggleNav" variant="link">
-            <icon name="ellipsis-v"/>
-          </b-btn>
-        </div>
-        <router-view/>
-      </b-col>
-
-    </b-row>
-  </b-container>
+  <!-- <b-container fluid id="app" class="no-pad"> -->
+    <div id="app">
+      <app-home-header></app-home-header>
+      <app-recent-projects></app-recent-projects>
+      <app-about></app-about>
+      <app-skills></app-skills>
+      <app-learn-more></app-learn-more>
+      <app-footer></app-footer>
+    </div>
+  <!-- </b-container> -->
 </template>
 
 <script>
-import Navigation from '@/components/Navigation.vue'
-import Availability from '@/components/Availability'
-import 'vue-awesome/icons/ellipsis-v'
-import 'vue-awesome/icons/file-download'
+import AppHomeHeader from '@/components/HomeHeader.vue'
+import AppRecentProjects from '@/components/RecentProjects.vue'
+import AppAbout from '@/components/About.vue'
+import AppSkills from '@/components/Skills.vue'
+import AppLearnMore from '@/components/LearnMore.vue'
+import AppFooter from '@/components/Footer.vue'
 import { mapGetters } from 'vuex'
 
 export default {
   components: {
-    Navigation,
-    Availability
+    AppHomeHeader,
+    AppRecentProjects,
+    AppAbout,
+    AppSkills,
+    AppLearnMore,
+    AppFooter
   },
   computed: {
     ...mapGetters([
