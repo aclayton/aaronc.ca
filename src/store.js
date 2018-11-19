@@ -15,7 +15,8 @@ export default new Vuex.Store({
         githubLink: 'https://github.com/aclayton/svg-machine',
         projectLink: 'https://www.svg-machine.com',
         scrollToId: '#project-2',
-        scrollToText: 'Next'
+        scrollToText: 'Next',
+        cardClass: ''
       },
       {
         _id: 2,
@@ -24,7 +25,8 @@ export default new Vuex.Store({
         githubLink: 'https://github.com/aclayton',
         // scrollToId: '#header-home',
         // scrollToText: 'Next',
-        descShort: `There's more to come, but in the mean time check out my GitHub.`
+        descShort: `There's more to come, but in the mean time check out my GitHub.`,
+        cardClass: ''
       },
       // {
       //   _id: 3,

@@ -2,22 +2,29 @@
   <div id="recent-projects" class="container-fluid no-pad">
     <h1 class="hide">Recent Projects</h1>
     <ul class="projects row">
-      <li :style="portfolioItemStyle" v-for="project in projects" :key="project._id" class="project col-md" :id="`project-${project._id}`">
-        <div class="project-details">
+      <li  v-for="project in projects" :class="project.cardClass" :style="portfolioItemStyle" :key="project._id" class="project col-md" :id="`project-${project._id}`">
+        <div class="project-details" @click="handleHover(project)">
           <!-- <router-link :to="{ name: 'project', params: { _id: project._id }}" class="img-wrap"> -->
-          <h2 class="hide">{{ project.name }}</h2>
-          <img v-if="project.imgMain" :src="project.imgMain" alt="" />
-          <div v-if="project.descShort">
-            <p>{{ project.descShort }}</p>
+
+          <div class="front" :style="portfolioItemStyle">
+            <h2 class="hide">{{ project.name }}</h2>
+            <img v-if="project.imgMain" :src="project.imgMain" alt="" />
           </div>
-          <div v-if="project.projectLink || project.githubLink" class="button-row mt-4">
-            <b-btn class="mr-4" v-if="project.projectLink" :href="project.projectLink" target="_blank" variant="outline-secondary" size="sm">
-              <icon name="external-link-alt" /> View the Project
-            </b-btn>
-            <b-btn  class="btn-gh" v-if="project.githubLink" :href="project.githubLink" target="_blank" variant="outline-secondary" size="sm">
-              <icon name="brands/github" /> View the Code
-            </b-btn>
+
+          <div class="back" :style="portfolioItemStyle">
+            <div v-if="project.descShort">
+              <p>{{ project.descShort }}</p>
+            </div>
+            <div v-if="project.projectLink || project.githubLink" class="button-row mt-4">
+              <b-btn class="mr-4" v-if="project.projectLink" :href="project.projectLink" target="_blank" variant="outline-secondary" size="sm">
+                <icon name="external-link-alt" /> View the Project
+              </b-btn>
+              <b-btn  class="btn-gh" v-if="project.githubLink" :href="project.githubLink" target="_blank" variant="outline-secondary" size="sm">
+                <icon name="brands/github" /> View the Code
+              </b-btn>
+            </div>
           </div>
+
           <!-- </router-link> -->
         </div>
         <b-btn variant="link" class="btn-scroll" v-if="project.scrollToId" v-scroll-to="project.scrollToId">
@@ -32,8 +39,10 @@
 import { mapGetters } from 'vuex'
 import 'vue-awesome/icons/brands/github'
 import 'vue-awesome/icons/external-link-alt'
+
 export default {
   name: 'RecentProjects',
+
   data() {
     return {
       portfolioItemStyle: {
@@ -42,23 +51,44 @@ export default {
       }
     }
   },
+
   computed: {
     ...mapGetters([
       'projects'
     ])
   },
+
   mounted() {
     this.$nextTick(() => {
       window.addEventListener('resize', this.handleResize)
-      this.handleResize()
+      this.calcSize()
     })
   },
+
   destroyed() {
     window.removeEventListener('resize', this.handleResize)
   },
+
   methods: {
+
+    handleHover(project) {
+      if (project.cardClass === 'hover') {
+        project.cardClass = ''
+      } else {
+        project.cardClass = 'hover'
+      }
+    },
+
+    calcSize() {
+      if (window.innerWidth < 768) {
+          this.portfolioItemStyle.height = `${window.innerHeight / 2}px`
+      } else {
+          this.portfolioItemStyle.height = `${window.innerWidth / 2.333}px`
+      }
+    },
+
     handleResize() {
-      this.portfolioItemStyle.height = `${window.innerHeight}px`;
+      this.calcSize()
     }
   }
 }

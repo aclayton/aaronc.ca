@@ -6,14 +6,57 @@
   }
 
   .project {
-      display: grid;
-      justify-content: center;
-      align-items: center;
       text-align: center;
-      padding: 0 $spacer*2;
+      perspective: 1000px;
+      padding: 0;
+      background-image: url('/img/code-75.png');
+      background-repeat: no-repeat;
+      background-position: center center;
+
+      &.hover .project-details {
+        transform: rotateY(180deg);
+      }
+
+      .project-details {
+      	transition: 0.6s;
+      	transform-style: preserve-3d;
+
+      	position: relative;
+        height: 100%;
+      }
+
+      .front, .back {
+      	backface-visibility: hidden;
+
+      	position: absolute;
+      	top: 0;
+      	left: 0;
+        width: 100%;
+        padding: $spacer*2;
+        opacity: .9;
+      }
+
+      .front {
+      	z-index: 2;
+      	/* for firefox 31 */
+      	transform: rotateY(0deg);
+        display: grid;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .back {
+      	transform: rotateY(180deg);
+        display: grid;
+        justify-content: center;
+        align-items: center;
+      }
+
+
+
 
       img {
-        max-width: 50%;
+        max-height: 200px;
       }
 
       p {
@@ -34,14 +77,22 @@
   }
 
   #project-1 {
-    background-color: #181d23;
+    background-color: lighten(#181d23, 25%);
+    .front, .back {
+      background-color: #181d23;
+    }
+
 
     .btn-scroll {
       color: $white;
     }
   }
   #project-2 {
-    background-color: $danger;
+    background-color: lighten($danger, 25%);
+    box-shadow: inset 0px 0px 30px rgba(0,0,0,.25);
+    .front, .back {
+      background-color: $danger;
+    }
   }
 }
 
@@ -49,6 +100,10 @@
   #recent-projects .project {
     .btn-link {
       display: none;
+    }
+
+    &:hover .project-details {
+      transform: rotateY(180deg);
     }
   }
 }
