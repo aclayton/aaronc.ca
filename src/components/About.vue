@@ -3,8 +3,8 @@
     <div class="container">
 
       <b-row>
-        <b-col cols="4" class="col-sm-3">
-          <b-img alt="Aaron's GitHub Avatar" thumbnail fluid src="https://avatars.githubusercontent.com/aclayton" />
+        <b-col cols="12" class="col-sm-3">
+          <b-img class="test" alt="Aaron's GitHub Avatar" fluid src="https://avatars.githubusercontent.com/aclayton" />
         </b-col>
         <b-col>
           <p>A self-motivated web development professional with in depth knowledge and proficiency in <strong>Vuejs/Vuex</strong>, <strong>Node</strong>, <strong>MongoDB</strong>. My varied work experience has provided me with the liberty to design and develop cutting edge websites that deliver on impact, functionality and accessibility.</p>

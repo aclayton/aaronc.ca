@@ -13,9 +13,19 @@ html,
 }
 
 #about {
-  padding: $spacer*10 0;
+  padding: $spacer*5 0;
   background-color: darken($primary, 15%);
   color: $white;
+
+  img {
+    max-width: 120px;
+    border-radius: 120px;
+    margin-bottom: $spacer*3;
+  }
+
+  .col-12 {
+    text-align: center;
+  }
 }
 
 #skills {
@@ -61,5 +71,10 @@ html,
 
   footer p {
     font-size: 1rem;
+  }
+
+  #about img {
+    max-width: 100%;
+    border-radius: 0;
   }
 }

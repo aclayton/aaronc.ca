@@ -16,6 +16,7 @@
 @import './partials/_animations';
 @import './partials/_recent-projects';
 @import './partials/_home-header';
+@import './partials/_skills';
 
 // Utility
 // ---------------------------------------------------------
@@ -25,4 +26,10 @@
 
 .no-pad {
   padding: 0;
+}
+
+
+img.test {
+  -webkit-filter: opacity(.7);
+  filter: opacity(.7);
 }
