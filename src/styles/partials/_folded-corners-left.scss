@@ -1,0 +1,57 @@
+/* FOLDED CORNER DEMO
+ * More detail in the article:
+ * http://tzi.fr/css/lab/folded-corner-mixin
+ */
+
+/* Public mixin:
+ * Create a page with folded corner effect in CSS.
+ */
+@mixin folded-corner-left(
+    $page-padding: 0,
+    $page-radius: 0,
+    $page-background: white,
+    $fold-size: 50px,
+    $fold-color: rgba(10, 10, 10, 0.2)
+) {
+
+    /* Render the page style with a transparent corner
+     */
+    & {
+        min-width: 2 * $fold-size;
+        min-height: 2 * $fold-size;
+        padding: $page-padding;
+        border-radius: $page-radius;
+
+        // Soften the corner between the page and the fold
+        border-top-left-radius: 1.2 * $fold-size;
+
+        @include transparent-corner-left($page-background, $fold-size);
+    }
+
+    /* Render the folded corner style
+     * Wrap the text around the corner
+     */
+    &:before {
+        content: "";
+        float: right;
+        width: $fold-size;
+        height: $fold-size;
+        border-bottom-right-radius: $page-radius;
+
+        // Move the padding from top+right to left+bottom
+        position: absolute;
+        top:   0;
+        left: 0;
+
+        @include transparent-corner-left($fold-color, $fold-size);
+    }
+}
+
+/* Private mixin:
+* Apply a background with a transparent corner (top right)
+*/
+@mixin transparent-corner-left($background, $size) {
+    $diagonal: $size / 1.414;
+    background: $background;
+    background: linear-gradient(-225deg, transparent $diagonal, $background $diagonal) right top;
+}

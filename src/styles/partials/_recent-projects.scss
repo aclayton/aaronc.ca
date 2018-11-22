@@ -83,7 +83,6 @@
       background-color: #181d23;
     }
     .front {
-
       @include folded-corner(
           $page-padding: 0,
           $page-radius: 0,
@@ -91,6 +90,16 @@
           $fold-size: 48px,
           $fold-color: lighten(#181d23, 20%)
       );
+    }
+    .back {
+      @include folded-corner-left(
+          $page-padding: $spacer*2,
+          $page-radius: 0,
+          $page-background: #181d23,
+          $fold-size: 48px,
+          $fold-color: darken(#181d23, 5%)
+      );
+      padding: $spacer*2;
     }
 
 
@@ -107,11 +116,21 @@
     .front {
       @include folded-corner(
           $page-padding: 0,
-          $page-radius: 5,
+          $page-radius: 0,
           $page-background: $danger,
           $fold-size: 48px,
           $fold-color: lighten($danger, 20%)
       );
+    }
+    .back {
+      @include folded-corner-left(
+          $page-padding: $spacer*2,
+          $page-radius: 0,
+          $page-background: $danger,
+          $fold-size: 48px,
+          $fold-color: darken($danger, 5%)
+      );
+      padding: $spacer*2;
     }
   }
 }
