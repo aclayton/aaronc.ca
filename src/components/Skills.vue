@@ -7,6 +7,20 @@
         <b-col>
           <h2><strong>Skills</strong></h2>
 
+          <vue-particles
+            color="#dedede"
+            :particleOpacity="0.7"
+            :particlesNumber="80"
+            shapeType="circle"
+            :particleSize="4"
+            :linesWidth="0"
+            :moveSpeed="3"
+            :hoverEffect="true"
+            hoverMode="grab"
+            :clickEffect="false"
+          >
+          </vue-particles>
+
           <label>Markup</label>
           <b-progress height="1.6rem" class="mb-3">
             <b-progress-bar :value="20" variant="success"><strong>

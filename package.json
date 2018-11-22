@@ -8,6 +8,7 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "anime": "^0.1.2",
     "bootstrap-vue": "^2.0.0-rc.11",
     "prerender-spa-plugin": "^3.4.0",
     "register-service-worker": "^1.0.0",

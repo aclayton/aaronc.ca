@@ -9,9 +9,10 @@
       text-align: center;
       perspective: 1000px;
       padding: 0;
-      background-image: url('/img/code-75.png');
+      background-image: url('/img/code.png');
       background-repeat: no-repeat;
       background-position: center center;
+      position: relative;
 
       &.hover .project-details {
         transform: rotateY(180deg);
@@ -81,6 +82,16 @@
     .front, .back {
       background-color: #181d23;
     }
+    .front {
+
+      @include folded-corner(
+          $page-padding: 0,
+          $page-radius: 0,
+          $page-background: #181d23,
+          $fold-size: 48px,
+          $fold-color: lighten(#181d23, 20%)
+      );
+    }
 
 
     .btn-scroll {
@@ -92,6 +103,15 @@
     box-shadow: inset 0px 0px 30px rgba(0,0,0,.25);
     .front, .back {
       background-color: $danger;
+    }
+    .front {
+      @include folded-corner(
+          $page-padding: 0,
+          $page-radius: 5,
+          $page-background: $danger,
+          $fold-size: 48px,
+          $fold-color: lighten($danger, 20%)
+      );
     }
   }
 }

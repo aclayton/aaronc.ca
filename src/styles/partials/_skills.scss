@@ -1,4 +1,27 @@
 #skills {
+
+
+  .skill {
+      width: 65px;
+      height: 65px;
+      border-radius: 65px;
+      background-color: $white;
+      color: $black;
+      overflow: hidden;
+      text-align: center;
+  }
+
+  label {
+    display: none;
+  }
+
+
+
+
+
+
+
+
   .progress-bar {
     font-size: 10px;
     svg {

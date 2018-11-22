@@ -7,7 +7,9 @@ import BootstrapVue from 'bootstrap-vue'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import Icon from 'vue-awesome/components/Icon.vue'
 import VueScrollTo from 'vue-scrollto'
+import VueAnime from './anime'
 
+Vue.use(VueAnime)
 Vue.use(BootstrapVue)
 Vue.use(VueScrollTo)
 Vue.component('icon', Icon)

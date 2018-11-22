@@ -4,8 +4,9 @@
       <app-home-header></app-home-header>
       <app-recent-projects></app-recent-projects>
       <app-about></app-about>
-      <app-skills></app-skills>
-      <app-learn-more></app-learn-more>
+      <app-contact></app-contact>
+      <!-- <app-skills></app-skills>
+      <app-learn-more></app-learn-more> -->
       <app-footer></app-footer>
     </div>
   <!-- </b-container> -->
@@ -15,8 +16,9 @@
 import AppHomeHeader from '@/components/HomeHeader.vue'
 import AppRecentProjects from '@/components/RecentProjects.vue'
 import AppAbout from '@/components/About.vue'
-import AppSkills from '@/components/Skills.vue'
-import AppLearnMore from '@/components/LearnMore.vue'
+import AppContact from '@/components/ContactComponent.vue'
+// import AppSkills from '@/components/SkillsBubble.vue'
+// import AppLearnMore from '@/components/LearnMore.vue'
 import AppFooter from '@/components/Footer.vue'
 import { mapGetters } from 'vuex'
 
@@ -25,8 +27,9 @@ export default {
     AppHomeHeader,
     AppRecentProjects,
     AppAbout,
-    AppSkills,
-    AppLearnMore,
+    AppContact,
+    // AppSkills,
+    // AppLearnMore,
     AppFooter
   },
   computed: {

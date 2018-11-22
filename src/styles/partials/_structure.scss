@@ -26,6 +26,23 @@ html,
   .col-12 {
     text-align: center;
   }
+  >div {
+    display: grid;
+    grid-template-columns: 120px auto;
+
+    img {
+      margin-right: $spacer*2;
+    }
+
+    p {
+      margin-left: $spacer*2;
+    }
+  }
+
+}
+
+#contact {
+  padding: $spacer*5 0;
 }
 
 #skills {
@@ -43,10 +60,20 @@ html,
 #footer {
   padding: $spacer*3 0;
   background-color: darken($primary, 45%);
-  color: $white;
+  color: transparentize($white, .7);
+
+  .socials {
+    display: grid;
+    grid-template-columns: auto auto;
+    text-align: center;
+    svg {
+      height: 80px;
+      width: 65px;
+    }
+  }
 
   a {
-    color: $white;
+    color: transparentize($white, .7);
   }
 
   svg {
