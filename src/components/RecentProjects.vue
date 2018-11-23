@@ -1,5 +1,8 @@
 <template>
-  <div id="recent-projects" class="container-fluid no-pad">
+  <div
+    id="recent-projects"
+    class="container-fluid no-pad"
+  >
     <h1 class="hide">Recent Projects</h1>
     <ul class="projects row">
       <li  v-for="project in projects" :class="project.cardClass" :style="portfolioItemStyle" :key="project._id" class="project col-md" :id="`project-${project._id}`">
@@ -82,6 +85,7 @@ export default {
     calcSize() {
       if (window.innerWidth < 768) {
           this.portfolioItemStyle.height = `${window.innerHeight / 2}px`
+          window.removeEventListener('resize', this.handleResize)
       } else {
           this.portfolioItemStyle.height = `${window.innerWidth / 2.333}px`
       }

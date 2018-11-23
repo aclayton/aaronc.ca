@@ -12,7 +12,7 @@
               <icon name="brands/github" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;GitHub
             </b-btn>
 
-            <b-btn variant="primary" size="sm" href="/doc/aaron-clayton.pdf" target="_blank">
+            <b-btn class="btn-action" size="sm" href="/doc/aaron-clayton.pdf" target="_blank">
               <icon name="file-download" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Resumé
             </b-btn>
           </div>

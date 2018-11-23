@@ -1,15 +1,18 @@
 #header-home {
   background-color: $primary;
-  padding: 15px;
   color: $white;
   text-align: center;
+
   display: grid;
+  grid-template-columns: 100%;
+  grid-template-rows: 300px auto 80px;
   align-items: center;
   justify-content: center;
-  img {
-    max-width: 50%;
-  }
   .btn {
     color: $white;
+  }
+
+  svg {
+    max-height: 50%;
   }
 }

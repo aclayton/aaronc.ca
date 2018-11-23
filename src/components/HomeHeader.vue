@@ -1,15 +1,25 @@
 <template>
 
-  <header id="header-home" :style="homeHeaderStyle" class="container-fluid">
+  <header
+    id="header-home"
+    :style="homeHeaderStyle"
+    class="container-fluid"
+  >
     <div class="logo">
-      <logo color="#ffffff" style="max-width: 50%" alt="" />
+      <logo class="home bounceInDown" color="#ffffff" alt="" />
     </div>
     <div class="main-msg">
-      <h1><strong>Aaron Clayton</strong></h1>
-      <h2>Front-end Developer</h2>
-      <p>Producing high quality responsive websites and exceptional user experience</p>
+      <div class="main-msg-inner">
+        <h1><strong>Aaron Clayton</strong></h1>
+        <h2>Front-end Developer</h2>
+        <p>Producing high quality responsive websites and exceptional user experience</p>
+      </div>
     </div>
-    <b-btn variant="link" v-scroll-to="'#recent-projects'">
+    <b-btn variant="link" v-scroll-to="{
+        el: '#recent-projects',
+        easing: 'cubic-bezier(0.215, 0.61, 0.355, 1)',
+        duration: 150
+      }">
       view recent work<br />
       <icon class="animated pulse infinite" name="chevron-down" />
     </b-btn>
@@ -48,7 +58,12 @@ export default {
 
   methods: {
     handleResize() {
-      this.homeHeaderStyle.height = `${window.innerHeight}px`;
+      if (window.innerWidth > 600) {
+        this.homeHeaderStyle.height = `${window.innerHeight}px`;
+      } else {
+        this.homeHeaderStyle.height = `${window.innerHeight}px`;
+        window.removeEventListener('resize', this.handleResize)
+      }
     }
   }
 }

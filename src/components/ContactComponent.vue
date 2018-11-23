@@ -3,21 +3,10 @@
 
     <b-container>
 
-      <b-alert variant="danger"
-               dismissible
-               :show="showError"
-               @dismissed="clearForm">
-        We are sorry, but there seems to be an error getting this form sent...
-      </b-alert>
-
-      <b-alert variant="success"
-               dismissible
-               :show="showSuccess"
-               @dismissed="clearForm">
-        Your message has been sent!
-      </b-alert>
-
-
+      <p>If you’d like to find out more about how I work and my process, please fill out the form and say hi!</p>
+      <p>&nbsp;</p>
+      <hr />
+      <p>&nbsp;</p>
       <b-form
         id="contactForm"
         method="post"
@@ -69,17 +58,43 @@
                        :max-rows="12">
           </b-form-textarea>
         </b-form-group>
+        <div class="text-right">
 
-        <b-button type="submit" variant="primary">Submit</b-button>
+          <b-button type="submit" size="sm" class="btn-action">
+            <icon name="paper-plane" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Submit
+          </b-button>
+
+        </div>
 
       </b-form>
-
-
     </b-container>
+
+    <div class="alerts">
+      <b-container>
+
+        <b-alert variant="danger"
+                 dismissible
+                 :show="showError"
+                 @dismissed="clearError"
+                 class="animated slideInUp">
+          We are sorry, but there seems to be an error getting this form sent...
+        </b-alert>
+
+        <b-alert variant="success"
+                 dismissible
+                 :show="showSuccess"
+                 @dismissed="clearForm"
+                 class="animated slideInUp">
+          Your message has been sent!
+        </b-alert>
+
+      </b-container>
+    </div>
 
   </div>
 </template>
 <script>
+import 'vue-awesome/icons/paper-plane'
 export default {
   name: 'ContactComponent',
 
@@ -121,6 +136,9 @@ export default {
       }
       this.status = 'ready'
     },
+    clearError() {
+      this.status = 'ready'
+    },
     encode(data) {
       return Object.keys(data)
         .map(
@@ -129,7 +147,7 @@ export default {
         .join('&');
     },
     handleSubmit () {
-      fetch('https://www.aaronc.ca', {
+      fetch('/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: this.encode({

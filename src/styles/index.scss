@@ -15,6 +15,7 @@
 @import './partials/_structure';
 @import './partials/_folded-corners';
 @import './partials/_folded-corners-left';
+@import './partials/_contact-component';
 @import './partials/_animations';
 @import './partials/_recent-projects';
 @import './partials/_home-header';
@@ -34,4 +35,18 @@
 img.test {
   -webkit-filter: opacity(.7);
   filter: opacity(.7);
+}
+
+.btn-action {
+  $background: $orange;
+  $border: $orange;
+  @include button-variant(
+    $background,
+    $border,
+    $hover-background: darken($background, 7.5%),
+    $hover-border: darken($border, 10%),
+    $active-background: darken($background, 10%),
+    $active-border: darken($border, 12.5%)
+  )
+  color: $white;
 }
