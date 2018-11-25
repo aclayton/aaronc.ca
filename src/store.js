@@ -36,10 +36,7 @@ export default new Vuex.Store({
       // }
     ],
     ui: {
-      menuActive: true
-    },
-    availability: {
-      msg: 'Aaron is a self-motivated web development professional, available for hire, or projects large and small.'
+      menuActive: false
     }
   },
   mutations: {
@@ -58,16 +55,6 @@ export default new Vuex.Store({
     },
     ui: state => {
       return state.ui
-    },
-    navClasses: state => {
-      if (!state.ui.menuActive) {
-        return ['animated', 'slideOutLeft']
-      } else {
-        return ['col-10', 'col-md-4', 'col-lg-3', 'animated', 'slideInLeft']
-      }
-    },
-    availability: state => {
-      return state.availability
     }
   }
 })
