@@ -1,17 +1,17 @@
 <template>
   <div class="home">
-    <home-header />
-    <recent-projects />
+    <app-home-header />
+    <app-recent-projects />
   </div>
 </template>
 <script>
-import RecentProjects from '@/components/RecentProjects.vue'
-import HomeHeader from '@/components/HomeHeader.vue'
+import AppRecentProjects from '@/components/AppRecentProjects.vue'
+import AppHomeHeader from '@/components/AppHomeHeader.vue'
 export default {
   name: 'home',
   components: {
-    RecentProjects,
-    HomeHeader
+    AppRecentProjects,
+    AppHomeHeader
   }
 }
 </script>
