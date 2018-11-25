@@ -28,7 +28,7 @@
 </template>
 <script>
 import 'vue-awesome/icons/chevron-down'
-import Logo from '@/components/Logo.vue'
+import Logo from '@/components/logo.vue'
 export default {
   name: 'HomeHeader',
 
