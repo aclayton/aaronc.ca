@@ -23,7 +23,7 @@
   </footer>
 </template>
 <script>
-import Logo from '@/components/Logo.vue'
+import Logo from '@/components/logo.vue'
 import 'vue-awesome/icons/brands/facebook-square'
 import 'vue-awesome/icons/brands/github'
 import 'vue-awesome/icons/brands/twitter-square'

@@ -116,7 +116,7 @@
   </div>
 </template>
 <script>
-import Logo from '@/components/Logo.vue'
+import Logo from '@/components/logo.vue'
 import 'vue-awesome/icons/brands/html5'
 import 'vue-awesome/icons/brands/vuejs'
 import 'vue-awesome/icons/brands/angular'
