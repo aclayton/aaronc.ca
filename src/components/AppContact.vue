@@ -4,9 +4,9 @@
     <b-container>
 
       <p>If you’d like to find out more about how I work and my process, please fill out the form and say hi!</p>
-      <p>&nbsp;</p>
+      <!-- <p>&nbsp;</p>
       <hr />
-      <p>&nbsp;</p>
+      <p>&nbsp;</p> -->
       <b-form
         id="contactForm"
         method="post"

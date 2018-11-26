@@ -1,6 +1,6 @@
 #contact {
   padding: $spacer*5 0;
-  background-color: lighten($secondary, 25%);
+  background-color: lighten($secondary, 50%);
   position: relative;
 
   .alerts {
@@ -18,6 +18,6 @@
 
   hr {
     border-top-style: dashed;
-    border-top-width: 2px; 
+    border-top-width: 2px;
   }
 }

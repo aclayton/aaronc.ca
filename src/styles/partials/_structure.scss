@@ -70,24 +70,46 @@ html,
 #footer {
   padding: $spacer*3 0;
   background-color: darken($primary, 45%);
-  color: transparentize($white, .7);
+  color: transparentize($white, .3);
+  .container {
+    @include clearfix;
+  }
 
-  .socials {
-    display: grid;
-    grid-template-columns: auto auto;
-    text-align: center;
-    svg {
-      height: 80px;
-      width: 65px;
+  .logo {
+    width: 25%;
+    float: left;
+  }
+
+  .numbers {
+    margin-left: $spacer;
+    width: calc(75% - #{$spacer});
+    float: left;
+    p,
+    a {
+      color: transparentize($white, .3);
+    }
+    p {
+      margin-bottom: $spacer/2;
     }
   }
 
-  a {
-    color: transparentize($white, .7);
-  }
+  .socials {
+    padding-top: $spacer*2;
+    width: 100%;
+    float: left;
+    a {
+      display: inline-block;
+      width: 50%;
+      text-align: center;
+      &:hover {
 
-  svg {
-    max-height: 80px;
+      }
+    }
+    svg {
+      width: 80px;
+      height: 40px;
+      max-height: 40px;
+    }
   }
 }
 
@@ -106,8 +128,25 @@ html,
     font-size: 1.5rem;
   }
 
-  footer p {
-    font-size: 1rem;
+  #footer {
+    .logo {
+      svg {
+        width: 88px;
+      }
+    }
+    .numbers {
+      width: calc(75% - #{$spacer} - 80px);
+      p {
+        font-size: 1rem;
+      }
+    }
+    .socials {
+      width: 80px;
+      padding-top: 0;
+      a {
+        display: block;
+      }
+    }
   }
 
   #about img {
