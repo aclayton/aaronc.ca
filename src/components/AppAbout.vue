@@ -2,8 +2,10 @@
   <div id="about">
     <div class="container">
       <div class="about-header">
-        <b-img class="test" alt="Aaron's GitHub Avatar" fluid src="https://avatars.githubusercontent.com/aclayton" />
-        <h2>Aaron is ...</h2>
+        <div class="about-header-inner">
+          <b-img class="test" alt="Aaron's GitHub Avatar" fluid src="https://avatars.githubusercontent.com/aclayton" />
+          <h2>Aaron is ...</h2>
+        </div>
       </div>
 
         <div class="details">
