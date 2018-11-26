@@ -31,28 +31,21 @@ html,
   background-color: darken($primary, 15%);
   color: $white;
 
-  img {
-    max-width: 120px;
-    border-radius: 120px;
-    margin-bottom: $spacer*3;
-  }
-
-  .col-12 {
-    text-align: center;
-  }
-  >div {
-    display: grid;
-    grid-template-columns: 120px auto;
-
+  .about-header {
+    @include clearfix;
+    h2 {
+      font-family: 'Permanent Marker', cursive;
+      margin-left: $spacer;
+      float: left;
+      transform: rotate(-10deg);
+    }
     img {
-      margin-right: $spacer*2;
-    }
-
-    p {
-      margin-left: $spacer*2;
+      max-width: 120px;
+      border-radius: 120px;
+      margin-bottom: $spacer*3;
+      float: left;
     }
   }
-
 }
 
 #skills {
@@ -149,8 +142,12 @@ html,
     }
   }
 
-  #about img {
-    max-width: 100%;
-    border-radius: 0;
+  #about {
+    .about-header {
+      h2 {
+        font-size: 4rem;
+        margin-left: 3rem;
+      }
+    }
   }
 }
