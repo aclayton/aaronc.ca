@@ -1,42 +1,140 @@
 #skills {
-
-
+  ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    // height: 420px;
+    background: transparentize($secondary, .7);
+    background: $white;
+    position: relative;
+    overflow: hidden;
+  }
   .skill {
-      width: 65px;
-      height: 65px;
-      border-radius: 65px;
-      background-color: $white;
-      color: $black;
-      overflow: hidden;
-      text-align: center;
-  }
-
-  label {
-    display: none;
-  }
-
-
-
-
-
-
-
-
-  .progress-bar {
-    font-size: 10px;
-    svg {
-      display: none;
+    @include text-hide;
+    position: absolute;
+    border-radius: 100%;
+    // background-color: $white;
+    background-position: center center;
+    background-size: contain;
+    background-repeat: no-repeat;
+    &.git {
+      top: -44px / 420px * 100%;
+      left: 0px / 1045px * 100%;
+      width: 203px / 1045px * 100%;
+      height: 203px / 420px * 100%;
+      background-image: url('/img/logos/git.png');
+    }
+    &.babel {
+      top: 90px / 420px *100%;
+      left: 24px / 1045px * 100%;
+      width: 235px / 1045px * 100%;
+      height: 235px / 420px * 100%;
+      background-image: url('/img/logos/babel.png');
+    }
+    &.node {
+      top: 233px / 420px *100%;
+      left: 0px / 1045px * 100%;
+      width: 208px / 1045px * 100%;
+      height: 208px / 420px * 100%;
+      background-image: url('/img/logos/nodejs.png');
+    }
+    &.javascript {
+      top: -6px / 420px *100%;
+      left: 197px / 1045px * 100%;
+      width: 223px / 1045px * 100%;
+      height: 223px / 420px * 100%;
+      background-image: url('/img/logos/js.jpg');
+    }
+    &.cordova {
+      top: 196px / 420px *100%;
+      left: 198px / 1045px * 100%;
+      width: 232px / 1045px * 100%;
+      height: 232px / 420px * 100%;
+      background-image: url('/img/logos/cordova.png');
+    }
+    &.oauth {
+      top: -7px / 420px *100%;
+      left: 394px / 1045px * 100%;
+      width: 164px / 1045px * 100%;
+      height: 164px / 420px * 100%;
+      background-image: url('/img/logos/oauth.png');
+    }
+    &.mongo {
+      top: 110px / 420px *100%;
+      left: 386px / 1045px * 100%;
+      width: 164px / 1045px * 100%;
+      height: 164px / 420px * 100%;
+      background-image: url('/img/logos/mongodb.jpg');
+    }
+    &.material {
+      top: 234px / 420px *100%;
+      left: 414px / 1045px * 100%;
+      width: 172px / 1045px * 100%;
+      height: 172px / 420px * 100%;
+      background-image: url('/img/logos/materialdesign.png');
+    }
+    &.angular {
+      top: -6px / 420px *100%;
+      left: 535px / 1045px * 100%;
+      width: 131px / 1045px * 100%;
+      height: 131px / 420px * 100%;
+      background-image: url('/img/logos/angularjs.png');
+    }
+    &.express {
+      top: 115px / 420px *100%;
+      left: 544px / 1045px * 100%;
+      width: 132px / 1045px * 100%;
+      height: 132px / 420px * 100%;
+      background-image: url('/img/logos/express.png');
+    }
+    &.bootstrap {
+      top: 218px / 420px *100%;
+      left: 574px / 1045px * 100%;
+      width: 217px / 1045px * 100%;
+      height: 217px / 420px * 100%;
+      background-image: url('/img/logos/bootstrap.png');
+    }
+    &.sass {
+      top: -13px / 420px *100%;
+      left: 651px / 1045px * 100%;
+      width: 188px / 1045px * 100%;
+      height: 188px / 420px * 100%;
+      background-image: url('/img/logos/sass.png');
+    }
+    &.vuejs {
+      top: 130px / 420px *100%;
+      left: 735px / 1045px * 100%;
+      width: 165px / 1045px * 100%;
+      height: 165px / 420px * 100%;
+      background-image: url('/img/logos/vuejs.png');
+    }
+    &.ubuntu {
+      top: 301px / 420px *100%;
+      left: 778px / 1045px * 100%;
+      width: 121px / 1045px * 100%;
+      height: 121px / 420px * 100%;
+      background-image: url('/img/logos/ubuntu.png');
+    }
+    &.webpack {
+      top: -13px / 420px *100%;
+      left: 839px / 1045px * 100%;
+      width: 224px / 1045px * 100%;
+      height: 224px / 420px * 100%;
+      background-image: url('/img/logos/webpack.png');
+    }
+    &.html5 {
+      top: 218px / 420px *100%;
+      left: 859px / 1045px * 100%;
+      width: 211px / 1045px * 100%;
+      height: 211px / 420px * 100%;
+      background-image: url('/img/logos/html5.png');
     }
   }
 }
 
 @include media-breakpoint-up(md) {
   #skills {
-    .progress-bar {
-      font-size: 12px;
-      svg {
-        display: inline-block;
-      }
-    }
+
   }
 }

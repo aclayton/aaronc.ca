@@ -36,7 +36,7 @@
     background: linear-gradient(-120deg, rgba(2,0,36,1) 25%, rgba(9,9,121,1) 50%, rgba(0,212,255,1) 85%);
     opacity: .8;
 
-    $speed: 30s;
+    $speed: 15s;
     -webkit-animation: rotating $speed linear infinite;
     -moz-animation: rotating $speed linear infinite;
     -ms-animation: rotating $speed linear infinite;

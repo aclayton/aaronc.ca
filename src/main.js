@@ -8,9 +8,7 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 import Icon from 'vue-awesome/components/Icon.vue'
 import VueScrollTo from 'vue-scrollto'
 import VueWaypoint from 'vue-waypoint'
-import VueAnime from './anime'
 
-Vue.use(VueAnime)
 Vue.use(BootstrapVue)
 Vue.use(VueScrollTo)
 Vue.use(VueWaypoint)
