@@ -6,7 +6,7 @@
     class="container-fluid"
   >
     <div class="logo">
-      <logo class="home bounceInDown" color="#ffffff" alt="" />
+      <logo class="home animated bounceInDown" color="#ffffff" alt="" />
     </div>
     <div class="main-msg">
       <div class="main-msg-inner">
@@ -47,7 +47,9 @@ export default {
 
   mounted() {
     this.$nextTick(() => {
-      window.addEventListener('resize', this.handleResize)
+      if (window.innerWidth > 600) {
+        window.addEventListener('resize', this.handleResize)
+      }
       this.handleResize()
     })
   },
@@ -58,12 +60,7 @@ export default {
 
   methods: {
     handleResize() {
-      if (window.innerWidth > 600) {
-        this.homeHeaderStyle.height = `${window.innerHeight}px`;
-      } else {
-        this.homeHeaderStyle.height = `${window.innerHeight}px`;
-        window.removeEventListener('resize', this.handleResize)
-      }
+      this.homeHeaderStyle.height = `${window.innerHeight}px`;
     }
   }
 }
