@@ -10,14 +10,26 @@ module.exports = {
           // Absolute path to compiled SPA
           path.resolve(__dirname, 'dist'),
           // List of routes to prerender
-          [
-            '/'
-          ],
-          {
-            // options
-          }
+          ['/'],
+          // options
+          {}
         ),
       ]
     }
+  },
+  chainWebpack: config => {
+    //html loader
+    config.module
+      .rule('html')
+      .test(/\.(html)$/)
+      .use(
+        {
+          options: {
+            // attrs: [':data-src']
+          }
+        }
+      )
+      .loader('html-loader')
+      .end()
   }
 }

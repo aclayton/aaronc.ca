@@ -42,7 +42,6 @@ export default {
   },
   methods: {
     handleResize () {
-      console.log(window.innerHeight*.3)
       this.ulStyle.height = `${window.innerHeight*.3}px`
     }
   }

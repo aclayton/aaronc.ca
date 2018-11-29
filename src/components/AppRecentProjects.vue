@@ -7,7 +7,7 @@
     <ul class="projects row">
       <li  v-for="project in projects" :class="project.cardClass" :style="portfolioItemStyle" :key="project._id" class="project col-md" :id="`project-${project._id}`">
         <div class="project-details" @click="handleHover(project)">
-          <!-- <router-link :to="{ name: 'project', params: { _id: project._id }}" class="img-wrap"> -->
+
 
           <div class="front" :style="portfolioItemStyle">
             <h2 class="hide">{{ project.name }}</h2>
@@ -19,8 +19,10 @@
               <p>{{ project.descShort }}</p>
             </div>
             <div v-if="project.projectLink || project.githubLink" class="button-row mt-4">
-              <b-btn class="mr-4" v-if="project.projectLink" :href="project.projectLink" target="_blank" variant="outline-secondary" size="sm">
-                <icon name="external-link-alt" /> View the Project
+              <b-btn class="mr-4" v-if="project.projectLink" @click="handleNavigation(project._id)" target="_blank" variant="outline-secondary" size="sm">
+
+                  <icon name="external-link-alt" /> View the Project
+
               </b-btn>
               <b-btn  class="btn-gh" v-if="project.githubLink" :href="project.githubLink" target="_blank" variant="outline-secondary" size="sm">
                 <icon name="brands/github" /> View the Code
@@ -28,7 +30,7 @@
             </div>
           </div>
 
-          <!-- </router-link> -->
+
         </div>
         <b-btn variant="link" class="btn-scroll" v-if="project.scrollToId" v-scroll-to="project.scrollToId">
           {{ project.scrollToText }}<br />
@@ -73,6 +75,12 @@ export default {
   },
 
   methods: {
+    handleNavigation(id) {
+      this.$router.push({
+        name: 'PortfolioItem',
+        params: { _id: id }
+      })
+    },
 
     handleHover(project) {
       if (project.cardClass === 'hover') {

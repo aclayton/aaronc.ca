@@ -1,30 +1,41 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import VuexPersistence from 'vuex-persist'
+
+import svgMachine from './html/svg-machine.html'
+
+const vuexLocal = new VuexPersistence({
+  storage: window.localStorage
+})
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
+  plugins: [vuexLocal.plugin],
   state: {
     projects: [
       {
         _id: 1,
         name: 'svg-machine.com',
+        url: 'svg-machine',
         imgMain: '/img/svg-machine.png',
         descShort: 'A little app to help make libraries of svgs, and export definition files.',
-        descLong: '',
+        descLong: svgMachine,
         githubLink: 'https://github.com/aclayton/svg-machine',
         projectLink: 'https://www.svg-machine.com',
         scrollToId: '#project-2',
         scrollToText: 'Next',
-        cardClass: ''
+        cardClass: '',
+        active: false
       },
       {
         _id: 2,
         name: 'More to come',
         imgMain: '/img/Octocat.png',
         githubLink: 'https://github.com/aclayton',
-        descShort: `There's more to come, but in the mean time check out my GitHub.`,
-        cardClass: ''
+        descShort: `There's more to come, but in the meantime check out my GitHub.`,
+        cardClass: '',
+        active: false
       }
     ],
     ui: {
@@ -52,6 +63,12 @@ export default new Vuex.Store({
   mutations: {
     UPDATE_UI_MENU (state, value) {
       state.ui.menuActive = value
+    },
+    SET_INACTIVE_PROJECT (state, id) {
+      state.projects.find(project => project._id === id ).active = false
+    },
+    SET_ACTIVE_PROJECT (state, id) {
+      state.projects.find(project => project._id === id ).active = true
     }
   },
   getters: {
@@ -62,6 +79,9 @@ export default new Vuex.Store({
       return id => {
         return state.projects.find(project => project._id === id)
       }
+    },
+    activeProject: state => {
+      return state.projects.find(project => project.active === true)
     },
     ui: state => {
       return state.ui
