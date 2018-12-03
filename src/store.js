@@ -31,22 +31,22 @@ export default new Vuex.Store({
       menuActive: false
     },
     skills: [
-      { _id: 1,   name: 'git' },
-      { _id: 2,   name: 'babel' },
-      { _id: 3,   name: 'node' },
-      { _id: 4,   name: 'javascript' },
-      { _id: 5,   name: 'cordova' },
-      { _id: 6,   name: 'oauth' },
-      { _id: 7,   name: 'mongo' },
-      { _id: 8,   name: 'material' },
-      { _id: 9,   name: 'angular' },
-      { _id: 10,  name: 'express' },
-      { _id: 11,  name: 'bootstrap' },
-      { _id: 12,  name: 'sass' },
-      { _id: 13,  name: 'vuejs' },
-      { _id: 14,  name: 'ubuntu' },
-      { _id: 15,  name: 'webpack' },
-      { _id: 16,  name: 'html5' }
+      { _id: 1,   name: 'git',        img_src: '/img/logos/git.png' },
+      { _id: 2,   name: 'babel',      img_src: '/img/logos/babel.png' },
+      { _id: 3,   name: 'node',       img_src: '/img/logos/nodejs.png' },
+      { _id: 4,   name: 'javascript', img_src: '/img/logos/js.jpg' },
+      { _id: 5,   name: 'cordova',    img_src: '/img/logos/cordova.png' },
+      { _id: 6,   name: 'oauth',      img_src: '/img/logos/oauth.png' },
+      { _id: 7,   name: 'mongo',      img_src: '/img/logos/mongodb.jpg' },
+      { _id: 8,   name: 'material',   img_src: '/img/logos/materialdesign.png' },
+      { _id: 9,   name: 'angular',    img_src: '/img/logos/angularjs.png' },
+      { _id: 10,  name: 'express',    img_src: '/img/logos/express.png' },
+      { _id: 11,  name: 'bootstrap',  img_src: '/img/logos/bootstrap.png' },
+      { _id: 12,  name: 'sass',       img_src: '/img/logos/sass.png' },
+      { _id: 13,  name: 'vuejs',      img_src: '/img/logos/vuejs.png' },
+      { _id: 14,  name: 'ubuntu',     img_src: '/img/logos/ubuntu.png' },
+      { _id: 15,  name: 'webpack',    img_src: '/img/logos/webpack.png' },
+      { _id: 16,  name: 'html5',      img_src: '/img/logos/html5.png' }
     ]
   },
   mutations: {

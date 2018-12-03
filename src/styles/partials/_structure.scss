@@ -23,13 +23,22 @@ html,
   }
 }
 
-
-
-
 #about {
   padding: $spacer*5 0;
-  background-color: darken($primary, 15%);
+  background-color: transparentize(darken($primary, 15%), .10);
   color: $white;
+  position: absolute;
+  width: 100%;
+
+  display: grid;
+  align-items: center;
+
+  // .container {
+  //
+  //     padding: $spacer*3 $spacer*2;
+  //     box-shadow: 0 0 80px rgba(0,0,0,.15);
+  //     max-width: 50%;
+  // }
 
   .about-header {
     display: grid;
@@ -56,7 +65,7 @@ html,
 }
 
 #skills {
-  background-color: darken($primary, 25%);
+  background-color: darken($primary, 15%);
   color: $white;
 }
 
