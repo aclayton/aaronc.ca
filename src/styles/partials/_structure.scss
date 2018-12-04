@@ -1,3 +1,28 @@
+// // Colors
+// $blue:    #007bff !default; // primary
+// $indigo:  #6610f2 !default;
+// $purple:  #6f42c1 !default;
+// $pink:    #e83e8c !default;
+// $red:     #dc3545 !default; // danger
+// $orange:  #fd7e14 !default;
+// $yellow:  #ffc107 !default; // warning
+// $green:   #28a745 !default; // success
+// $teal:    #20c997 !default;
+// $cyan:    #17a2b8 !default; // info
+//
+// // Grays
+// $white:    #fff !default;
+// $gray-100: #f8f9fa !default; // light
+// $gray-200: #e9ecef !default;
+// $gray-300: #dee2e6 !default;
+// $gray-400: #ced4da !default;
+// $gray-500: #adb5bd !default;
+// $gray-600: #868e96 !default; // secondary
+// $gray-700: #495057 !default;
+// $gray-800: #343a40 !default; // dark
+// $gray-900: #212529 !default;
+// $black:    #000 !default;
+
 body,
 html,
 #app,
@@ -27,18 +52,10 @@ html,
   padding: $spacer*5 0;
   background-color: transparentize(darken($primary, 15%), .10);
   color: $white;
-  position: absolute;
   width: 100%;
-
   display: grid;
   align-items: center;
-
-  // .container {
-  //
-  //     padding: $spacer*3 $spacer*2;
-  //     box-shadow: 0 0 80px rgba(0,0,0,.15);
-  //     max-width: 50%;
-  // }
+  min-height: 504px;
 
   .about-header {
     display: grid;
@@ -54,6 +71,7 @@ html,
       float: left;
       transform: rotate(-10deg);
       font-size: 2.25rem;
+      display: none;
     }
     img {
       max-width: 120px;
@@ -67,18 +85,29 @@ html,
 #skills {
   background-color: darken($primary, 15%);
   color: $white;
+  display: none;
+  position: absolute;
+  top: 0;
+  z-index: -1;
+  width: 100%;
 }
 
 #learn-more {
-    padding: $spacer*10 0;
+  padding: $spacer*10 0;
   background-color: darken($primary, 35%);
   color: $white;
 }
 
 #footer {
   padding: $spacer*3 0;
-  background-color: darken($primary, 45%);
+  background-color: darken($primary, 40%);
+  background-color: $gray-700;
   color: transparentize($white, .3);
+  p,
+  a {
+    color: transparentize($white, .3);
+  }
+
   .container {
     @include clearfix;
   }
@@ -92,10 +121,7 @@ html,
     margin-left: $spacer;
     width: calc(75% - #{$spacer});
     float: left;
-    p,
-    a {
-      color: transparentize($white, .3);
-    }
+
     p {
       margin-bottom: $spacer/2;
     }
@@ -107,17 +133,24 @@ html,
     float: left;
     a {
       display: inline-block;
-      width: 50%;
+      width: auto;
       text-align: center;
-      &:hover {
-
-      }
     }
     svg {
-      width: 80px;
+      width: 40px;
       height: 40px;
-      max-height: 40px;
+      margin-right: $spacer;
     }
+  }
+}
+
+.outro {
+  background-color: $black;
+  color: transparentize($white, .3);
+  padding: $spacer 0;
+  p {
+    margin: 0;
+    font-weight: bold;
   }
 }
 
@@ -136,28 +169,46 @@ html,
     font-size: 1.5rem;
   }
 
+  #contact {
+    >.container {
+      max-width: var(--breakpoint-md);
+    }
+  }
+
+  #skills {
+    display: block;
+  }
+
   #footer {
     .logo {
+      width: auto;
       svg {
         width: 88px;
       }
     }
     .numbers {
-      width: calc(75% - #{$spacer} - 80px);
+      width: calc(75% - #{$spacer} - 120px);
       p {
         font-size: 1rem;
       }
     }
     .socials {
-      width: 80px;
+      width: 120px;
       padding-top: 0;
+      float: right;
       a {
         display: block;
+        float: right;
+      }
+      svg {
+        margin-right: 0;
+        margin-left: $spacer;
       }
     }
   }
 
   #about {
+    height: auto;
     .about-header {
       h2 {
         font-size: 4rem;

@@ -1,12 +1,10 @@
 #header-home {
   position: relative;
-
   color: $white;
   text-align: center;
-
   display: grid;
   grid-template-columns: 100%;
-  grid-template-rows: 200px auto 120px;
+  grid-template-rows: 50% auto 120px;
   align-items: center;
   justify-content: center;
 
@@ -22,7 +20,7 @@
   }
 
   svg {
-    max-width: 50%;
+    max-width: 62%;
   }
 
   &::after {
@@ -60,9 +58,9 @@
 // -------------------------------
 @include media-breakpoint-up(md) {
     #header-home {
-      grid-template-rows: 300px auto 120px;
+      grid-template-rows: 50% auto 120px;
       svg {
-        max-width: 40%;
+        max-height: 80%;
         margin-top: $spacer*3;
       }
     }

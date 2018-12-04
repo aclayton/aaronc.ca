@@ -1,7 +1,7 @@
 export default {
     "particles": {
       "number": {
-        "value": 10, // No of images
+        "value": 20, // No of images
         "density": {
           "enable": true,
           "value_area": 600 // Specify area (Lesser is greater density)
@@ -50,17 +50,17 @@ export default {
         }
       },
       "size": {
-        "value": 140, // Adjust the image size
+        "value": 100, // Adjust the image size
         "random": true,
         "anim": {
           "enable": true,
           "speed": 5,
-          "size_min": 80,
+          "size_min": 60,
           "sync": false
         }
       },
       "line_linked": {
-        "enable": true,
+        "enable": false,
         "distance": 500,
         "color": "#ffffff",
         "opacity": .3,

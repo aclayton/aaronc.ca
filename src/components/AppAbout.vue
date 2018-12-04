@@ -45,7 +45,7 @@ export default {
         window.addEventListener('resize', this.handleResize)
       }
       this.handleResize()
-      
+
     })
   },
   destroyed() {
@@ -53,8 +53,12 @@ export default {
   },
   methods: {
     handleResize () {
-      let height = document.getElementById('particles-js').clientHeight;
-      this.aboutStyle.height = `${height}px`
+      if (window.innerWidth > 768) {
+        let height = document.getElementById('particles-js').clientHeight;
+        this.aboutStyle.height = `${height}px`
+      } else {
+        this.aboutStyle.height = `auto`
+      }
     },
   }
 }
