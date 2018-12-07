@@ -1,10 +1,9 @@
 <template>
-  <div id="about">
+  <div id="about" :style="aboutStyle">
     <div class="container">
       <div class="about-header">
         <div class="about-header-inner">
           <b-img class="test" alt="Aaron's GitHub Avatar" fluid src="https://avatars.githubusercontent.com/aclayton" />
-          <h2>Aaron is ...</h2>
         </div>
       </div>
 
@@ -31,6 +30,35 @@
 import 'vue-awesome/icons/file-download'
 import 'vue-awesome/icons/brands/github'
 export default {
-  name: 'About'
+  name: 'About',
+  data() {
+    return {
+      aboutStyle: {
+        height: 0
+      }
+    }
+  },
+  mounted() {
+    this.$nextTick(() => {
+      if (window.innerWidth > 600) {
+        window.addEventListener('resize', this.handleResize)
+      }
+      this.handleResize()
+
+    })
+  },
+  destroyed() {
+    window.removeEventListener('resize', this.handleResize)
+  },
+  methods: {
+    handleResize () {
+      if (window.innerWidth > 768) {
+        let height = document.getElementsByClassName('particles-js-canvas-el')[0].clientHeight;
+        this.aboutStyle.height = `${height}px`
+      } else {
+        this.aboutStyle.height = `auto`
+      }
+    },
+  }
 }
 </script>
