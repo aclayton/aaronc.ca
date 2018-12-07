@@ -1,7 +1,7 @@
 export default {
     "particles": {
       "number": {
-        "value": 20, // No of images
+        "value": 80, // No of images
         "density": {
           "enable": true,
           "value_area": 600 // Specify area (Lesser is greater density)
@@ -55,7 +55,7 @@ export default {
         "anim": {
           "enable": true,
           "speed": 5,
-          "size_min": 60,
+          "size_min": 20,
           "sync": false
         }
       },
@@ -68,12 +68,12 @@ export default {
       },
       "move": {
         "enable": true,
-        "speed": 6,   // Speed of particle motion
+        "speed": 2,   // Speed of particle motion
         "direction": "none",
         "random": false,
         "straight": false,
-        "out_mode": "bounce",
-        "bounce": true,
+        "out_mode": "out",
+        "bounce": false,
         "attract": {
           "enable": false,
           "rotateX": 600,

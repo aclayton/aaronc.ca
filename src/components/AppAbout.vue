@@ -4,7 +4,6 @@
       <div class="about-header">
         <div class="about-header-inner">
           <b-img class="test" alt="Aaron's GitHub Avatar" fluid src="https://avatars.githubusercontent.com/aclayton" />
-          <h2>Aaron is ...</h2>
         </div>
       </div>
 
@@ -54,7 +53,7 @@ export default {
   methods: {
     handleResize () {
       if (window.innerWidth > 768) {
-        let height = document.getElementById('particles-js').clientHeight;
+        let height = document.getElementsByClassName('particles-js-canvas-el')[0].clientHeight;
         this.aboutStyle.height = `${height}px`
       } else {
         this.aboutStyle.height = `auto`

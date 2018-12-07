@@ -4,7 +4,7 @@
       v-waypoint="{ active: true, callback: toggleShow, options: waypointOptions }"
     ></app-home-header>
     <app-recent-projects></app-recent-projects>
-    <div style="position: relative;">
+    <div style="position: relative; overflow: hidden;">
       <app-about></app-about>
       <app-skills></app-skills>
     </div>

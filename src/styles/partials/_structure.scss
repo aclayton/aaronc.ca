@@ -50,29 +50,32 @@ html,
 
 #about {
   padding: $spacer*5 0;
-  background-color: transparentize(darken($primary, 15%), .10);
+  background-color: transparentize(darken($primary, 15%), .15);
   color: $white;
   width: 100%;
   display: grid;
   align-items: center;
   min-height: 504px;
 
+  // p {
+  //   position: absolute;
+  //   background: $gray-900;
+  //   padding: 2rem 16rem;
+  //   transform: rotate(-10deg);
+  //   top: 33%;
+  //   width: 140%;
+  //   left: -19%;
+  // }
+
   .about-header {
     display: grid;
     align-items: center;
     justify-content: center;
+
     &-inner {
-        @include clearfix;
+      @include clearfix;
     }
 
-    h2 {
-      font-family: 'Permanent Marker', cursive;
-      margin-left: $spacer;
-      float: left;
-      transform: rotate(-10deg);
-      font-size: 2.25rem;
-      display: none;
-    }
     img {
       max-width: 120px;
       border-radius: 120px;
@@ -85,11 +88,12 @@ html,
 #skills {
   background-color: darken($primary, 15%);
   color: $white;
-  display: none;
+  // display: none;
   position: absolute;
   top: 0;
   z-index: -1;
   width: 100%;
+  height: 100%;
 }
 
 #learn-more {
