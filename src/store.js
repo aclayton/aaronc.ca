@@ -26,7 +26,21 @@ export default new Vuex.Store({
         scrollToId: '#project-2',
         scrollToText: 'Next',
         cardClass: '',
-        active: false
+        active: false,
+        slides: [
+          {
+            _id: 1,
+            caption: '',
+            text: '',
+            src: '/img/svg-machine.png'
+          }, {
+            _id: 2,
+            caption: '',
+            text: '',
+            src: '/img/Octocat.png'
+          }
+        ],
+        color: {'background-color': '#181d23'}
       },
       {
         _id: 2,

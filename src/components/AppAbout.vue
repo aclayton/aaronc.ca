@@ -12,13 +12,17 @@
 
 
           <div class="text-right">
-            <b-btn class="btn-github mr-2" variant="dark" size="sm" href="https://github.com/aclayton" target="_blank">
-              <icon name="brands/github" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;GitHub
-            </b-btn>
+            <span class="btn-special btn-special-dark">
+              <b-btn class="btn-github" href="https://github.com/aclayton" target="_blank">
+                <icon name="brands/github" />&nbsp;&nbsp;&nbsp;GitHub
+              </b-btn>
+            </span>
 
-            <b-btn class="btn-action" size="sm" href="/doc/aaron-clayton.pdf" target="_blank">
-              <icon name="file-download" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Resumé
-            </b-btn>
+            <span class="btn-special btn-special-action">
+              <b-btn class="btn-action" href="/doc/aaron-clayton.pdf" target="_blank">
+                <icon name="file-download" />&nbsp;&nbsp;&nbsp;Resumé
+              </b-btn>
+            </span>
           </div>
         </div>
 

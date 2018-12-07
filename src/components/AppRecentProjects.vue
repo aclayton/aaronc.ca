@@ -21,12 +21,12 @@
             <div v-if="project.projectLink || project.githubLink" class="button-row mt-4">
               <b-btn class="mr-4" v-if="project.projectLink" @click="handleNavigation(project._id)" target="_blank" variant="outline-secondary" size="sm">
 
-                  <icon name="external-link-alt" /> View the Project
+                  <icon name="link" />&nbsp;&nbsp;&nbsp;View the Project
 
               </b-btn>
-              <b-btn  class="btn-gh" v-if="project.githubLink" :href="project.githubLink" target="_blank" variant="outline-secondary" size="sm">
+              <!-- <b-btn  class="btn-gh" v-if="project.githubLink" :href="project.githubLink" target="_blank" variant="outline-secondary" size="sm">
                 <icon name="brands/github" /> View the Code
-              </b-btn>
+              </b-btn> -->
             </div>
           </div>
 
@@ -43,7 +43,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import 'vue-awesome/icons/brands/github'
-import 'vue-awesome/icons/external-link-alt'
+import 'vue-awesome/icons/link'
 
 export default {
   name: 'RecentProjects',

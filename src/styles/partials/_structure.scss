@@ -23,18 +23,30 @@
 // $gray-900: #212529 !default;
 // $black:    #000 !default;
 
-body,
-html,
-#app,
-#app>.row,
-#app>.row>div {
-  height: 100%;
+body {
+  background: $black;
 }
 
 #app {
   font-family: 'Roboto', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.carousel-indicators {
+  li {
+    width: 6px;
+    height: 6px;
+    border-radius: 6px;
+  }
+  .active {
+    background: transparentize($white, .3);
+  }
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  display: none;
 }
 
 .btn-to-top {
@@ -48,6 +60,26 @@ html,
   }
 }
 
+h1 {
+  font-weight: 900;
+  letter-spacing: -3px;
+}
+
+#project-page {
+  color: transparentize($white, .6);
+  height: 100%;
+  padding-top: $spacer;
+
+  h2 {
+    font-weight: 900;
+    letter-spacing: -2px;
+  }
+
+  .carousel-item:focus {
+    outline: 0;
+  }
+}
+
 #about {
   padding: $spacer*5 0;
   background-color: transparentize(darken($primary, 15%), .15);
@@ -56,16 +88,6 @@ html,
   display: grid;
   align-items: center;
   min-height: 504px;
-
-  // p {
-  //   position: absolute;
-  //   background: $gray-900;
-  //   padding: 2rem 16rem;
-  //   transform: rotate(-10deg);
-  //   top: 33%;
-  //   width: 140%;
-  //   left: -19%;
-  // }
 
   .about-header {
     display: grid;
@@ -88,7 +110,6 @@ html,
 #skills {
   background-color: darken($primary, 15%);
   color: $white;
-  // display: none;
   position: absolute;
   top: 0;
   z-index: -1;
@@ -169,6 +190,10 @@ html,
 // MEDIA ADJUSTMENTS
 // -------------------------------
 @include media-breakpoint-up(md) {
+
+  #project-page {
+    padding-top: $spacer*3;
+  }
   p {
     font-size: 1.5rem;
   }

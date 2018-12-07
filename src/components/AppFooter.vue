@@ -4,6 +4,7 @@
 
       <div class="logo">
         <logo color="rgba(255, 255, 255, 0.7)"></logo>
+        <!-- <logo color="#007bff"></logo> -->
       </div>
 
       <div class="numbers">

@@ -60,9 +60,13 @@
         </b-form-group>
         <div class="text-right">
 
-          <b-button type="submit" size="sm" class="btn-action">
-            <icon name="paper-plane" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Submit
-          </b-button>
+          <span class="btn-special-action">
+
+            <b-button type="submit">
+              <icon name="paper-plane" />&nbsp;&nbsp;&nbsp;Submit
+            </b-button>
+
+          </span>
 
         </div>
 
