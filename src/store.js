@@ -32,12 +32,12 @@ export default new Vuex.Store({
             _id: 1,
             caption: '',
             text: '',
-            src: '/img/svg-machine.png'
+            src: '/img/projects/svg-machine-start.png'
           }, {
             _id: 2,
             caption: '',
             text: '',
-            src: '/img/Octocat.png'
+            src: '/img/projects/svg-machine-check.png'
           }
         ],
         color: {'background-color': '#181d23'}

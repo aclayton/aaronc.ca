@@ -6,7 +6,7 @@
         <p>{{ activeProject.descShort }}</p>
         <hr />
         <span class="btn-special btn-special-project">
-          <b-btn :href="activeProject.projectLink">
+          <b-btn :href="activeProject.projectLink" target="_blank">
             <icon name="external-link-alt" />&nbsp;&nbsp;&nbsp;view the project
           </b-btn>
         </span>
@@ -19,12 +19,17 @@
     </header>
     <div role="main">
       <div class="container">
+        <div class="carousel-top">
+          <span class="indicator red"></span>
+          <span class="indicator yellow"></span>
+          <span class="indicator green"></span>
+        </div>
 
       <b-carousel
         id="carousel1"
         controls
         indicators
-        :interval="12000"
+        :interval="6000"
       >
 
           <b-carousel-slide

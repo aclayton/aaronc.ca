@@ -27,22 +27,52 @@
 .hide {
   display: none !important;
 }
-.carousel {
+
+@mixin carouselTop($this-spacer) {
+  height: $this-spacer*2;
+  width: 100%;
+  background-color: $white;
+  border-top-left-radius: .25rem;
+  border-top-right-radius: .25rem;
   margin-top: $spacer*2;
+  position: relative;
+
+  .indicator{
+    position: absolute;
+    top: $this-spacer/2;
+    height: $this-spacer;
+    width: $this-spacer;
+    border-radius: $this-spacer;
+  }
+  .red {
+    background-color: $red;
+    left: $this-spacer;
+  }
+  .yellow {
+    background-color: $yellow;
+    left: $this-spacer*2.5;
+  }
+  .green {
+    background-color: $green;
+    left: $this-spacer*4;
+  }
+}
+
+.carousel {
   margin-bottom: $spacer*2;
   box-shadow: 0 9px 1px -3px rgba(0,0,0,.35);
   background-color: transparentize($white, .9);
   border-bottom-left-radius: .25rem;
   border-bottom-right-radius: .25rem;
 
-  &::before {
-    content: '';
-    display: block;
-    height: 33px;
-    width: 100%;
-    background-color: $white;
-    border-top-left-radius: .25rem;
-    border-top-right-radius: .25rem;
+  &-top {
+    @include carouselTop($spacer/2);
+  }
+}
+
+@include media-breakpoint-up(md) {
+  .carousel-top {
+    @include carouselTop($spacer);
   }
 }
 
@@ -105,6 +135,9 @@ img.test {
   }
   &-special-gh {
     @include special-btn($purple);
+  }
+  &-special-fb {
+    @include special-btn($blue);
   }
   &-special-action {
     @include special-btn($orange);

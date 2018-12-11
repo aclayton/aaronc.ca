@@ -4,7 +4,6 @@
 
       <div class="logo">
         <logo color="rgba(255, 255, 255, 0.7)"></logo>
-        <!-- <logo color="#007bff"></logo> -->
       </div>
 
       <div class="numbers">
@@ -19,6 +18,21 @@
         <a class="gh" href="https://github.com/aclayton">
           <icon name="brands/github" />
         </a>
+
+        <!-- <span class="btn-special btn-special-gh">
+          <b-btn href="https://github.com/aclayton">
+            <icon name="brands/github" />
+          </b-btn>
+        </span>
+
+
+        <span class="btn-special btn-special-fb">
+          <b-btn href="https://facebook.com/profile.php?id=100000204910548">
+            <icon name="brands/facebook-square" />
+          </b-btn>
+        </span> -->
+
+
       </div>
 
     </div>
