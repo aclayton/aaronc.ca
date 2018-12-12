@@ -96,6 +96,7 @@ export default {
           window.removeEventListener('resize', this.handleResize)
       } else {
           this.portfolioItemStyle.height = `${window.innerWidth / 2.333}px`
+          this.portfolioItemStyle.height = `${window.innerWidth / 3.333}px`
       }
     },
 

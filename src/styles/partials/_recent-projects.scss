@@ -109,6 +109,36 @@
     }
   }
   #project-2 {
+    background-color: lighten(#181d23, 25%);
+    .front, .back {
+      background-color: #181d23;
+    }
+    .front {
+      @include folded-corner(
+          $page-padding: 0,
+          $page-radius: 0,
+          $page-background: $primary,
+          $fold-size: 48px,
+          $fold-color: lighten($primary, 20%)
+      );
+    }
+    .back {
+      @include folded-corner-left(
+          $page-padding: $spacer*2,
+          $page-radius: 0,
+          $page-background: $primary,
+          $fold-size: 48px,
+          $fold-color: darken($primary, 5%)
+      );
+      padding: $spacer*2;
+    }
+
+
+    .btn-scroll {
+      color: $white;
+    }
+  }
+  #project-3 {
     background-color: lighten($danger, 25%);
     box-shadow: inset 0px 0px 30px rgba(0,0,0,.25);
     .front, .back {

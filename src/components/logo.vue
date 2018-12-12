@@ -1,5 +1,5 @@
 <template>
-  <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 439 293" enable-background="new 0 0 439 293" xml:space="preserve">
+  <svg style="overflow: visible;" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 439 293" enable-background="new 0 0 439 293" xml:space="preserve">
      <path :class="theClass" :fill="color" d="M0,0v293h317.096H439V0H0z M237.029,11.719c-22.456,9.376-42.024,24.667-57.045,43.527l-25.1-43.527H237.029 z M11.707,11.719h129.659L11.707,232.274V11.719z M11.707,281.279v-25.564L147.228,22.854l149.592,258.426H11.707z M427.293,281.279 h-75.465c17.657-8.206,33.538-19.031,46.82-32.514l-10.508-6.368c-21.541,20.917-48.856,33.65-78.311,36.982L186.303,65.103 c3.917-5.264,8.239-10.316,12.959-15.041c25.429-25.458,59.236-39.493,95.193-39.493c35.257,0,68.438,13.474,93.686,37.99 l10.508-5.492c-13.266-13.472-29.12-24.314-46.756-31.347h75.4V281.279z"/>
   </svg>
 </template>

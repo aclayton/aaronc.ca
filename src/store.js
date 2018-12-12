@@ -44,6 +44,38 @@ export default new Vuex.Store({
       },
       {
         _id: 2,
+        name: 'AC Logo',
+        imgMain: '/img/ac-white.png',
+        descShort: 'A logo of divine proportion',
+        descLong: '',
+        githubLink: '',
+        projectLink: 'https://www.aaronc.ca',
+        scrollToId: '',
+        scrollToText: '',
+        cardClass: '',
+        active: false,
+        slides: [
+          {
+            _id: 1,
+            src: '/img/projects/logo-1.png',
+            caption: '',
+            text: ''
+          }, {
+            _id: 2,
+            src: '/img/projects/logo-2.png',
+            caption: '',
+            text: ''
+          }, {
+            _id: 3,
+            src: '/img/projects/logo-3.png',
+            caption: '',
+            text: ''
+          }
+        ],
+        color: {'background-color': '#007bff'}
+      },
+      {
+        _id: 3,
         name: 'More to come',
         imgMain: '/img/Octocat.png',
         githubLink: 'https://github.com/aclayton',
