@@ -12,7 +12,7 @@
         method="post"
         data-netlify="true"
         data-netlify-honeypot="bot-field"
-        @submit.prevent="handleSubmit">
+        @submit.prevent="fbSubmit">
 
         <input type="hidden" name="form-name" value="contact" />
 
@@ -99,6 +99,7 @@
 </template>
 <script>
 import 'vue-awesome/icons/paper-plane'
+import * as fb from './../appConfig'
 export default {
   name: 'ContactComponent',
 
@@ -127,7 +128,8 @@ export default {
   },
 
   mounted() {
-    this.status = 'ready'
+    this.status = 'ready',
+    console.log(fb)
   },
 
   methods: {
@@ -149,6 +151,16 @@ export default {
           key => `${encodeURIComponent(key)}=${encodeURIComponent(data[key])}`
         )
         .join('&');
+    },
+    fbSubmit () {
+      const record = {
+        name: this.form.name,
+        email: this.form.email,
+        phone: this.form.phone,
+        message: this.form.message
+      }
+      console.log(record)
+      fb.messagesCollection.add(record)
     },
     handleSubmit () {
       fetch('/', {
