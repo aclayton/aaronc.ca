@@ -12,6 +12,7 @@
     <app-scroll-to-top
       :class="ui.menuActive ? 'active' : ''"
     ></app-scroll-to-top>
+    <app-alerts></app-alerts>
   </div>
 </template>
 
@@ -21,6 +22,7 @@ import AppRecentProjects from '@/components/AppRecentProjects.vue'
 import AppSkills from '@/components/AppSkills.vue'
 import AppAbout from '@/components/AppAbout.vue'
 import AppContact from '@/components/AppContact.vue'
+import AppAlerts from '@/components/AppAlerts.vue'
 import AppScrollToTop from '@/components/AppScrollToTop.vue'
 import { mapGetters } from 'vuex'
 
@@ -31,6 +33,7 @@ export default {
     AppSkills,
     AppAbout,
     AppContact,
+    AppAlerts,
     AppScrollToTop
   },
   data() {

@@ -1,10 +1,13 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import VuexPersistence from 'vuex-persist'
+import * as fireBase from './fireBase'
+import axios from 'axios'
 
 import svgMachine from './html/svg-machine.html'
 
 const vuexLocal = new VuexPersistence({
+  supportCircular: true,
   storage: window.localStorage
 })
 
@@ -13,6 +16,23 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   plugins: [vuexLocal.plugin],
   state: {
+    contactForm: {
+      name: '', email: '', phone: '', message: '', date: new Date
+    },
+    alerts: [
+      {
+        type: 'messageError',
+        variant: 'danger',
+        message: 'Sorry, there was an error sending your message.',
+        active: false
+      },
+      {
+        type: 'messageSuccess',
+        variant: 'success',
+        message: 'Your message has been sent!',
+        active: true
+      }
+    ],
     projects: [
       {
         _id: 1,
@@ -115,11 +135,44 @@ export default new Vuex.Store({
     },
     SET_ACTIVE_PROJECT (state, id) {
       state.projects.find(project => project._id === id ).active = true
+    },
+    SET_ALERT (state, type) {
+      state.alerts.find(alert => alert.type === type).active = true
+    },
+    CLEAR_ALERTS (state) {
+      state.alerts.forEach(alert => alert.active = false)
+    },
+    CLEAR_CONTACT_FORM (state) {
+      state.contactForm = { name: '', email: '', phone: '', message: '' }
+    }
+  },
+  actions: {
+    sendMessage (state) {
+      this.state.contactForm.date = new Date
+      const replyUrl = `https://us-central1-aaroncca-form-processor.cloudfunctions.net/responseMessage`
+      const forwardUrl = `https://us-central1-aaroncca-form-processor.cloudfunctions.net/forwardMessage`
+      const forwardAndReply = [
+          axios.post(replyUrl, this.state.contactForm),
+          axios.post(forwardUrl, this.state.contactForm)
+      ]
+      fireBase.messagesCollection.add(this.state.contactForm)
+        .then(() => {
+          Promise.all(forwardAndReply)
+            .then(state.commit('SET_ALERT', 'messageSuccess'))
+        })
+        .catch(err => {
+          state.commit('SET_ALERT', 'messageError')
+          console.warn(err)
+        })
     }
   },
   getters: {
-    projects: state => {
-      return state.projects
+    ui: state => state.ui,
+    skills: state => state.skills,
+    projects: state => state.projects,
+    contactFormData: state => state.contactForm,
+    activeAlerts: state => {
+      return state.alerts.find(alert => alert.active === true)
     },
     projectById: state => {
       return id => {
@@ -128,12 +181,6 @@ export default new Vuex.Store({
     },
     activeProject: state => {
       return state.projects.find(project => project.active === true)
-    },
-    ui: state => {
-      return state.ui
-    },
-    skills: state => {
-      return state.skills
     }
   }
 })
