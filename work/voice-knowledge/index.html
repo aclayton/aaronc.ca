@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Voice-to-knowledge pipeline — Aaron Clayton</title>
+<meta name="description" content="Voice capture routed through an AI agent into a structured, linked knowledge base — and the earlier design that could never have worked, and why the diagnosis was architectural rather than a matter of code.">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/style.css">
+
+<style>
+  .fig { margin: var(--s5) 0; }
+  .fig svg { display: block; width: 100%; height: auto; }
+  .fig figcaption { margin-top: var(--s2); color: var(--muted);
+                    font-size: .9375rem; max-width: 62ch; }
+  .fig .lbl { font: 600 .6875rem/1 "Plex Mono", monospace; letter-spacing: .1em;
+              text-transform: uppercase; fill: var(--muted); }
+  .fig .t   { font: 400 .8125rem/1.25 "Plex Sans", sans-serif; fill: var(--fg); }
+  .fig .tm  { font: 400 .75rem/1.3 "Plex Mono", monospace; fill: var(--muted); }
+  .fig .box { fill: var(--bg); stroke: var(--rule); }
+  .fig .box-a { fill: var(--accent-wash); stroke: color-mix(in srgb, var(--accent-fill) 45%, transparent); }
+  .fig .box-dead { fill: none; stroke: var(--ghost-line); stroke-dasharray: 5 4; }
+  .fig .edge { stroke: var(--hairline); fill: none; }
+  .fig .edge-s { stroke: var(--ghost-line); fill: none; }
+  .fig .dot { fill: var(--accent-fill); }
+  .fig .stop { fill: none; stroke: var(--fg); }
+
+  table.t { width: 100%; border-collapse: collapse; font-size: var(--t-small); }
+  table.t th, table.t td { text-align: left; vertical-align: top;
+    padding: var(--s2) var(--s3); border-bottom: 1px solid var(--rule); }
+  table.t thead th { font-size: .6875rem; font-weight: 600; letter-spacing: .1em;
+    text-transform: uppercase; color: var(--muted); border-bottom: 1px solid var(--fg); }
+  table.t th[scope=row] { font-weight: 400; }
+  table.t code { font-family: var(--font-mono); font-size: .75rem; }
+  .scrollw { overflow-x: auto; }
+
+  .back { display: inline-block; font-size: var(--t-small); margin-bottom: var(--s3); }
+  .next { margin-top: var(--s5); padding-top: var(--s4); border-top: 1px solid var(--rule); }
+</style>
+</head>
+
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site">
+  <nav aria-label="Main">
+    <a class="brand" href="/">Aaron Clayton</a>
+    <ul>
+      <li><a href="/#work">Work</a></li>
+      <li><a href="/#how">How I work</a></li>
+      <li><a href="/#contact">Contact</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main id="main">
+
+  <section class="hero">
+    <a class="back" href="/#work">&larr; All work</a>
+    <p class="eyebrow">Applied AI · UX · systems integration</p>
+    <h1>Voice-to-knowledge pipeline</h1>
+    <p class="lede">Speak a thought on a phone and have it arrive as a structured, linked note. The interesting part is not the pipeline that works &mdash; it is the one before it, which could never have worked, and took a read of the platform's own rules to diagnose.</p>
+    <p class="note">The first design was broken by <strong>architecture, not code</strong>. Finding that out was worth more than patching it would have been.</p>
+  </section>
+
+  <section>
+    <h2>The problem</h2>
+    <p>Capture is where most note systems die. Not retrieval, not organisation &mdash; capture. If recording a thought takes more than a few seconds, the thought does not get recorded, and the system quietly stops existing.</p>
+    <p>So the constraint was absolute: the act of recording had to be the same act as having it filed. Say it, and it is organised. No inbox to clear, no triage pass, no discipline required later &mdash; because discipline required later is a system with a failure date on it.</p>
+  </section>
+
+  <section class="band">
+    <div>
+      <h2>The one that works</h2>
+      <p>Dictation on the phone, a local service on the tailnet, an agent turn in the middle, and a structured note out the other end.</p>
+
+      <figure class="fig">
+        <svg viewBox="0 0 900 300" role="img" aria-labelledby="f1t f1d">
+          <title id="f1t">The working pipeline: dictated speech becomes a structured, linked note without any manual filing step</title>
+          <desc id="f1d">The phone dictates a thought into a shortcut, which posts the transcript over the tailnet to a small local service. The service runs an agent turn and returns the structured result, which the pipeline files into the knowledge base as a note with frontmatter, a summary, key points and links.</desc>
+
+          <text class="lbl" x="14" y="20">Capture &mdash; the act of speaking is the act of filing</text>
+
+          <rect class="box" x="14"  y="36" width="196" height="56" rx="5"/>
+          <text class="tm" x="28" y="58">Dictate Text</text>
+          <text class="tm" x="28" y="74">one spoken thought,</text>
+          <text class="tm" x="28" y="88">no app to open</text>
+
+          
+          
+
+          <rect class="box" x="254" y="36" width="196" height="56" rx="5"/>
+          <text class="tm" x="268" y="58">POST over the tailnet</text>
+          <text class="tm" x="268" y="74">private network only,</text>
+          <text class="tm" x="268" y="88">nothing exposed publicly</text>
+
+          
+          
+
+          <rect class="box-a" x="494" y="36" width="196" height="56" rx="5"/>
+          <text class="tm" x="508" y="58">A small local service</text>
+          <text class="tm" x="508" y="74">runs one agent turn</text>
+          <text class="tm" x="508" y="88">per note</text>
+
+          
+          
+
+          <rect class="box" x="734" y="36" width="152" height="56" rx="5"/>
+          <text class="tm" x="748" y="58">A structured note</text>
+          <text class="tm" x="748" y="74">frontmatter +</text>
+          <text class="tm" x="748" y="88">sectioned body</text>
+
+          <!-- the note shape -->
+          
+          
+
+          <rect class="box" x="64" y="138" width="386" height="146" rx="6"/>
+          <text class="lbl" x="80" y="162">What lands in the knowledge base</text>
+          <text class="tm" x="80" y="188">date · time · type · tags · status</text>
+          <text class="tm" x="80" y="208">source: iphone-dictation</text>
+          
+        <path class="edge-s" stroke-width="2" d="M210,54 H250"/>
+        <path class="edge-s" stroke-width="2" d="M210,74 H250"/>
+        <path class="edge-s" stroke-width="2" d="M450,54 H490"/>
+        <path class="edge-s" stroke-width="2" d="M450,74 H490"/>
+        <path class="edge-s" stroke-width="2" d="M690,54 H730"/>
+        <path class="edge-s" stroke-width="2" d="M690,74 H730"/>
+        <path class="edge" stroke-width="2" d="M810,92 V110 H257 V138"/>
+        <path class="edge" stroke-width="2" d="M810,110 H693 V138"/>
+        <path class="edge" stroke-width="1" d="M80,224 H434"/>
+          <text class="tm" x="80" y="242">Summary · Key Points</text>
+          <text class="tm" x="80" y="262">Action Items · Links</text>
+
+          <rect class="box" x="500" y="138" width="386" height="146" rx="6"/>
+          <text class="lbl" x="516" y="162">Why the shape matters</text>
+          <text class="tm" x="516" y="188">The sections are not decoration. They are</text>
+          <text class="tm" x="516" y="206">what makes the note findable and linkable</text>
+          <text class="tm" x="516" y="224">later, by a person or by an agent.</text>
+          <text class="tm" x="516" y="252">An unstructured transcript is a note that</text>
+          <text class="tm" x="516" y="270">only its author will ever read again.</text>
+        </svg>
+        <figcaption><strong>The filing is not a second step.</strong> A template with enforced sections turns dictation into something the rest of the knowledge base can actually use.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section>
+    <h2>The one that could never work &mdash; and why that was the useful part</h2>
+    <p>The first version of this routed the whole thing through a chat bot. The phone would send the question as a message, the agent would answer into the chat, and the phone would read the reply back. It looked reasonable. It was impossible, and no amount of debugging would have fixed it, because it was wrong about how the platform works.</p>
+
+    <figure class="fig">
+      <svg viewBox="0 0 900 330" role="img" aria-labelledby="f2t f2d">
+        <title id="f2t">Why the first design could never work: a bot never receives its own messages, and a shortcut cannot read a chat as the user</title>
+        <desc id="f2d">The first design sent the phone's question as a message authored by the bot, so the agent never received it. It then tried to read the reply by polling for updates, but the gateway already consumes those updates. Both paths are dead. The working design instead returns the answer inside the same HTTP response to the original request.</desc>
+
+        <text class="lbl" x="14" y="20">The first design &mdash; two independent faults, either one fatal</text>
+
+        <!-- path A -->
+        <rect class="box-dead" x="14" y="34" width="250" height="72" rx="5"/>
+        <text class="tm" x="30" y="56">1 · send the question</text>
+        <text class="tm" x="30" y="74">the shortcut posted it <em>as the bot</em></text>
+        <text class="tm" x="30" y="92">so the agent never received it</text>
+
+        <!-- path B -->
+        <rect class="box-dead" x="14" y="122" width="250" height="72" rx="5"/>
+        <text class="tm" x="30" y="144">2 · read the reply</text>
+        <text class="tm" x="30" y="162">the shortcut polled for updates</text>
+        <text class="tm" x="30" y="180">the gateway already consumes those</text>
+
+        <!-- the stop marks -->
+        <circle class="stop" cx="300" cy="70" r="15" stroke-width="1.5"/>
+        
+        <circle class="stop" cx="300" cy="158" r="15" stroke-width="1.5"/>
+        
+
+        <!-- the measured evidence -->
+        <rect class="box-a" x="348" y="34" width="538" height="160" rx="6"/>
+        <text class="lbl" x="366" y="58">The measurement that settled it</text>
+        <text class="tm" x="366" y="84">Updates waiting to be read by the shortcut:</text>
+        <text class="t"  x="366" y="118" style="font: 600 1.618rem/1 'Plex Sans', sans-serif">0</text>
+        <text class="tm" x="404" y="118">the queue is drained before anything else can read it</text>
+        <text class="tm" x="366" y="148">Two faults, in opposite directions. Fixing either one still</text>
+        <text class="tm" x="366" y="166">leaves the other, and no amount of code changes the rule</text>
+        <text class="tm" x="366" y="184">underneath: a bot never sees its own outgoing messages.</text>
+
+        <!-- the working shape -->
+        
+        <path class="edge-s" stroke-width="2" d="M315,70 H342"/>
+        <path class="edge-s" stroke-width="2" d="M315,158 H342"/>
+        <path class="edge-s" stroke-width="1.5" stroke-dasharray="5 4" d="M139,194 V252"/>
+        <text class="lbl" x="14" y="238">What replaced it</text>
+
+        <rect class="box-a" x="14" y="252" width="872" height="64" rx="6"/>
+        <circle class="dot" cx="38" cy="284" r="4"/>
+        <text class="t"  x="54" y="288">The answer comes back inside the same request.</text>
+        <text class="tm" x="54" y="306">The shortcut holds the connection open while the agent thinks, so there is nothing to poll and nothing to race.</text>
+      </svg>
+      <figcaption><strong>Both faults are structural.</strong> One sends the message as the wrong author; the other reads a queue that is already drained. The design that works stops trying to observe the conversation and instead makes the reply a return value.</figcaption>
+    </figure>
+
+    <p>The lesson generalises: when a design is impossible, the impossibility is usually about <em>ownership</em> &mdash; who authors a thing, who consumes it, who is allowed to see it. Reading the platform's own rules and finding the two places where the plan contradicted them took less time than another round of debugging would have, and it produced a design that is simpler than the one it replaced.</p>
+  </section>
+
+  <section class="band">
+    <div>
+      <h2>Two pipelines, two jobs</h2>
+      <p>The system deliberately keeps recording and answering apart, because they are different promises. One is a note filed for later; the other is an answer you hear out loud.</p>
+
+      <figure class="fig">
+        <svg viewBox="0 0 900 190" role="img" aria-labelledby="f3t f3d">
+          <title id="f3t">Recording and answering are separate paths with separate endpoints</title>
+          <desc id="f3d">The note path files dictated text or audio into an inbox folder for a scheduled processor, producing a structured note. The ask path runs a live agent turn and speaks the answer back to the phone without storing anything.</desc>
+
+          <rect class="box" x="14" y="24" width="424" height="150" rx="6"/>
+          <text class="lbl" x="30" y="48">Recording for later</text>
+          <text class="t"  x="30" y="74">"Remember this."</text>
+          <text class="tm" x="30" y="100">dictated text or audio &rarr; an inbox folder</text>
+          <text class="tm" x="30" y="120">&rarr; a scheduled processor structures it</text>
+          <text class="tm" x="30" y="140">&rarr; a linked note in the knowledge base</text>
+          <text class="tm" x="30" y="162">Nothing to wait for. Filing is the whole job.</text>
+
+          <rect class="box-a" x="462" y="24" width="424" height="150" rx="6"/>
+          <text class="lbl" x="478" y="48">Answering now</text>
+          <text class="t"  x="478" y="74">"Tell me something."</text>
+          <text class="tm" x="478" y="100">a dictated question &rarr; a live agent turn</text>
+          <text class="tm" x="478" y="120">&rarr; the reply returns in the response</text>
+          <text class="tm" x="478" y="140">&rarr; the phone speaks it aloud</text>
+          <text class="tm" x="478" y="162">Nothing is stored. This one is a conversation.</text>
+        </svg>
+        <figcaption>Keeping them apart is why neither is compromised: the note path never makes you wait, and the answer path never files something you only wanted to hear.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section>
+    <h2>Facts, in a form you can check</h2>
+    <div class="scrollw">
+    <table class="t">
+      <tbody>
+        <tr><th scope="row">Capture</th><td>A phone dictation shortcut &mdash; nine actions, no app to open</td></tr>
+        <tr><th scope="row">Transport</th><td>HTTP over a private tailnet; the service is not exposed publicly</td></tr>
+        <tr><th scope="row">Output shape</th><td>Frontmatter plus four enforced sections: summary, key points, action items, links</td></tr>
+        <tr><th scope="row">Typical latency</th><td>Around 6&nbsp;seconds for a direct answer, around 13 when the agent needs a tool call</td></tr>
+        <tr><th scope="row">Ceiling</th><td>180&nbsp;seconds, after which the request is abandoned rather than left hanging</td></tr>
+        <tr><th scope="row">Failure handling</th><td>A failed agent run returns an error rather than an empty answer</td></tr>
+        <tr><th scope="row">Scheduling</th><td>Note processing runs on a timer, so a backlog drains without being watched</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <p><strong>Outcome.</strong> <!-- TODO: e.g. "in daily use since DATE, N notes captured, zero-friction capture on iOS". --></p>
+
+    <h3 style="margin-top:var(--s5)">What I would change next</h3>
+    <p>Three things, and none of them are cosmetic. The service currently listens on every interface rather than the private one, which is fine on this machine and wrong the moment it joins a network I do not trust. There is no shared secret on the answering endpoint, so any device on the network can spend model credits. And each question is a fresh turn with no memory of the last one &mdash; a session handle would fix that, and is the first thing I would add if the thing turns conversational.</p>
+  </section>
+
+  <div class="next">
+    <p class="note">Next: <a href="/work/bug-investigation/">Automated bug investigation</a> &rarr;</p>
+    <p class="note"><a href="/#work">&larr; All work</a></p>
+  </div>
+
+</main>
+
+<footer class="site">
+  <svg class="mark-foot" viewBox="18 0 216 144" aria-hidden="true" focusable="false">
+    <path fill="currentColor" d="M18,0v144h156.02H234V0H18z M134.625,5.76c-11.049,4.608-20.677,12.123-28.068,21.392L94.207,5.76H134.625z M23.76,5.76
+	h63.796L23.76,114.156V5.76z M23.76,138.24v-12.564L90.44,11.232l73.603,127.008H23.76z M228.24,138.24h-37.131
+	c8.688-4.032,16.502-9.352,23.037-15.979l-5.17-3.13c-10.599,10.28-24.039,16.538-38.531,18.176L109.666,31.996
+	c1.927-2.587,4.054-5.07,6.376-7.392c12.512-12.512,29.146-19.41,46.838-19.41c17.347,0,33.673,6.622,46.096,18.671l5.17-2.699
+	c-6.527-6.621-14.328-11.95-23.005-15.406h37.099V138.24z"/>
+  </svg>
+  <p>Aaron Clayton · Niagara, Canada</p>
+  <p><a href="https://github.com/aclayton" rel="me">GitHub</a></p>
+</footer>
+
+<script src="/accent.js" defer></script>
+
+</body>
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Not found — Aaron Clayton</title>
+<!-- A 404 is not a destination: index the page you land on, not this one. -->
+<meta name="robots" content="noindex, follow">
+
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/style.css">
+
+<style>
+  .nf { padding-block: var(--s6); max-width: var(--measure); }
+  .nf h1 { font-size: var(--t-h1); line-height: var(--lead-h); margin: 0 0 var(--s3); }
+  .nf .lede { margin-bottom: var(--s5); }
+  .nf nav ul { list-style: none; margin: 0; padding: 0; }
+  .nf nav li + li { border-top: 1px solid var(--rule); }
+  .nf nav a { display: block; padding: var(--s2) 0; text-decoration: none; }
+  .nf nav .t { display: block; font-weight: 600; color: var(--fg); }
+  .nf nav .d { display: block; color: var(--muted); font-size: .9375rem; }
+  .nf nav a:hover .t,
+  .nf nav a:focus-visible .t { color: var(--accent-text); }
+  .nf .more { margin-top: var(--s5); }
+</style>
+</head>
+
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site">
+  <nav aria-label="Main">
+    <a class="brand" href="/">Aaron Clayton</a>
+    <ul>
+      <li><a href="/#work">Work</a></li>
+      <li><a href="/#how">How I work</a></li>
+      <li><a href="/#contact">Contact</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main id="main">
+
+  <!-- ── Not found ───────────────────────────────────────────────────────────
+       A 404 has one job beyond saying so: offer the thing the visitor was
+       probably looking for. The links below are the whole site, which is short
+       enough that this is honest rather than a consolation. -->
+  <section class="nf">
+    <p class="eyebrow">Error 404</p>
+    <h1>Nothing here.</h1>
+    <p class="lede">That address doesn&rsquo;t exist on this site &mdash; or it did once and
+       doesn&rsquo;t any more. Either way it&rsquo;s the link, not you.</p>
+
+    <nav aria-label="Where to go instead">
+      <ul>
+        <li><a href="/"><span class="t">Start here</span>
+          <span class="d">What I do, and the systems I&rsquo;ve built.</span></a></li>
+        <li><a href="/work/bug-investigation/"><span class="t">Bug investigation</span>
+          <span class="d">Turning an unread bug queue into reviewable plans.</span></a></li>
+        <li><a href="/work/finance-automation/"><span class="t">Finance automation</span>
+          <span class="d">Reconciling statements by hand, then not by hand.</span></a></li>
+        <li><a href="/work/voice-knowledge/"><span class="t">Voice to knowledge</span>
+          <span class="d">Walking notes that arrive as questions.</span></a></li>
+      </ul>
+    </nav>
+
+    <p class="note more">If you followed a link from somewhere and expected it to work,
+       <a href="/#contact">tell me</a> &mdash; that&rsquo;s a bug, and I&rsquo;d like to fix it.</p>
+  </section>
+
+</main>
+
+<footer class="site">
+  <svg class="mark-foot" viewBox="18 0 216 144" aria-hidden="true" focusable="false">
+    <path fill="currentColor" d="M18,0v144h156.02H234V0H18z M134.625,5.76c-11.049,4.608-20.677,12.123-28.068,21.392L94.207,5.76H134.625z M23.76,5.76
+	h63.796L23.76,114.156V5.76z M23.76,138.24v-12.564L90.44,11.232l73.603,127.008H23.76z M228.24,138.24h-37.131
+	c8.688-4.032,16.502-9.352,23.037-15.979l-5.17-3.13c-10.599,10.28-24.039,16.538-38.531,18.176L109.666,31.996
+	c1.927-2.587,4.054-5.07,6.376-7.392c12.512-12.512,29.146-19.41,46.838-19.41c17.347,0,33.673,6.622,46.096,18.671l5.17-2.699
+	c-6.527-6.621-14.328-11.95-23.005-15.406h37.099V138.24z"/>
+  </svg>
+  <p>Aaron Clayton · Niagara, Canada</p>
+  <p><a href="https://github.com/aclayton" rel="me">GitHub</a></p>
+</footer>
+
+<script src="/accent.js" defer></script>
+
+</body>
+</html>

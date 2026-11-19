@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>End-to-end personal finance automation — Aaron Clayton</title>
+<meta name="description" content="Ingesting statements, receipts and bank exports into one store, then reconciling them through a tiered matcher with an explicit invariant: a receipt is evidence, never a financial event.">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/style.css">
+
+<style>
+  .fig { margin: var(--s5) 0; }
+  .fig svg { display: block; width: 100%; height: auto; }
+  .fig img { display: block; width: 100%; height: auto;
+             border: 1px solid var(--rule); border-radius: var(--s1); }
+  .fig figcaption { margin-top: var(--s2); color: var(--muted);
+                    font-size: .9375rem; max-width: 62ch; }
+  .fig .lbl { font: 600 .6875rem/1 "Plex Mono", monospace; letter-spacing: .1em;
+              text-transform: uppercase; fill: var(--muted); }
+  .fig .t   { font: 400 .8125rem/1.25 "Plex Sans", sans-serif; fill: var(--fg); }
+  .fig .tm  { font: 400 .75rem/1.3 "Plex Mono", monospace; fill: var(--muted); }
+  .fig .box { fill: var(--bg); stroke: var(--rule); }
+  .fig .box-a { fill: var(--accent-wash); stroke: color-mix(in srgb, var(--accent-fill) 45%, transparent); }
+  .fig .edge { stroke: var(--hairline); fill: none; }
+  .fig .edge-s { stroke: var(--ghost-line); fill: none; }
+  .fig .bar { fill: var(--accent-fill); }
+  .fig .bar-p { fill: color-mix(in srgb, var(--fg) 22%, transparent); }
+  .fig .axis { stroke: var(--rule); }
+  .fig .grid { stroke: var(--rule); stroke-dasharray: 2 5; }
+
+  table.t { width: 100%; border-collapse: collapse; font-size: var(--t-small); }
+  table.t th, table.t td { text-align: left; vertical-align: top;
+    padding: var(--s2) var(--s3); border-bottom: 1px solid var(--rule); }
+  table.t thead th { font-size: .6875rem; font-weight: 600; letter-spacing: .1em;
+    text-transform: uppercase; color: var(--muted); border-bottom: 1px solid var(--fg); }
+  table.t th[scope=row] { font-weight: 400; }
+  table.t code { font-family: var(--font-mono); font-size: .75rem; }
+  .scrollw { overflow-x: auto; }
+
+  .back { display: inline-block; font-size: var(--t-small); margin-bottom: var(--s3); }
+  .next { margin-top: var(--s5); padding-top: var(--s4); border-top: 1px solid var(--rule); }
+</style>
+</head>
+
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site">
+  <nav aria-label="Main">
+    <a class="brand" href="/">Aaron Clayton</a>
+    <ul>
+      <li><a href="/#work">Work</a></li>
+      <li><a href="/#how">How I work</a></li>
+      <li><a href="/#contact">Contact</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main id="main">
+
+  <section class="hero">
+    <a class="back" href="/#work">&larr; All work</a>
+    <p class="eyebrow">Automation · data pipelines · reconciliation</p>
+    <h1>End-to-end personal finance automation</h1>
+    <p class="lede">Statements, emailed receipts and brokerage exports arrive in different formats, at different times, from different sources. This ingests all of them into one store and reconciles them through a tiered matcher &mdash; with one rule that decides everything: <em>a receipt is evidence, never a financial event.</em></p>
+    <p class="note">Everything below is measured from the running system &mdash; <strong>2,214 records spanning May 2025 to November 2026</strong>. <strong>Counts and structure only:</strong> the amounts, the vendors and the account numbers are the part that stays private, which is a constraint the design had to respect from the start rather than one added at the end.</p>
+  </section>
+
+  <section>
+    <h2>The problem</h2>
+    <p>Recording a transaction is easy. Knowing that <em>this</em> evidence belongs to <em>that</em> charge is the whole problem &mdash; and it is not a parsing problem, it is a judgement problem wearing a parsing problem's clothes.</p>
+    <p>Three things arrive independently and none of them agree. A receipt is emailed on the day of purchase and quotes a pre-tax figure. The card charge lands days later, includes the tax, and names a parent company rather than the shop. A brokerage export arrives at month end, in a different currency, with its own idea of what a date is. And in every set there is one payment that must never be allowed to settle two bills, because the fastest way to make a ledger wrong is to make it look tidy.</p>
+    <p>Reconciling that by hand is the kind of work that quietly never gets done.</p>
+  </section>
+
+  <section class="band">
+    <div>
+      <h2>How it fits together</h2>
+      <p>Four sources, one store, and a matcher in the middle that is doing the actual thinking.</p>
+
+      <figure class="fig">
+        <svg viewBox="0 0 900 250" role="img" aria-labelledby="f1t f1d">
+          <title id="f1t">The ingestion path: four sources into one store, then reconciliation, then a dashboard</title>
+          <desc id="f1d">Emailed receipts, bank CSV exports, brokerage activity exports and manual entries all normalise into a single SQLite store. A tiered matcher then reconciles evidence against charges, and a self-hosted dashboard reads the result.</desc>
+
+          <text class="lbl" x="14" y="20">Sources &mdash; they disagree by design</text>
+
+          <rect class="box" x="14"  y="34" width="196" height="52" rx="5"/>
+          <text class="tm" x="28" y="56">emailed receipts</text>
+          <text class="tm" x="28" y="72">pre-tax, day of purchase</text>
+
+          <rect class="box" x="222" y="34" width="196" height="52" rx="5"/>
+          <text class="tm" x="236" y="56">bank exports</text>
+          <text class="tm" x="236" y="72">post-tax, days later</text>
+
+          <rect class="box" x="430" y="34" width="196" height="52" rx="5"/>
+          <text class="tm" x="444" y="56">brokerage activity</text>
+          <text class="tm" x="444" y="72">month-end, multi-currency</text>
+
+          <rect class="box" x="638" y="34" width="196" height="52" rx="5"/>
+          <text class="tm" x="652" y="56">manual entries</text>
+          <text class="tm" x="652" y="72">the fallback that stays</text>
+
+          
+          
+          
+          
+          
+          
+          
+
+          <rect class="box-a" x="250" y="142" width="348" height="48" rx="5"/>
+          <text class="t"  x="266" y="163">One normalised store</text>
+          <text class="tm" x="266" y="180">SQLite · every source parsed on its own terms</text>
+
+          
+          
+        <path class="edge" stroke-width="2" d="M112,86 V118"/>
+        <path class="edge" stroke-width="2" d="M320,86 V118"/>
+        <path class="edge" stroke-width="2" d="M528,86 V118"/>
+        <path class="edge" stroke-width="2" d="M736,86 V118"/>
+        <path class="edge" stroke-width="2" d="M112,118 H736"/>
+        <path class="edge" stroke-width="2" d="M424,118 V142"/>
+        <path class="edge" stroke-width="2" d="M424,190 V218"/>
+        <path class="edge" stroke-width="2" d="M652,232 H670"/>
+
+          <rect class="box" x="196" y="218" width="456" height="28" rx="5"/>
+          <text class="tm" x="212" y="236">tiered matcher &rarr; anomaly detection &rarr; self-hosted dashboard</text>
+
+          <text class="lbl" x="676" y="236">then a person looks</text>
+        </svg>
+        <figcaption><strong>Nothing is merged at ingest time.</strong> Sources are parsed on their own terms and kept distinguishable, so the matcher can always tell what kind of evidence it is holding.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section>
+    <h2>The matcher: six tiers, ordered by how much they assume</h2>
+    <p>Each tier is a different theory of how two records can be the same thing. They run in order, and the order is the design: the cheap, safe theories first, so a confident match never gets made by a fuzzy rule that happened to fire first.</p>
+
+    <figure class="fig">
+      <svg viewBox="0 0 900 400" role="img" aria-labelledby="f2t f2d">
+        <title id="f2t">The six matching tiers, each reached when the previous one cannot decide</title>
+        <desc id="f2d">Exact match first. If the amounts differ by the tax rate, a tax-adjusted match. If the currencies differ, a foreign-currency match at the day's rate. Then fuzzy matching, then batch matching for grouped charges, then split matching for one payment covering several items. A final invariant check rejects any result where one payment would settle two bills.</desc>
+
+        <g transform="translate(14,14)">
+          <rect class="box-a" x="0"   y="0" width="252" height="52" rx="5"/>
+          <text class="tm" x="14" y="22">1 · exact</text>
+          <text class="tm" x="14" y="40">same amount, same day</text>
+
+          <rect class="box" x="0"   y="66" width="252" height="52" rx="5"/>
+          <text class="tm" x="14" y="88">2 · tax-adjusted</text>
+          <text class="tm" x="14" y="106">receipt said X, charge says X + tax</text>
+
+          <rect class="box" x="0"   y="132" width="252" height="52" rx="5"/>
+          <text class="tm" x="14" y="154">3 · foreign currency</text>
+          <text class="tm" x="14" y="172">matches only at that day's rate</text>
+
+          <rect class="box" x="0"   y="198" width="252" height="52" rx="5"/>
+          <text class="tm" x="14" y="220">4 · fuzzy</text>
+          <text class="tm" x="14" y="238">the vendor writes its own name three ways</text>
+
+          <rect class="box" x="0"   y="264" width="252" height="52" rx="5"/>
+          <text class="tm" x="14" y="286">5 · batch</text>
+          <text class="tm" x="14" y="304">one charge, several items behind it</text>
+
+          <rect class="box" x="0"   y="330" width="252" height="52" rx="5"/>
+          <text class="tm" x="14" y="352">6 · split</text>
+          <text class="tm" x="14" y="370">one payment, several bills</text>
+
+          <!-- the escalation spine -->
+          
+          
+          
+          
+          
+          <text class="lbl" x="306" y="140" transform="rotate(90 306 140)">cannot decide &mdash; next tier</text>
+
+          <!-- the invariant -->
+          
+        <path class="edge" stroke-width="1.5" d="M126,52 V66"/>
+        <path class="edge" stroke-width="1.5" d="M126,118 V132"/>
+        <path class="edge" stroke-width="1.5" d="M126,184 V198"/>
+        <path class="edge" stroke-width="1.5" d="M126,250 V264"/>
+        <path class="edge" stroke-width="1.5" d="M126,316 V330"/>
+        <path class="edge-s" stroke-width="1.5" stroke-dasharray="5 4" d="M252,96 H462"/>
+          <rect class="box-a" x="470" y="60" width="416" height="268" rx="6"/>
+          <circle cx="496" cy="90" r="4" class="bar"/>
+          <text class="t"  x="510" y="94">The invariant that outranks all six</text>
+          <text class="tm" x="496" y="124">A receipt is evidence, never an event.</text>
+          <text class="tm" x="496" y="148">A charge is the event. The receipt only</text>
+          <text class="tm" x="496" y="166">tells you what the charge was for.</text>
+          <text class="tm" x="496" y="200">So the matcher is allowed to fail. What it</text>
+          <text class="tm" x="496" y="218">is never allowed to do is let one payment</text>
+          <text class="tm" x="496" y="236">settle two bills &mdash; a wrong ledger that</text>
+          <text class="tm" x="496" y="254">looks tidy is worse than an obvious gap.</text>
+          <text class="tm" x="496" y="288">Anything unmatched surfaces for a person,</text>
+          <text class="tm" x="496" y="306">rather than being guessed at.</text>
+        </g>
+      </svg>
+      <figcaption><strong>The correctness rules mattered more than the parsing.</strong> Every tier exists because a real pair of records broke the tier above it, and the last line of defence is an invariant check that rejects a plausible match rather than accepting an impossible one.</figcaption>
+    </figure>
+  </section>
+
+  <section class="band">
+    <div>
+      <h2>What it holds, measured</h2>
+      <p>Two charts, both counts rather than amounts. The first is the volume of records the store has accumulated; the second is where they came from &mdash; which is really a chart about how many different formats one system had to learn.</p>
+
+      <figure class="fig">
+        <svg viewBox="0 0 900 282" role="img" aria-labelledby="f3t f3d">
+          <title id="f3t">Records ingested per month, May 2025 to November 2026</title>
+          <desc id="f3d">Monthly record counts rise from around sixty to seventy in mid-2025 to a peak of 222 in September 2026. January 2026 shows a step change from 75 to 103 as new sources were added. The final bar, November 2026, is partial at 11 records.</desc>
+
+          <text class="lbl" x="14" y="18">Records ingested per month</text>
+          <text class="tm"  x="14" y="34">peak 222 · Sep 2026</text>
+
+          <!-- gridlines -->
+          
+          
+          
+
+          <g>
+            <!-- 19 months, values 70 71 67 60 63 63 53 75 103 127 139 175 173 187 161 196 222 198 11 -->
+            <rect class="bar" x="60"  y="149.5" width="28" height="50.5"/>
+            <rect class="bar" x="102" y="148.8" width="28" height="51.2"/>
+            <rect class="bar" x="144" y="151.7" width="28" height="48.3"/>
+            <rect class="bar" x="186" y="156.8" width="28" height="43.2"/>
+            <rect class="bar" x="228" y="154.6" width="28" height="45.4"/>
+            <rect class="bar" x="270" y="154.6" width="28" height="45.4"/>
+            <rect class="bar" x="312" y="161.8" width="28" height="38.2"/>
+            <rect class="bar" x="354" y="145.9" width="28" height="54.1"/>
+
+            <rect class="bar" x="396" y="125.8" width="28" height="74.2"/>
+            <rect class="bar" x="438" y="108.5" width="28" height="91.5"/>
+            <rect class="bar" x="480" y="99.8"  width="28" height="100.2"/>
+            <rect class="bar" x="522" y="73.9"  width="28" height="126.1"/>
+            <rect class="bar" x="564" y="75.3"  width="28" height="124.7"/>
+            <rect class="bar" x="606" y="65.2"  width="28" height="134.8"/>
+            <rect class="bar" x="648" y="84.0"  width="28" height="116.0"/>
+            <rect class="bar" x="690" y="58.7"  width="28" height="141.3"/>
+            <rect class="bar" x="732" y="40.0"  width="28" height="160.0"/>
+            <rect class="bar" x="774" y="57.3"  width="28" height="142.7"/>
+
+            <rect class="bar-p" x="816" y="192.1" width="28" height="7.9"/>
+          </g>
+
+          <!-- year markers -->
+          <text class="lbl" x="60"  y="220">May 2025</text>
+          <text class="lbl" x="396" y="220">Jan 2026</text>
+          <text class="lbl" x="760" y="220">Sep 2026</text>
+          <text class="tm"  x="816" y="220">Nov</text>
+
+          
+        <path class="grid" stroke-width="1" d="M52,80 H852"/>
+        <path class="grid" stroke-width="1" d="M52,140 H852"/>
+        <path class="axis" stroke-width="1.5" d="M52,200 H852"/>
+        <path class="edge-s" stroke-width="1.5" d="M396,254 V206"/>
+          <text class="tm" x="400" y="264">a step change &mdash; sources came online together</text>
+          <text class="tm" x="620" y="264">faded bar = month in progress</text>
+        </svg>
+        <figcaption><strong>2,214 records.</strong> The growth is in what the system learned to read, not in spending &mdash; and the November bar is drawn faded because the month is not finished, which is the sort of thing a chart should say rather than hide.</figcaption>
+      </figure>
+
+      <figure class="fig">
+        <svg viewBox="0 0 900 160" role="img" aria-labelledby="f4t f4d">
+          <title id="f4t">Ingested records by source format</title>
+          <desc id="f4d">Bank CSV exports account for 1,330 records, brokerage activity exports 431, brokerage holdings 267, and email-sourced records 186.</desc>
+
+          <text class="lbl" x="14" y="18">Records by originating format &mdash; four parsers</text>
+          <g transform="translate(14,34)">
+            <text class="tm" x="0" y="14">Bank CSV</text>
+            <rect class="bar" x="200" y="4" width="560" height="14" rx="3"/>
+            <text class="tm" x="770" y="14">1,330</text>
+
+            <text class="tm" x="0" y="48">Brokerage activity</text>
+            <rect class="bar" x="200" y="38" width="181" height="14" rx="3"/>
+            <text class="tm" x="391" y="48">431</text>
+
+            <text class="tm" x="0" y="82">Brokerage holdings</text>
+            <rect class="bar" x="200" y="72" width="112" height="14" rx="3"/>
+            <text class="tm" x="322" y="82">267</text>
+
+            <text class="tm" x="0" y="116">Email / other</text>
+            <rect class="bar" x="200" y="106" width="78" height="14" rx="3"/>
+            <text class="tm" x="288" y="116">186</text>
+          </g>
+        </svg>
+        <figcaption>Four formats, none of them introduced by choice. Each one arrived because the alternative was re-keying it.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section>
+    <h2>What made it interesting</h2>
+    <p>Not the parsing. Reconciliation is where the edge cases live, and every one of them is a case where the <em>correct</em> answer is less convenient than the plausible one:</p>
+    <ul>
+      <li>A receipt quoted before tax against a charge that includes it &mdash; matching on the pre-tax figure is right, matching on the post-tax figure is a coincidence.</li>
+      <li>A foreign vendor on a domestic card, which reconciles only at that day's rate and therefore matches on some days and not others.</li>
+      <li>One payment that must never settle two bills, no matter how well the numbers line up.</li>
+    </ul>
+    <p>Building it changed how I think about automation generally. The interesting part is never the happy path; it is deciding what the system does when it cannot be sure &mdash; and the answer here is that it says so.</p>
+    <p><strong>Outcome.</strong> <!-- TODO: honest framing, e.g. "runs unattended, N statements/month, reconciliation down from a manual evening to a review". --></p>
+  </section>
+
+  <section>
+    <h2>The dashboard</h2>
+    <p>The pipeline's output still has to be readable by a person, so it ends in an interface. One
+       self-contained HTML file &mdash; no build step, no framework, self-hosted fonts &mdash; reading
+       the same SQLite store, installable to a phone home screen, and organised as three views:
+       <strong>Dashboard</strong>, <strong>Ledger</strong>, <strong>Receipts</strong>.</p>
+    <p>The dashboard opens with a snapshot, and then two cards that are the actual point:
+       <strong>Wins</strong> and <strong>Opportunities</strong>. Not more figures &mdash; the reading of
+       them. Below that, four charts (spending by category across twelve months, this month, the
+       savings-rate trend and its projection, the net-worth projection), then bills, a watchlist, a
+       portfolio, and a drop zone for importing statements.</p>
+
+    <figure class="fig">
+      <img src="dashboard.png" width="1280" height="1120" loading="lazy" decoding="async"
+           alt="The finance dashboard: a snapshot row, Wins and Opportunities cards, and a spending-by-category chart. Every dollar figure is blurred, and the charts with them.">
+      <figcaption><strong>Values blurred &mdash; with the dashboard's own control.</strong> It is the only honest way to screenshot it, and the feature is the more interesting story. It is dark by design: its ground is <code>#0b0910</code>, the same night value the rest of this site uses.</figcaption>
+    </figure>
+
+    <h3 style="margin-top:var(--s5)">The blur button, and why it is the part worth keeping</h3>
+    <p>There is a button that hides every dollar figure, and it exists for a reason that is not
+       obvious: <strong>so the dashboard can be shown to someone.</strong> Every money value is wrapped
+       at runtime and blurred; the charts blur with it.</p>
+    <p>Two decisions inside that small feature are better than the feature itself:</p>
+    <ul>
+      <li><strong>It tags money by walking the DOM, not by matching a list of CSS classes.</strong>
+          The class list had already missed twenty-eight elements &mdash; bare table cells carrying no
+          class, a portfolio total, a formatted <code>+$41 (+0.8%)</code>. A privacy control that
+          misses things is worse than no privacy control, because it looks like it worked.</li>
+      <li><strong>The blur is deliberately not persisted.</strong> Reload the page and the real values
+          are back, so it can never be left switched on and mistaken for missing data.</li>
+    </ul>
+    <p>That is a small piece of engineering, and it is the difference between a demo and something a
+       person keeps using. Its existence tells you the author expected to want to show it to
+       somebody &mdash; which is a design assumption you can build a feature on, and the reason this
+       page can show you the interface at all.</p>
+  </section>
+
+  <section class="band">
+    <div>
+      <h2>Facts, in a form you can check</h2>
+      <div class="scrollw">
+      <table class="t">
+        <tbody>
+          <tr><th scope="row">Store</th><td>SQLite, single file, 11 tables</td></tr>
+          <tr><th scope="row">Records</th><td>2,214, spanning May 2025 to November 2026</td></tr>
+          <tr><th scope="row">Sources</th><td>Four formats: bank CSV, brokerage activity, brokerage holdings, email</td></tr>
+          <tr><th scope="row">Matching</th><td>Six ordered tiers, cheapest and safest first</td></tr>
+          <tr><th scope="row">Ingestion</th><td>Email receipts parsed directly; every source de-duplicated on the way in</td></tr>
+          <tr><th scope="row">Diagnostics</th><td>Anomaly detection over the reconciled result, run on a schedule</td></tr>
+          <tr><th scope="row">Interface</th><td>One self-contained HTML file, no build step; a dashboard, a ledger and a receipts view; installable to a phone home screen</td></tr>
+          <tr><th scope="row">Sharing</th><td>A blur control that hides every money figure on demand &mdash; runtime-tagged, and deliberately not persisted</td></tr>
+          <tr><th scope="row">Data policy</th><td>Counts and structure only. No amounts, no vendors, no account numbers &mdash; in the system's public description and in this page alike</td></tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+  </section>
+
+  <div class="next">
+    <p class="note">Next: <a href="/work/voice-knowledge/">Voice-to-knowledge pipeline</a> &rarr;</p>
+    <p class="note"><a href="/#work">&larr; All work</a></p>
+  </div>
+
+</main>
+
+<footer class="site">
+  <svg class="mark-foot" viewBox="18 0 216 144" aria-hidden="true" focusable="false">
+    <path fill="currentColor" d="M18,0v144h156.02H234V0H18z M134.625,5.76c-11.049,4.608-20.677,12.123-28.068,21.392L94.207,5.76H134.625z M23.76,5.76
+	h63.796L23.76,114.156V5.76z M23.76,138.24v-12.564L90.44,11.232l73.603,127.008H23.76z M228.24,138.24h-37.131
+	c8.688-4.032,16.502-9.352,23.037-15.979l-5.17-3.13c-10.599,10.28-24.039,16.538-38.531,18.176L109.666,31.996
+	c1.927-2.587,4.054-5.07,6.376-7.392c12.512-12.512,29.146-19.41,46.838-19.41c17.347,0,33.673,6.622,46.096,18.671l5.17-2.699
+	c-6.527-6.621-14.328-11.95-23.005-15.406h37.099V138.24z"/>
+  </svg>
+  <p>Aaron Clayton · Niagara, Canada</p>
+  <p><a href="https://github.com/aclayton" rel="me">GitHub</a></p>
+</footer>
+
+<script src="/accent.js" defer></script>
+
+</body>
+</html>

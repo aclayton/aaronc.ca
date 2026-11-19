@@ -1,0 +1,532 @@
+/* Aaron Clayton — aaronc.ca
+   Hand-written, no build step.
+
+   ── PROPORTIONAL SYSTEM ──────────────────────────────────────────────────
+   Every measurement on this page comes from one sequence. Nothing here is an
+   arbitrary number.
+
+     spacing    8   13   21   34   55   89
+     type       1   1.272   1.618   2.618   4.236
+     leading    1.618  (body)      1.272  (headings)
+     measure    derived:  container / 1.618   =  550px
+     container  55.625rem      —  890px
+
+   Adjacent spacing steps hold a constant ratio (1.6154–1.6250), so the spacing
+   scale is one continuous curve.
+
+   The type steps are 1 / 1.272 / 1.618 / 2.618 / 4.236, i.e. 1, √φ, φ, φ², φ³.
+   They do NOT hold one constant ratio: the first two transitions are half-steps
+   (×1.272) and the last two are full steps (×1.618). It is a φ-power *set*, not
+   a second curve at another scale. Baselines come from the same set — body
+   leading φ (1.618), headings √φ (1.272).
+
+   Section rhythm, gutters, grid gaps and control sizes read from the spacing
+   sequence.
+
+   ── COLOUR ───────────────────────────────────────────────────────────────
+   A cool neutral ground with a single accent hue. The hue is the only thing
+   that changes day to day; saturation and both lightnesses are pinned per hue so
+   that every day carries identical contrast (4.5:1) and no day reads as weaker
+   than another. Solve any new hue the same way.
+
+   Without accent.js the resting hue stands on its own. */
+
+/* ── TYPE ─────────────────────────────────────────────────────────────────
+   IBM Plex Sans (variable, 400–700) + IBM Plex Mono, both self-hosted from
+   this directory. Four files, ~91 KB, no third-party request, no CDN, no
+   Google Fonts call — consistent with the rest of the page carrying no
+   external dependencies.
+
+   Plex is chosen for the technical spine: it was drawn as a system of
+   related faces on a shared rational grid, its terminals are cut flat rather
+   than rounded, and it has a true companion mono. It reads as engineered
+   without reading as decorative.
+
+   font-display: swap — text is readable immediately in the fallback and the
+   real face arrives without blocking. Self-hosted same-origin, so the swap is
+   short. The unicode-range tells the browser not to fetch these at all for a
+   visitor who only ever sees non-Latin text.
+
+   Fallback order matters as much as the face: system-ui keeps the substitute
+   close in width, so nothing reflows badly if the font is blocked. */
+
+@font-face {
+  font-family: "Plex Sans";
+  src: url("/fonts/plex-sans.woff2") format("woff2-variations");
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+                 U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122,
+                 U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "Plex Mono";
+  src: url("/fonts/plex-mono-400.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+                 U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122,
+                 U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "Plex Mono";
+  src: url("/fonts/plex-mono-600.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+                 U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122,
+                 U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "Plex Mono";
+  src: url("/fonts/plex-mono-700.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+                 U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122,
+                 U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+:root {
+  /* ── sequence ── */
+  --s1: .5rem;       /*   8 */
+  --s2: .8125rem;    /*  13 */
+  --s3: 1.3125rem;   /*  21 */
+  --s4: 2.125rem;    /*  34 */
+  --s5: 3.4375rem;   /*  55 */
+  --s6: 5.5625rem;   /*  89 */
+
+  /* ── families ── */
+  --font-sans: "Plex Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* ── type ── */
+  --t-small:  .8125rem;   /* 13.00 */
+  --t-body:   1rem;       /* 16.00 */
+  --t-lede:   1.272rem;   /* 20.35 */
+  --t-h3:     1.272rem;   /* 20.35 */
+  --t-h2:     1.618rem;   /* 25.89 */
+  --t-h1:     2.618rem;   /* 41.89 */
+  --t-h1-max: 4.236rem;   /* 67.78 */
+
+  --lead:   1.618;
+  --lead-h: 1.272;
+
+  /* ── framework ── */
+  /* The measure is derived from the container, not from a ch count.
+     `ch` is the width of "0" in whatever font is loaded, so `61.8ch` silently
+     meant 550px in the old system font and 594px in Plex — which broke the
+     1.618 relationship the moment the font changed. Deriving it keeps the
+     ratio exact and font-independent. */
+  --container: 55.625rem;   /* 890px */
+  --measure:   calc(var(--container) / 1.618);   /* 550px */
+  --pad-x:     var(--s4);
+
+  /* ── surfaces ── */
+  --bg:        #f7f6fa;
+  --surface:   #eeebf6;
+  --surface-2: #e4dff0;
+  --fg:        #191725;
+  --muted:     #5e5a72;
+  --rule:      #dcd6ea;
+
+  /* ── accent: resting hue ── */
+  --hue: 268;
+  --accent-s: 62%;
+  --fill-l: 58%;       /* mid-dark fill, white label */
+  --text-l: 54%;       /* readable on paper */
+  --fill-ink: #ffffff;
+
+  --accent-fill: hsl(var(--hue) var(--accent-s) var(--fill-l));
+  --accent-text: hsl(var(--hue) var(--accent-s) var(--text-l));
+  --accent-wash: hsl(var(--hue) 55% 95%);
+  /* Construction lines on the hero ground. In ink, so they are a light hairline
+     on a dark page and a dark one on a light page — using --rule drew them in a
+     dark colour in dark mode, where they very nearly vanished. */
+  --hairline: color-mix(in srgb, var(--fg) 22%, transparent);
+  /* The secondary button's boundary. WCAG 1.4.11 wants 3:1 for the visual
+     information that identifies a control, and --rule gives 1.28:1 / 1.31:1 —
+     i.e. the ghost button had no perceivable edge. 50% ink clears 3:1 in both
+     themes (4.55:1 dark, 3.33:1 light), so one value serves both. */
+  --ghost-line: color-mix(in srgb, var(--fg) 50%, transparent);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg:        #0b0910;
+    --surface:   #141120;
+    --surface-2: #1e1930;
+    --fg:        #e9e6f2;
+    --muted:     #9a94ae;
+    --rule:      #272137;
+
+    --fill-l: 71%;       /* mid-light fill, near-black label */
+    --text-l: 63%;
+    --fill-ink: #120f1a;
+    --accent-wash: hsl(var(--hue) 40% 12%);
+  }
+}
+
+/* Accent hues, one per day. Nothing here names anything.
+
+   Light: fill is mid-dark and carries a white label (a solid button on paper).
+   Dark:  fill is mid-light and carries a near-black label (a bright chip on
+   near-black). Every pair is solved to >= 4.5:1, so no day reads as weaker. */
+:root[data-accent="d0"] { --hue:  46; --accent-s: 82%; --fill-l: 30%; --text-l: 28%; }
+:root[data-accent="d1"] { --hue: 268; --accent-s: 62%; --fill-l: 58%; --text-l: 54%; }
+:root[data-accent="d2"] { --hue:  10; --accent-s: 68%; --fill-l: 48%; --text-l: 44%; }
+:root[data-accent="d3"] { --hue:  30; --accent-s: 78%; --fill-l: 38%; --text-l: 34%; }
+:root[data-accent="d4"] { --hue: 222; --accent-s: 68%; --fill-l: 56%; --text-l: 52%; }
+:root[data-accent="d5"] { --hue: 152; --accent-s: 56%; --fill-l: 32%; --text-l: 30%; }
+:root[data-accent="d6"] { --hue: 340; --accent-s: 60%; --fill-l: 52%; --text-l: 46%; }
+
+@media (prefers-color-scheme: dark) {
+  :root[data-accent="d0"] { --fill-l: 55%; --text-l: 55%; }
+  :root[data-accent="d1"] { --fill-l: 71%; --text-l: 63%; }
+  :root[data-accent="d2"] { --fill-l: 67%; --text-l: 55%; }
+  :root[data-accent="d3"] { --fill-l: 55%; --text-l: 55%; }
+  :root[data-accent="d4"] { --fill-l: 69%; --text-l: 61%; }
+  :root[data-accent="d5"] { --fill-l: 55%; --text-l: 55%; }
+  :root[data-accent="d6"] { --fill-l: 69%; --text-l: 59%; }
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+/* `clip` not `hidden`: absorbs full-bleed layers crossing the viewport without
+   creating a scroll container (which would break sticky positioning). */
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; overflow-x: clip; }
+
+/* The accent drifts rather than snaps when it resolves. */
+a, .btn, .case .role, .steps li::before, input, textarea {
+  transition: color 2.4s ease, background-color 2.4s ease,
+              border-color 2.4s ease, outline-color 2.4s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  * { animation: none !important; transition: none !important; }
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-size: var(--t-body);
+  line-height: var(--lead);
+  font-family: var(--font-sans);
+  font-feature-settings: "kern", "liga";
+  text-rendering: optimizeLegibility;
+}
+
+:focus-visible { outline: 2px solid var(--accent-text); outline-offset: 3px; border-radius: var(--s1); }
+
+.skip {
+  position: absolute; left: -9999px; top: 0;
+  background: var(--fg); color: var(--bg); padding: var(--s2) var(--s3); z-index: 10;
+}
+.skip:focus { left: var(--s1); top: var(--s1); }
+
+/* ── Layout ────────────────────────────────────────────────────────────────
+   ONE container and ONE gutter for every band, heading, card and the header.
+
+   The band owns the gutter and its children are simply centred inside it. The
+   earlier version put the gutter on `.band > *`, which lost to any later rule of
+   equal specificity (e.g. `.steps { padding: 0 }`) and silently dropped the
+   gutter — the "How I work" number circles ended up out in the margin.
+
+   Containers are rem; only text is measured in `ch`, because a `ch` container is
+   relative to each element's own font-size and breaks the spine. */
+main > section,
+header.site,
+footer.site {
+  max-width: var(--container);
+  margin-inline: auto;
+  padding-inline: var(--pad-x);
+}
+
+/* The header floats OVER the hero rather than sitting above it, so the hero's
+   ground runs up behind the menu and the page starts at the artwork instead of
+   at a grey strip.
+
+   `inset-inline: 0` + `max-width` + `margin-inline: auto` is what centres an
+   absolutely positioned box — the container width is preserved, not abandoned.
+   z-index 2 keeps the nav above the ground (which is z-index -1 inside .hero's
+   own stacking context).
+
+   It is deliberately NOT sticky: it scrolls away, and the ground is free to be
+   the first thing you see. */
+header.site {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline: 0;
+  z-index: 2;
+}
+
+.band {
+  max-width: none;
+  padding-inline: var(--pad-x);
+  background: var(--surface);
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+}
+.band > * {
+  max-width: calc(var(--container) - 2 * var(--pad-x));
+  margin-inline: auto;
+}
+
+section { padding-block: var(--s5); }
+section + section { border-top: 1px solid var(--rule); }
+
+/* ── Type ──────────────────────────────────────────────────────────────── */
+h1, h2, h3 { line-height: var(--lead-h); letter-spacing: -0.018em; text-wrap: balance; }
+h1 { font-size: clamp(var(--t-h1), 1rem + 4.6vw, var(--t-h1-max)); margin: 0 0 var(--s3); }
+h2 { font-size: var(--t-h2); margin: 0 0 var(--s4); }
+h3 { font-size: var(--t-h3); margin: 0 0 var(--s1); }
+
+p  { margin: 0 0 var(--s3); text-wrap: pretty; max-width: var(--measure); }
+p:last-child { margin-bottom: 0; }
+a  { color: var(--accent-text); text-underline-offset: 3px; text-decoration-thickness: 1px; }
+a:hover { text-decoration-thickness: 2px; }
+strong { font-weight: 650; }
+ul, ol { padding-left: var(--s3); max-width: var(--measure); }
+li { margin-bottom: var(--s2); }
+
+.eyebrow {
+  color: var(--muted); font-size: var(--t-small); font-weight: 600;
+  text-transform: uppercase; letter-spacing: .1em;
+  margin: 0 0 var(--s1);
+}
+.lede { font-size: var(--t-lede); color: var(--muted); margin-bottom: 0; }
+.note, .fallback { color: var(--muted); font-size: .9375rem; }
+
+/* Keep an address and its punctuation together — an unbreakable token followed by a
+   separate text node can strand the full stop on a line of its own. */
+.nowrap { white-space: nowrap; }
+
+/* ── Header ────────────────────────────────────────────────────────────── */
+header.site { padding-block: var(--s3); }
+header.site nav { display: flex; flex-wrap: wrap; gap: var(--s1) var(--s4); align-items: baseline; }
+header.site ul { display: flex; gap: var(--s4); list-style: none; margin: 0; padding: 0; }
+
+/* The name, not an abstract mark: a visitor must know whose site this is.
+   The mark itself carries the hero. */
+.brand {
+  margin-right: auto; color: var(--fg); text-decoration: none;
+  font-weight: 650; letter-spacing: -0.01em;
+}
+header.site a:not(.brand) { color: var(--muted); text-decoration: none; }
+header.site a:not(.brand):hover { color: var(--fg); text-decoration: underline; }
+
+footer.site {
+  padding-block: var(--s5) var(--s6);
+  border-top: 1px solid var(--rule);
+  color: var(--muted); font-size: var(--t-small);
+}
+footer.site p { margin: 0 0 var(--s1); }
+.mark-foot { display: block; height: var(--s3); width: auto; color: var(--muted); margin-bottom: var(--s2); }
+
+/* ── Hero — the mark leads ─────────────────────────────────────────────────
+   The mark opens the page at a size where its strokes resolve. Its own frame
+   is 252:144.
+
+   The ground behind the hero is built from the mark's own construction: two
+   rings, offset so that they intersect and their overlap reads as a soft lens.
+   A wash of the day's accent sits over it. Both are masked to dissolve well
+   before the headline, so nothing competes with the text. Static — nothing
+   animates, so there is nothing for prefers-reduced-motion to suppress. */
+/* The hero starts at the top of the page now, because the header floats over it.
+   Its padding is what keeps the mark clear of the nav, and it is measured, not
+   guessed: the header is 81px (two 21px paddings around a 39px nav line), so
+   --s6 + --s2 = 102px clears it with 21px of air. Below 30rem the nav wraps to
+   two rows and the header becomes 115px, hence the extra --s4. */
+.hero { position: relative; isolation: isolate; padding-block: calc(var(--s6) + var(--s2)) var(--s5); }
+
+.hero::before {
+  content: '';
+  position: absolute;
+  inset-block: calc(-1 * var(--s4)) calc(-1 * var(--s2));
+  /* Full-bleed. The layer must reach the viewport so its horizontal dissolve
+     happens in the page gutter, not at the container edge where it lines up
+     with the text and reads as a step. `overflow-x: clip` on <html> absorbs the
+     sub-pixel 100vw/scrollbar difference without creating a scroll container. */
+  /* Full-bleed, exactly the viewport. It must NOT be wider: anything the layer's
+     box extends past the viewport becomes horizontally scrollable, and a wider
+     bleed plus a sideways translate produced a stray horizontal scrollbar. */
+  inset-inline: calc(-50vw + 50%);
+  z-index: -1;
+  pointer-events: none;
+
+  background:
+    /* the construction — two rings, centres one radius apart. They run off the
+       canvas, the way a compass arc would.
+       The centres are set so that a lens vertex lands at roughly (576, 167):
+       clear of the nav above and the body copy below, where two arcs meeting
+       actually reads as a vertex. Higher up it sits under the header and looks
+       like a crop accident, which is worse than no lens at all. */
+    radial-gradient(circle at 24% 78%, transparent 0 20rem,
+                    var(--hairline) 20rem 20.06rem,
+                    transparent 20.06rem),
+    radial-gradient(circle at 62% 66%, transparent 0 20rem,
+                    var(--hairline) 20rem 20.06rem,
+                    transparent 20.06rem),
+    /* the day's wash. Fades in AND out — a radial centred at 14% is still a
+       quarter of its radius at the left edge, which crops into a tonal seam.
+       10% is about as far as "ambient" goes before it becomes a coloured field;
+       contrast survives to 15%+ (ink 13.4:1, muted 5.0:1, ghost line 3.16:1),
+       so this is a taste dial, not a legibility limit. */
+    linear-gradient(100deg,
+                    transparent 0,
+                    color-mix(in srgb, var(--accent-fill) 10%, transparent) 20%,
+                    transparent 56%);
+
+  /* Fade on both axes so nothing is guillotined — the arcs reach 106px past the
+     hero's own box, and a 1px stroke stopping dead draws the eye more than any
+     soft field does. */
+  -webkit-mask-image:
+    linear-gradient(to bottom, #000 0 52%, transparent 88%),
+    linear-gradient(to right, transparent 0, #000 15%, #000 85%, transparent 100%);
+  -webkit-mask-composite: source-in;
+          mask-image:
+    linear-gradient(to bottom, #000 0 52%, transparent 88%),
+    linear-gradient(to right, transparent 0, #000 15%, #000 85%, transparent 100%);
+          mask-composite: intersect;
+
+  /* Movement is VERTICAL ONLY.
+     A horizontal shift on a full-bleed layer extends the scrollable area and
+     produces a stray horizontal scrollbar — and scaling the layer does the same
+     thing, because the box grows in both axes. The page is already taller than
+     the viewport, so vertical movement costs nothing. */
+  translate: 0 var(--py, 0);
+  animation: ground-drift 72s ease-in-out infinite;
+  will-change: transform, translate;
+}
+
+@keyframes ground-drift {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50%      { transform: translate3d(0, -1.6%, 0); }
+}
+
+.hero-mark { margin: 0 0 var(--s4); }
+.hero-mark svg {
+  display: block;
+  height: clamp(52px, 5.6vw, var(--t-h1-max));   /* same step as the headline */
+  width: auto;
+  color: var(--fg);
+}
+
+.hero h1 { margin-bottom: var(--s3); }
+.hero .lede { margin-bottom: var(--s4); }
+
+/* On a short viewport the hero cannot fit a φ³ headline plus the mark, eyebrow,
+   lede and buttons — and the closing clause of the sentence is what gets cut.
+   Step the headline down one place in the sequence rather than lose the line. */
+/* Measured: the nav wraps to two rows below 420px, so the floating header goes
+   from 81px to 115px there. 26rem (416px) sits inside the wrap zone — erring
+   toward the taller padding, because over-applying it costs 34px of air while
+   under-applying it puts the mark behind the nav. */
+@media (max-width: 26rem) {
+  .hero { padding-block-start: calc(var(--s6) + var(--s2) + var(--s4)); }
+}
+
+@media (max-height: 46rem) {
+  h1 { font-size: clamp(var(--t-h2), 1rem + 3.4vw, var(--t-h1)); }
+  .hero { padding-block-end: var(--s4); }
+  .hero-mark { margin-bottom: var(--s3); }
+  .hero-mark svg { height: clamp(44px, 4.4vw, var(--t-h1)); }
+}
+
+.cta { display: flex; flex-wrap: wrap; gap: var(--s3); }
+
+.btn {
+  display: inline-block; padding: var(--s2) var(--s3); border-radius: var(--s1);
+  background: var(--accent-fill); color: var(--fill-ink);
+  font-size: .9375rem; font-weight: 650; text-decoration: none;
+  border: 1px solid var(--accent-fill);
+}
+.btn:hover { background: color-mix(in srgb, var(--accent-fill) 85%, #000); border-color: color-mix(in srgb, var(--accent-fill) 85%, #000); }
+
+/* Secondary is a real link, not a greyed-out button — honest hierarchy. */
+.btn.ghost { background: transparent; color: var(--fg); border-color: var(--ghost-line); }
+.btn.ghost:hover { background: var(--surface-2); border-color: var(--fg); }
+
+/* ── Pillars ───────────────────────────────────────────────────────────── */
+.grid { display: grid; gap: var(--s4); grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); }
+.grid > * { min-width: 0; }
+.grid p { color: var(--muted); margin: 0; }
+
+/* ── Case studies — two-column grid ────────────────────────────────────────
+   Label : content = 1 : 1.618. The label is metadata so it takes the short
+   side; the reading column gets the long one. */
+.case { padding-block: var(--s4); border-top: 1px solid var(--rule); }
+.case:first-of-type { border-top: 0; padding-top: 0; }
+.case .role {
+  color: var(--accent-text); font-size: var(--t-small); font-weight: 650;
+  text-transform: uppercase; letter-spacing: .08em; margin: 0 0 var(--s2);
+}
+.case .stack {
+  color: var(--muted); font-size: var(--t-small);
+  font-family: var(--font-mono);
+  max-width: none; margin-top: var(--s3);
+}
+.more { margin-top: var(--s4); }
+
+@media (min-width: 48rem) {
+  .case {
+    display: grid;
+    grid-template-columns: 1fr 1.618fr;
+    gap: var(--s4);
+    align-items: start;
+  }
+  .case .role { margin-bottom: 0; }
+  .case .case-body > :last-child { margin-bottom: 0; }
+}
+
+/* ── Steps ─────────────────────────────────────────────────────────────── */
+.steps { counter-reset: s; list-style: none; padding: 0; }
+.steps li { position: relative; padding-left: var(--s4); margin-bottom: var(--s3); }
+.steps li::before {
+  counter-increment: s; content: counter(s);
+  position: absolute; left: 0; top: .15em;
+  width: var(--s3); height: var(--s3); border-radius: 50%;
+  display: grid; place-items: center;
+  font-size: var(--t-small); font-weight: 700;
+  background: var(--accent-fill); color: var(--fill-ink);
+}
+
+/* ── Form ──────────────────────────────────────────────────────────────── */
+form { margin-block: var(--s4) var(--s5); }
+form p { margin-bottom: var(--s3); max-width: none; }
+/* The button sits in the form's last <p>, which `p:last-child` zeroes — so the
+   form itself carries the space that separates the button from the email line.
+   Bottom margin is one step larger than the top: a primary action wants more
+   room beneath it than a field label does above it. */
+form p:last-child { margin-bottom: 0; }
+label { display: block; font-weight: 600; font-size: var(--t-small); margin-bottom: var(--s1); }
+input, textarea {
+  width: 100%; padding: var(--s2);
+  font: inherit; color: var(--fg); background: var(--bg);
+  border: 1px solid var(--rule); border-radius: var(--s1);
+}
+input:focus, textarea:focus { border-color: var(--accent-text); }
+textarea { resize: vertical; }
+.hp { position: absolute; left: -9999px; }
+
+@media (max-width: 30rem) {
+  :root { --pad-x: var(--s3); }
+  header.site ul { gap: var(--s3); }
+  .cta .btn { width: 100%; text-align: center; }
+}
+
+/* Print: no chrome, no wasted ink. */
+@media print {
+  header.site nav ul, .cta, form, .hero-mark { display: none; }
+  body { background: #fff; color: #000; }
+  a::after { content: " (" attr(href) ")"; font-size: .8em; color: #555; }
+}
