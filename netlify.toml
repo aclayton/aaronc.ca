@@ -1,0 +1,91 @@
+# Netlify configuration — aaronc.ca
+#
+# Hand-written static site: no build step, so `publish = "."` and Netlify just serves it.
+# Netlify Forms is enabled by the `data-netlify="true"` attribute on the form in index.html;
+# no backend, no Functions, no Firebase.
+
+[build]
+  publish = "."
+  # This site has NO build step — the HTML is hand-written and served as-is. The old
+  # Vue 2 app that used to live in this repo had `npm run build` → `dist`, and if
+  # Netlify still holds that build command from the UI it will run it, fail (there is
+  # no package.json any more), and the deploy will not go live. Setting it to a no-op
+  # here overrides the UI, because netlify.toml takes precedence.
+  command = "echo 'static site — no build step'"
+
+# ~/sites/aaronc.ca/social/ is a WORKING directory — render sources, Python build
+# scripts, and a local asset index. `publish = "."` uploads all of it, so shadow
+# the whole path here. It must never be served: the asset index carries the accent
+# correspondences, and the standing rule keeps the day and planet names off
+# anything published. `force = true` makes the 404 win over the static file.
+[[redirects]]
+  from = "/social/*"
+  to = "/404.html"
+  status = 404
+  force = true
+
+# ~/sites/aaronc.ca/vesica/ is the architecture page for a WORK tool. It names the
+# employer's repository and describes an employer-owned prototype, and its own
+# eyebrow reads "Local · tailnet only". `noindex` is NOT access control — that page
+# is fully fetchable and anything that ignores robots will read it. Shadowed here
+# so the only way to see it is over the tailnet.
+[[redirects]]
+  from = "/vesica/*"
+  to = "/404.html"
+  status = 404
+  force = true
+
+# Source and config files inside the publish root. `publish = "."` uploads them, so
+# /README.md, /NOTES.md and /netlify.toml are all fetchable on the live site. NOTES.md
+# is the working document — the internal rules and the build checklist — and it is
+# neither committed nor served. llms.txt is deliberately NOT shadowed: it exists to
+# be read.
+[[redirects]]
+  from = "/README.md"
+  to = "/404.html"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/NOTES.md"
+  to = "/404.html"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/netlify.toml"
+  to = "/404.html"
+  status = 404
+  force = true
+
+# This directory is now a git working copy, and `publish = "."` uploads the whole
+# directory. Never serve the repository internals.
+[[redirects]]
+  from = "/.git/*"
+  to = "/404.html"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/.gitignore"
+  to = "/404.html"
+  status = 404
+  force = true
+
+# Security headers. These are cheap and they matter on a site whose owner sells
+# systems competence — a missing header is a credibility tell.
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    X-Frame-Options = "DENY"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "geolocation=(), camera=(), microphone=(), interest-cohort=()"
+    Strict-Transport-Security = "max-age=31536000; includeSubDomains; preload"
+    Content-Security-Policy = "default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; form-action 'self'; frame-ancestors 'none'; base-uri 'self'"
+
+# Immutable assets can be cached hard; the HTML must not be.
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"

@@ -1,21 +1,16 @@
+# Paths that must never be committed.
+#
+# This repository is PUBLIC, and `publish = "."` in netlify.toml means everything in
+# this directory is also served by the website — so each path below is both left out of
+# git and 404-guarded in netlify.toml.
+
+NOTES.md
+social/
+vesica/
+
+# Noise
+__pycache__/
+*.pyc
 .DS_Store
-node_modules
-/dist
-
-# local env files
-.env.local
-.env.*.local
-
-# Log files
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-# Editor directories and files
-.idea
-.vscode
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw*
+Thumbs.db
+*.swp

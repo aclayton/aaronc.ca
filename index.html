@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Aaron Clayton — UX-minded systems engineer</title>
+<meta name="description" content="I make complex systems people actually use, then take the manual work out of them. User experience, systems management, automation and applied AI.">
+<link rel="canonical" href="https://aaronc.ca/">
+
+<!-- Social preview. TODO: create /og.png (1200x630) and keep the copy in sync with the h1. -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://aaronc.ca/">
+<meta property="og:title" content="Aaron Clayton — UX-minded systems engineer">
+<meta property="og:description" content="I make complex systems people actually use, then take the manual work out of them.">
+<meta property="og:image" content="https://aaronc.ca/og.png">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/style.css">
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Person","name":"Aaron Clayton",
+ "url":"https://aaronc.ca/","jobTitle":"UX-minded systems engineer",
+ "address":{"@type":"PostalAddress","addressRegion":"Ontario","addressCountry":"CA"},
+ "sameAs":["https://github.com/aclayton"],
+ "knowsAbout":["User experience","Systems management","Automation","Applied AI"]}
+</script>
+</head>
+
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site">
+  <nav aria-label="Main">
+    <a class="brand" href="/">Aaron Clayton</a>
+    <ul>
+      <li><a href="#work">Work</a></li>
+      <li><a href="#how">How I work</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main id="main">
+
+  <!-- ── Hero ─────────────────────────────────────────────────────────────
+       The positioning line is the whole point of this page. Everything below
+       exists to substantiate it. -->
+  <section class="hero">
+    <div class="hero-mark">
+      <svg viewBox="18 0 216 144" role="img" aria-label="Aaron Clayton">
+        <path fill="currentColor" d="M18,0v144h156.02H234V0H18z M134.625,5.76c-11.049,4.608-20.677,12.123-28.068,21.392L94.207,5.76H134.625z M23.76,5.76
+	h63.796L23.76,114.156V5.76z M23.76,138.24v-12.564L90.44,11.232l73.603,127.008H23.76z M228.24,138.24h-37.131
+	c8.688-4.032,16.502-9.352,23.037-15.979l-5.17-3.13c-10.599,10.28-24.039,16.538-38.531,18.176L109.666,31.996
+	c1.927-2.587,4.054-5.07,6.376-7.392c12.512-12.512,29.146-19.41,46.838-19.41c17.347,0,33.673,6.622,46.096,18.671l5.17-2.699
+	c-6.527-6.621-14.328-11.95-23.005-15.406h37.099V138.24z"/>
+      </svg>
+    </div>
+    <p class="eyebrow">Niagara, Canada</p>
+    <h1>I make complex systems people actually use, then take the manual work out&nbsp;of&nbsp;them.</h1>
+    <p class="lede">
+      UX-minded systems engineer. I work where the interface meets the infrastructure —
+      designing the parts people touch, automating the parts they shouldn't have to,
+      and applying AI only where it genuinely earns its place.
+    </p>
+    <p class="cta">
+      <a class="btn" href="#work">See the work</a>
+    </p>
+  </section>
+
+  <!-- ── Three pillars ────────────────────────────────────────────────────
+       Deliberately no technology list. What it MEANS, not what it's built in. -->
+  <section id="what" class="band">
+    <h2>What I do</h2>
+    <div class="grid">
+      <article>
+        <h3>User experience</h3>
+        <p>Systems people don't fight. The interface is where a system succeeds or fails,
+           so I design for the person who has to use it on a bad day — not the demo.</p>
+      </article>
+      <article>
+        <h3>Systems management</h3>
+        <p>Infrastructure that stays up, stays observable, and stays cheap. I care about
+           what happens at 3am more than what happens in the pitch.</p>
+      </article>
+      <article>
+        <h3>Automation &amp; applied AI</h3>
+        <p>Manual work removed, and AI where it actually earns its place. Good automation
+           is boring in the best way: it runs, it's idempotent, and nobody has to think about it.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- ── Selected work ────────────────────────────────────────────────────
+       Real projects. Each is problem -> approach -> outcome. Numbers marked
+       TODO must be filled in with true figures; do not invent them. -->
+  <section id="work">
+    <h2>Selected work</h2>
+    <p class="lede">Three systems, each written up in full &mdash; with the diagrams, the measured numbers, and the parts that are still missing.</p>
+
+    <article class="case">
+      <p class="role">Systems integration · agent orchestration</p>
+      <div class="case-body">
+        <h3>Automated bug investigation, from Azure DevOps to a reviewed GitHub issue</h3>
+        <p>Moving tickets to GitHub was never the hard part &mdash; <em>understanding</em> them was, and
+           that is skilled work per bug. This runs one coding agent per bug in parallel and writes
+           each resolution plan into a tracking issue, where every mutating step is decided by
+           deterministic script logic rather than by an agent reporting its own success.</p>
+        <p class="more"><a href="/work/bug-investigation/">Read the full write-up</a> &mdash; the pipeline, the trust boundary, and where the code actually is.</p>
+        <p class="stack">Azure DevOps · GitHub · Herdr · Claude Code · Bash</p>
+      </div>
+    </article>
+
+    <article class="case">
+      <p class="role">Automation · data pipelines · reconciliation</p>
+      <div class="case-body">
+        <h3>End-to-end personal finance automation</h3>
+        <p>Four sources arrive in four formats and never quite agree. This ingests them into one
+           store and reconciles them through six ordered matching tiers &mdash; governed by a single
+           invariant: <em>a receipt is evidence, never a financial event.</em> 2,214 records so far.</p>
+        <p class="more"><a href="/work/finance-automation/">Read the full write-up</a> &mdash; the six tiers, why their order is the design, and three measured charts.</p>
+        <p class="stack">Python · SQLite · email ingestion · FX handling · self-hosted</p>
+      </div>
+    </article>
+
+    <article class="case">
+      <p class="role">Applied AI · UX</p>
+      <div class="case-body">
+        <h3>Voice-to-knowledge pipeline</h3>
+        <p>Capture is where most note systems die: if recording a thought takes more than a few
+           seconds, it does not happen. Speaking one now files it as a structured, linked note. The
+           interesting part is the design before this one &mdash; which could never have worked, and
+           took a read of the platform's own rules to prove it.</p>
+        <p class="more"><a href="/work/voice-knowledge/">Read the full write-up</a> &mdash; why the first design was impossible, and the measurement that settled it.</p>
+        <p class="stack">iOS Shortcuts · local service · AI agent · markdown knowledge base</p>
+      </div>
+    </article>
+
+    <p class="more">More on <a href="https://github.com/aclayton" rel="me">GitHub</a>.</p>
+  </section>
+
+  <!-- ── How I work ───────────────────────────────────────────────────────
+       The old site promised this and never delivered it. As a UX person it is
+       the most persuasive thing on the page. -->
+  <section id="how" class="band">
+    <h2>How I work</h2>
+    <ol class="steps">
+      <li><strong>Understand the actual job.</strong> Not the ticket — the work the person
+          is trying to get done, and what they currently do instead.</li>
+      <li><strong>Find the smallest real thing.</strong> Ship something usable early and
+          watch it get used, rather than designing in the abstract.</li>
+      <li><strong>Make it hold.</strong> Correctness rules, failure behaviour and
+          observability, because a demo that can't run unattended isn't finished.</li>
+      <li><strong>Then automate.</strong> Once a process is understood and stable, take the
+          human out of the loop — carefully, and reversibly.</li>
+    </ol>
+    <p class="note">I'd rather tell you a system is not ready than watch it fail quietly.</p>
+  </section>
+
+  <!-- ── Contact ──────────────────────────────────────────────────────────
+       Netlify Forms: works on Netlify with no backend at all. Replaces the dead
+       Firebase functions. NOTE: also add a visible email address as a fallback,
+       because a form is a single point of failure. -->
+  <section id="contact">
+    <h2>Contact</h2>
+    <p>Niagara, Canada.</p>
+
+    <form name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+      <input type="hidden" name="form-name" value="contact">
+      <!-- Honeypot: hidden from people AND removed from the tab order / a11y tree.
+           A visually-hidden field that is still focusable is a known accessibility trap. -->
+      <p class="hp" aria-hidden="true"><label>Don't fill this out: <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
+
+      <p><label for="name">Name</label>
+         <input id="name" name="name" type="text" autocomplete="name" required></p>
+
+      <p><label for="email">Email</label>
+         <input id="email" name="email" type="email" autocomplete="email" required></p>
+
+      <p><label for="message">Message</label>
+         <textarea id="message" name="message" rows="6" required></textarea></p>
+
+      <p><button class="btn" type="submit">Send</button></p>
+    </form>
+
+    <p class="fallback">Or email <span class="nowrap"><a href="mailto:aaronc@protonmail.ch">aaronc@protonmail.ch</a>.</span></p>
+  </section>
+
+</main>
+
+<footer class="site">
+  <svg class="mark-foot" viewBox="18 0 216 144" aria-hidden="true" focusable="false">
+    <path fill="currentColor" d="M18,0v144h156.02H234V0H18z M134.625,5.76c-11.049,4.608-20.677,12.123-28.068,21.392L94.207,5.76H134.625z M23.76,5.76
+	h63.796L23.76,114.156V5.76z M23.76,138.24v-12.564L90.44,11.232l73.603,127.008H23.76z M228.24,138.24h-37.131
+	c8.688-4.032,16.502-9.352,23.037-15.979l-5.17-3.13c-10.599,10.28-24.039,16.538-38.531,18.176L109.666,31.996
+	c1.927-2.587,4.054-5.07,6.376-7.392c12.512-12.512,29.146-19.41,46.838-19.41c17.347,0,33.673,6.622,46.096,18.671l5.17-2.699
+	c-6.527-6.621-14.328-11.95-23.005-15.406h37.099V138.24z"/>
+  </svg>
+  <p>Aaron Clayton · Niagara, Canada</p>
+  <p><a href="https://github.com/aclayton" rel="me">GitHub</a></p>
+</footer>
+
+<!-- Progressive enhancement: the day's accent, and the hero ground's parallax.
+     The page is complete without either. -->
+<script src="/accent.js" defer></script>
+<script src="/ground.js" defer></script>
+
+</body>
+</html>

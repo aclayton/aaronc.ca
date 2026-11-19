@@ -1,0 +1,39 @@
+# Aaron Clayton
+
+> UX-minded systems engineer. I make complex systems people actually use, then take the
+> manual work out of them.
+
+Aaron Clayton works at the intersection of user experience, systems management, automation
+and applied AI. He designs the parts of a system people touch, builds the infrastructure
+underneath it, and automates processes once they are understood and stable. Based in Niagara,
+Canada.
+
+## Focus areas
+
+- **User experience** — designing systems people don't fight; the interface is where a system
+  succeeds or fails.
+- **Systems management** — infrastructure that stays up, stays observable and stays cheap.
+- **Automation and applied AI** — removing manual work, and applying AI only where it earns
+  its place.
+
+## Selected work
+
+- [Automated bug investigation](/work/bug-investigation/): investigations run one per bug in
+  parallel through Herdr against a single shared read-only worktree, and the resolution plan
+  becomes a GitHub tracking issue — with every mutating step decided by deterministic script
+  logic, never by an agent's claim of success.
+- [End-to-end personal finance automation](/work/finance-automation/): four source formats into
+  one store, then six ordered matching tiers governed by one invariant — a receipt is evidence,
+  never a financial event. 2,214 records.
+- [Voice-to-knowledge pipeline](/work/voice-knowledge/): phone dictation filed as a structured,
+  linked note — and the design before it, which could never have worked, and why.
+
+## Contact
+
+https://aaronc.ca/#contact · https://github.com/aclayton
+
+<!--
+  llms.txt gives AI agents a clean, unambiguous summary of the site instead of making them
+  infer intent from rendered HTML. Cheap to maintain, and on-brand for someone who works with
+  AI. Keep it in sync when the positioning line or the case studies change.
+-->

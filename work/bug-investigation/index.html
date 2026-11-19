@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Automated bug investigation — Aaron Clayton</title>
+<meta name="description" content="A pipeline that investigates Azure DevOps bugs with parallel coding agents and writes each resolution plan into a reviewable GitHub issue — with every mutating step decided by deterministic script logic.">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/style.css">
+
+<style>
+  /* Page-scoped. Every value is one of the site's own tokens. */
+  .fig { margin: var(--s5) 0; }
+  .fig svg { display: block; width: 100%; height: auto; }
+  .fig figcaption { margin-top: var(--s2); color: var(--muted);
+                    font-size: .9375rem; max-width: 62ch; }
+  .fig .lbl { font: 600 .6875rem/1 "Plex Mono", monospace; letter-spacing: .1em;
+              text-transform: uppercase; fill: var(--muted); }
+  .fig .t   { font: 400 .8125rem/1.25 "Plex Sans", sans-serif; fill: var(--fg); }
+  .fig .tm  { font: 400 .75rem/1.3 "Plex Mono", monospace; fill: var(--muted); }
+  .fig .box { fill: var(--bg); stroke: var(--rule); }
+  .fig .box-a { fill: var(--accent-wash); stroke: color-mix(in srgb, var(--accent-fill) 45%, transparent); }
+  .fig .edge { stroke: var(--hairline); fill: none; }
+  .fig .edge-s { stroke: var(--ghost-line); fill: none; }
+  .fig .dot { fill: var(--accent-fill); }
+  .fig .ring { fill: none; stroke: var(--ghost-line); }
+
+  .kpis { list-style: none; padding: 0; margin: var(--s4) 0 0;
+          display: grid; gap: var(--s3); grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr)); }
+  .kpis > * { min-width: 0; }
+  .kpis .n { font: 600 1.618rem/1 "Plex Sans", sans-serif; display: block; }
+  .kpis .k { color: var(--muted); font-size: .8125rem; display: block; margin-top: .35rem; }
+
+  table.t { width: 100%; border-collapse: collapse; font-size: var(--t-small); }
+  table.t th, table.t td { text-align: left; vertical-align: top;
+    padding: var(--s2) var(--s3); border-bottom: 1px solid var(--rule); }
+  table.t thead th { font-size: .6875rem; font-weight: 600; letter-spacing: .1em;
+    text-transform: uppercase; color: var(--muted); border-bottom: 1px solid var(--fg); }
+  table.t th[scope=row] { font-weight: 400; }
+  table.t code { font-family: var(--font-mono); font-size: .75rem; }
+  .scrollw { overflow-x: auto; }
+
+  /* the saving model: a grid of inputs, not a measurement */
+  table.mx { width: 100%; border-collapse: collapse; font-size: var(--t-small);
+             margin: var(--s4) 0; }
+  table.mx caption { text-align: left; color: var(--muted); font-size: .9375rem;
+                     padding-bottom: var(--s2); }
+  table.mx th, table.mx td { padding: var(--s2) var(--s3); text-align: center;
+                             border: 1px solid var(--rule); }
+  table.mx thead th, table.mx tbody th { font-size: .6875rem; font-weight: 600;
+    letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+  table.mx tbody th { text-transform: none; letter-spacing: 0; color: var(--fg);
+                      font-family: var(--font-mono); font-weight: 600; }
+  table.mx td { font-family: var(--font-mono); font-weight: 600; }
+
+  .bar { fill: var(--accent-fill); }
+  .bar.quiet { fill: color-mix(in srgb, var(--fg) 18%, transparent); }
+
+  .back { display: inline-block; font-size: var(--t-small); margin-bottom: var(--s3); }
+  .next { margin-top: var(--s5); padding-top: var(--s4); border-top: 1px solid var(--rule); }
+</style>
+</head>
+
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site">
+  <nav aria-label="Main">
+    <a class="brand" href="/">Aaron Clayton</a>
+    <ul>
+      <li><a href="/#work">Work</a></li>
+      <li><a href="/#how">How I work</a></li>
+      <li><a href="/#contact">Contact</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main id="main">
+
+  <section class="hero">
+    <a class="back" href="/#work">&larr; All work</a>
+    <p class="eyebrow">Systems integration · agent orchestration · automated investigation</p>
+    <h1>Automated bug investigation, from Azure DevOps to a reviewed GitHub issue</h1>
+    <p class="lede">A pipeline that investigates treated bugs with parallel coding agents and writes each resolution plan into a reviewable issue &mdash; where every mutating step is decided by deterministic script logic, never by an agent reporting its own success.</p>
+    <p class="note">Tickets lived in Azure DevOps. Moving them to GitHub was never the hard part &mdash; <em>understanding</em> them was. This system does the investigation, stops short of the fix, and hands a human a plan.</p>
+  </section>
+
+  <section>
+    <h2>The problem</h2>
+    <p>Bugs were filed in Azure DevOps. Migrating them to GitHub should have been a data move, and instead it was two jobs: move the tickets, and investigate each one &mdash; root cause, defect location, proposed fix, what could regress.</p>
+    <p>Investigating is skilled work per bug. A bulk export would have moved the tickets and left the understanding behind: the same fields, filled in the same shallow way, with nobody any better off. So the choice was between paying for the investigation by hand forever, or automating it &mdash; and automating it meant trusting agents, which is where it gets interesting.</p>
+  </section>
+
+  <section class="band">
+    <div>
+      <h2>How it works</h2>
+      <p>One bug in, one investigation out. The fan-out is the easy half; the gate is the point.</p>
+
+      <figure class="fig">
+        <svg viewBox="0 0 900 430" role="img" aria-labelledby="f1t f1d">
+          <title id="f1t">The pipeline: one tagged bug per investigation agent, validated before anything is written</title>
+          <desc id="f1d">Azure DevOps bugs tagged for migration are checked out into one shared read-only worktree. One investigation agent per bug runs in parallel through Herdr panes. Each agent writes a uniquely named report file. A deterministic gate checks the report contains every required section; only then is a GitHub tracking issue created. Two other outcomes post a comment and tag on the original ticket instead.</desc>
+
+          <!-- source -->
+          <rect class="box" x="14" y="14" width="200" height="66" rx="6"/>
+          <text class="lbl" x="30" y="38">Source</text>
+          <text class="t" x="30" y="58">Azure DevOps bugs</text>
+          <text class="tm" x="30" y="73">tagged for migration</text>
+
+          
+          
+
+          <!-- shared worktree -->
+          <rect class="box-a" x="270" y="14" width="266" height="66" rx="6"/>
+          <text class="lbl" x="286" y="38">One per run, not per bug</text>
+          <text class="t" x="286" y="58">A shared read-only worktree</text>
+          <text class="tm" x="286" y="73">detached checkout · never written to</text>
+
+          
+          
+
+          <!-- agents -->
+          <text class="lbl" x="14" y="112">Parallel investigation — one agent per bug</text>
+          <g>
+            <rect class="box" x="14"  y="152" width="130" height="54" rx="5"/>
+            <text class="tm" x="28" y="175">Claude Code</text><text class="tm" x="28" y="191">agent · bug 1</text>
+            <rect class="box" x="156" y="152" width="130" height="54" rx="5"/>
+            <text class="tm" x="170" y="175">Claude Code</text><text class="tm" x="170" y="191">agent · bug 2</text>
+            <rect class="box" x="298" y="152" width="130" height="54" rx="5"/>
+            <text class="tm" x="312" y="175">Claude Code</text><text class="tm" x="312" y="191">agent · bug 3</text>
+            <rect class="box" x="440" y="152" width="130" height="54" rx="5"/>
+            <text class="tm" x="454" y="175">Claude Code</text><text class="tm" x="454" y="191">agent · bug n</text>
+            <text class="lbl" x="600" y="175">driven through</text>
+            <text class="lbl" x="600" y="191">Herdr panes</text>
+          </g>
+
+          
+          
+          
+          <text class="tm" x="536" y="224">each writes its own report file</text>
+
+          <!-- gate -->
+          <rect class="box-a" x="150" y="252" width="300" height="60" rx="6"/>
+          <text class="lbl" x="166" y="276">The gate &mdash; deterministic</text>
+          <text class="t" x="166" y="296">Every required section present?</text>
+
+          
+          
+        <path class="edge-s" stroke-width="2" d="M214,36 H260"/>
+        <path class="edge-s" stroke-width="2" d="M214,58 H260"/>
+        <path class="edge" stroke-width="2" d="M403,80 V126"/>
+        <path class="edge" stroke-width="2" d="M79,126 H505"/>
+        <path class="edge" stroke-width="2" d="M79,126 V152"/>
+        <path class="edge" stroke-width="2" d="M221,126 V152"/>
+        <path class="edge" stroke-width="2" d="M363,126 V152"/>
+        <path class="edge" stroke-width="2" d="M505,126 V152"/>
+        <path class="edge-s" stroke-width="2" d="M79,206 V232"/>
+        <path class="edge-s" stroke-width="2" d="M221,206 V232"/>
+        <path class="edge-s" stroke-width="2" d="M363,206 V232"/>
+        <path class="edge-s" stroke-width="2" d="M505,206 V232"/>
+        <path class="edge-s" stroke-width="2" d="M79,232 H505"/>
+        <path class="edge-s" stroke-width="2" d="M300,232 V252"/>
+        <path class="edge-s" stroke-width="2" d="M300,312 V328"/>
+        <path class="edge-s" stroke-width="2" d="M147,328 H711"/>
+        <path class="edge-s" stroke-width="2" d="M147,328 V346"/>
+        <path class="edge-s" stroke-width="2" d="M429,328 V346"/>
+        <path class="edge-s" stroke-width="2" d="M711,328 V346"/>
+
+          <!-- outcomes -->
+          <g>
+            <rect class="box" x="14"  y="346" width="266" height="70" rx="6"/>
+            <circle class="dot" cx="32" cy="366" r="4"/>
+            <text class="t" x="46" y="370">A complete plan</text>
+            <text class="tm" x="32" y="390">creates the tracking issue</text>
+            <text class="tm" x="32" y="405">the plan is the issue body</text>
+
+            <rect class="box" x="296" y="346" width="266" height="70" rx="6"/>
+            <circle class="ring" cx="314" cy="366" r="4" stroke-width="1.5"/>
+            <text class="t" x="328" y="370">Not enough information</text>
+            <text class="tm" x="314" y="390">comments the blocker</text>
+            <text class="tm" x="314" y="405">creates nothing · marks BLOCKED</text>
+
+            <rect class="box" x="578" y="346" width="266" height="70" rx="6"/>
+            <circle class="ring" cx="596" cy="366" r="4" stroke-width="1.5"/>
+            <text class="t" x="610" y="370">Already fixed in the code</text>
+            <text class="tm" x="596" y="390">posts the fixing commit</text>
+            <text class="tm" x="596" y="405">creates nothing · retags</text>
+          </g>
+        </svg>
+        <figcaption><strong>One bug in, exactly one of three things out.</strong> Nothing is created unless a report passes the gate &mdash; a report missing any required section is treated as a failed investigation, not as a plan.</figcaption>
+      </figure>
+
+      <p>The scope is deliberately narrow: <em>bug in, reviewed issue out.</em> The system does not write application code, does not open pull requests, and does not decide that a fix is ready. It hands over a plan a person can read and argue with.</p>
+      <p>Every bug in a run reads the <strong>same</strong> read-only worktree rather than getting its own clone. That works because the investigation agent only ever reads code and writes its own uniquely named report &mdash; so a single detached checkout is both safe and cheap.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>What made it interesting: the trust problem</h2>
+    <p>An agent that reports success is not evidence of success. It can hallucinate a completion, misread its own output, or be interrupted halfway &mdash; and a pipeline that takes its word will happily create issues from nothing.</p>
+    <p>So the design puts a hard line between what an agent <em>says</em> and what the system <em>does</em>. Every mutating step &mdash; creating an issue, commenting on a ticket, changing a tag, updating state &mdash; is decided by deterministic script logic reading a verified report file on disk.</p>
+
+    <figure class="fig">
+      <svg viewBox="0 0 900 260" role="img" aria-labelledby="f2t f2d">
+        <title id="f2t">The trust boundary: the agent's output is treated as input, not as truth</title>
+        <desc id="f2d">On the left, an agent produces a report file. A dashed vertical boundary separates it from everything the system does. On the right, deterministic script logic reads the file, validates that every required section is present, and only then performs a mutation.</desc>
+
+        <text class="lbl" x="14" y="24">What the agent produces</text>
+        <rect class="box" x="14" y="38" width="330" height="180" rx="6"/>
+        <text class="tm" x="32" y="63">a report file, on disk</text>
+        <text class="tm" x="32" y="88">&rarr; Root Cause Analysis</text>
+        <text class="tm" x="32" y="108">&rarr; Resolution Plan</text>
+        <text class="tm" x="32" y="128">&rarr; Defect Location</text>
+        <text class="tm" x="32" y="148">&rarr; Proposed Fix</text>
+        <text class="tm" x="32" y="168">&rarr; Files to Modify</text>
+        <text class="tm" x="32" y="188">&rarr; Regression Risk</text>
+        <text class="tm" x="32" y="208">…and the rest of the required set</text>
+
+        <!-- boundary -->
+        
+        <path class="edge-s" stroke-width="1.5" stroke-dasharray="5 4" d="M398,38 V218"/>
+        <text class="lbl" x="382" y="130" transform="rotate(-90 382 130)">the boundary</text>
+
+        <text class="lbl" x="420" y="24">What the system acts on</text>
+        <rect class="box-a" x="420" y="38" width="466" height="180" rx="6"/>
+        <text class="t" x="440" y="66">Deterministic script logic reads the file</text>
+        <text class="tm" x="440" y="92">1 · is every required section present?</text>
+        <text class="tm" x="440" y="114">   a missing one = failed investigation</text>
+        <text class="tm" x="440" y="142">2 · has this bug already been handled?</text>
+        <text class="tm" x="440" y="164">   the state map is consulted, under a lock</text>
+        <text class="tm" x="440" y="192">3 · only then, one mutation</text>
+        <text class="tm" x="440" y="212">   issue · comment · tag · state write</text>
+      </svg>
+      <figcaption><strong>The agent's claim is never the trigger.</strong> And because the boundary is a file on disk, a half-finished run leaves evidence rather than a silent success &mdash; which is what makes the repair path possible.</figcaption>
+    </figure>
+
+    <p>Two smaller decisions fall out of the same instinct. Concurrent state writes are guarded by a lock and written atomically, so two runs cannot corrupt each other's bookkeeping. And a partially failed run has a repair script that finishes the missing steps &mdash; rather than a re-run, which would investigate the same bugs again and risk duplicate issues.</p>
+    <p>Everything defaults to a dry run. You can see exactly what would be created before anything touches a real ticket.</p>
+  </section>
+
+  <section class="band">
+    <div>
+      <h2>What it saves, per sprint</h2>
+      <p>The saving is not the migration. It is the <strong>investigation</strong>: every bug this
+         handles is one somebody does not have to read, trace, diagnose, plan a fix for and judge
+         for regression. That work lands on whoever picks the ticket up, and it is the same work
+         whether or not anyone has already done it once.</p>
+      <p>So the saving scales with two things, and both are facts about a <strong>workflow</strong>
+         rather than about the software &mdash; <strong>how many bugs a sprint moves</strong>, and
+         <strong>how long one investigation takes by hand.</strong> The arithmetic is trivial, which
+         is rather the point:</p>
+
+      <div class="scrollw">
+      <table class="mx">
+        <caption>Hours recovered per sprint &mdash; by how many bugs a sprint moves, and how long one manual investigation takes.</caption>
+        <thead>
+          <tr>
+            <th scope="col">bugs / sprint</th>
+            <th scope="col">30 min each</th>
+            <th scope="col">1 hour each</th>
+            <th scope="col">90 min each</th>
+            <th scope="col">2 hours each</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">5</th>
+            <td style="background:color-mix(in srgb, var(--accent-fill) 8%, transparent)">2.5</td>
+            <td style="background:color-mix(in srgb, var(--accent-fill) 9%, transparent)">5</td>
+            <td style="background:color-mix(in srgb, var(--accent-fill) 10%, transparent)">7.5</td>
+            <td style="background:color-mix(in srgb, var(--accent-fill) 11%, transparent)">10</td>
+          </tr>
+          <tr>
+            <th scope="row">10</th>
+            <td style="background:color-mix(in srgb, var(--accent-fill) 9%, transparent)">5</td>
+            <td style="background:color-mix(in srgb, var(--accent-fill) 11%, transparent)">10</td>
+            <td style="background:color-mix(in srgb, var(--accent-fill) 12%, transparent)">15</td>
+            <td style="background:color-mix(in srgb, var(--accent-fill) 14%, transparent)">20</td>
+          </tr>
+          <tr>
+            <th scope="row">20</th>
+            <td style="background:color-mix(in srgb, var(--accent-fill) 11%, transparent)">10</td>
+            <td style="background:color-mix(in srgb, var(--accent-fill) 14%, transparent)">20</td>
+            <td style="background:color-mix(in srgb, var(--accent-fill) 18%, transparent)">30</td>
+            <td style="background:color-mix(in srgb, var(--accent-fill) 21%, transparent)">40</td>
+          </tr>
+          <tr>
+            <th scope="row">40</th>
+            <td style="background:color-mix(in srgb, var(--accent-fill) 14%, transparent)">20</td>
+            <td style="background:color-mix(in srgb, var(--accent-fill) 21%, transparent)">40</td>
+            <td style="background:color-mix(in srgb, var(--accent-fill) 29%, transparent)">60</td>
+            <td style="background:color-mix(in srgb, var(--accent-fill) 36%, transparent)">80</td>
+          </tr>
+        </tbody>
+      </table>
+      </div>
+      <p class="note">Hours, not a measurement. Pick the row and column that match reality.</p>
+
+      <p>Ten bugs a sprint at an hour each is a working day and a bit recovered every sprint. And
+         that is only the first-order saving. The larger one is harder to count: because the plan
+         <em>is</em> the issue body, the person reviewing it reads a plan instead of re-doing the
+         investigation &mdash; so review gets cheaper as well as faster. There is also an outcome
+         that beats saving time outright: a bug already fixed in the code is closed with the
+         evidence, and nobody investigates it at all.</p>
+      <p><strong>There is no headline number here, deliberately.</strong> Nobody has measured how
+         long a manual investigation takes, and a figure I invented would be worth less than no
+         figure at all. That is why the table is a table of <em>inputs</em>: the mechanism is real,
+         the multiplication takes seconds, and the two numbers belong to whoever runs the system.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>What it does not do</h2>
+    <p>The boundary is a feature, so it is worth stating plainly: no code changes, no pull requests, no test runs, no assignment. The tracking issue is the end of this system's responsibility.</p>
+
+    <h3 style="margin-top:var(--s5)">Facts, in a form you can check</h3>
+    <div class="scrollw">
+    <table class="t">
+      <tbody>
+        <tr><th scope="row">Language &amp; licence</th><td>Bash · MIT</td></tr>
+        <tr><th scope="row">Surface</th><td>Ubuntu and Debian, WSL2 included, with Windows launcher scripts</td></tr>
+        <tr><th scope="row">Fan-out</th><td>One coding agent per bug, driven through Herdr panes</td></tr>
+        <tr><th scope="row">Isolation</th><td>One shared read-only worktree per run, not one clone per bug</td></tr>
+        <tr><th scope="row">Validation</th><td>Reports are structurally checked before anything is written</td></tr>
+        <tr><th scope="row">Concurrency</th><td>State writes lock-guarded and atomic</td></tr>
+        <tr><th scope="row">Safety default</th><td>Dry run; the installer can verify an installation without changing it</td></tr>
+        <tr><th scope="row">Delegation</th><td>Root-cause analysis itself belongs to the target repository's own agent, not this repo</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </section>
+
+  <div class="next">
+    <p class="note">Next: <a href="/work/finance-automation/">End-to-end personal finance automation</a> &rarr;</p>
+    <p class="note"><a href="/#work">&larr; All work</a></p>
+  </div>
+
+</main>
+
+<footer class="site">
+  <svg class="mark-foot" viewBox="18 0 216 144" aria-hidden="true" focusable="false">
+    <path fill="currentColor" d="M18,0v144h156.02H234V0H18z M134.625,5.76c-11.049,4.608-20.677,12.123-28.068,21.392L94.207,5.76H134.625z M23.76,5.76
+	h63.796L23.76,114.156V5.76z M23.76,138.24v-12.564L90.44,11.232l73.603,127.008H23.76z M228.24,138.24h-37.131
+	c8.688-4.032,16.502-9.352,23.037-15.979l-5.17-3.13c-10.599,10.28-24.039,16.538-38.531,18.176L109.666,31.996
+	c1.927-2.587,4.054-5.07,6.376-7.392c12.512-12.512,29.146-19.41,46.838-19.41c17.347,0,33.673,6.622,46.096,18.671l5.17-2.699
+	c-6.527-6.621-14.328-11.95-23.005-15.406h37.099V138.24z"/>
+  </svg>
+  <p>Aaron Clayton · Niagara, Canada</p>
+  <p><a href="https://github.com/aclayton" rel="me">GitHub</a></p>
+</footer>
+
+<script src="/accent.js" defer></script>
+
+</body>
+</html>

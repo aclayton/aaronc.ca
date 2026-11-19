@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>aaronc.ca — one page</title>
+<style>
+/* ══════════════════════════════════════════════════════════════════════════
+   One-page flyer, Letter, light. Built to the same system as the site so the
+   paper and the page agree.
+
+     sequence   8  13  21  34  55  89
+     type       1  1.272  1.618  2.618  4.236
+     leading    φ body · √φ headings
+     container  760px  ·  measure  760 / 1.618 = 470px
+
+   print-color-adjust: exact is load-bearing — Chromium drops element
+   backgrounds when printing, which would strip every band on this sheet.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* STATIC Plex Sans instances, not the variable file the website uses.
+   Chromium's PDF export cannot embed a variable font: it silently falls back to
+   Type 3 glyph procedures flattened to one weight, so every heading and every
+   body paragraph on the sheet rendered at the same weight. Static instances
+   embed as real subsetted TrueType, like the mono below always did.
+   These live in print/fonts/ so the site keeps its smaller variable file. */
+@font-face { font-family:"Plex Sans"; src:url("/print/fonts/plex-sans-400.woff2") format("woff2");
+             font-weight:400; font-style:normal; font-display:block; }
+@font-face { font-family:"Plex Sans"; src:url("/print/fonts/plex-sans-600.woff2") format("woff2");
+             font-weight:600; font-style:normal; font-display:block; }
+@font-face { font-family:"Plex Sans"; src:url("/print/fonts/plex-sans-700.woff2") format("woff2");
+             font-weight:700; font-style:normal; font-display:block; }
+@font-face { font-family:"Plex Mono"; src:url("/fonts/plex-mono-400.woff2") format("woff2");
+             font-weight:400; font-style:normal; font-display:block; }
+@font-face { font-family:"Plex Mono"; src:url("/fonts/plex-mono-600.woff2") format("woff2");
+             font-weight:600; font-style:normal; font-display:block; }
+@font-face { font-family:"Plex Mono"; src:url("/fonts/plex-mono-700.woff2") format("woff2");
+             font-weight:700; font-style:normal; font-display:block; }
+
+:root{
+  --s1:.5rem; --s2:.8125rem; --s3:1.3125rem; --s4:2.125rem; --s5:3.4375rem; --s6:5.5625rem;
+  --t-small:.8125rem; --t-body:1rem; --t-lede:1.272rem; --t-h2:1.618rem; --t-h1:2.618rem;
+  --lead:1.618; --lead-h:1.272;
+  --container:47.5rem;                 /* 760px sheet content */
+  --measure:calc(var(--container) / 1.618);
+
+  --bg:#f7f6fa; --surface:#eeebf6; --fg:#191725; --muted:#5e5a72; --rule:#dcd6ea;
+  --hue:268; --accent-s:62%;
+  --accent-text:hsl(var(--hue) var(--accent-s) 54%);
+  --accent-fill:hsl(var(--hue) var(--accent-s) 58%);
+  --hairline:hsl(var(--hue) var(--accent-s) 40% / .34);   /* a step heavier than screen: uncoated stock eats hairlines */
+  --ghost-line:color-mix(in srgb, var(--fg) 50%, transparent);
+}
+
+@page { size:letter; margin:0; }
+
+*{ box-sizing:border-box; }
+html,body{ margin:0; padding:0; }
+body{
+  width:8.5in; height:11in; overflow:hidden;
+  background:var(--bg); color:var(--fg);
+  font-family:"Plex Sans",system-ui,sans-serif;
+  font-size:var(--t-body); line-height:var(--lead);
+  -webkit-print-color-adjust:exact; print-color-adjust:exact;
+  text-rendering:optimizeLegibility;
+}
+
+.sheet{ position:relative; width:100%; height:100%; padding:0.75in 0.75in 0.55in; display:flex;
+        flex-direction:column; }
+
+/* Vertical budget: content must total under 11in or the footer is pushed onto a
+   second page — `margin-top:auto` cannot help when there is no free space to
+   distribute. Measured at 1031px of 1056px. If you add a line of copy, re-render
+   and check `pdfinfo` still reports one page. */
+
+/* the ground: two rings, centres ONE RADIUS APART — that relationship is the
+   whole construction. 15rem at this sheet width is 25.7%, so the second centre
+   sits at 45.7%, not somewhere arbitrary across the page. Placed 2.57 radii
+   apart the pair is not a pair at all: the second ring falls off the sheet. */
+.ground{ position:absolute; inset:0; z-index:0; pointer-events:none;
+  background:
+    radial-gradient(circle at 20% 18%, transparent 0 15rem, var(--hairline) 15rem 15.015rem, transparent 15.015rem),
+    radial-gradient(circle at 45.7% 18%, transparent 0 15rem, var(--hairline) 15rem 15.015rem, transparent 15.015rem),
+    linear-gradient(104deg, transparent 0, hsl(var(--hue) var(--accent-s) 58% / .10) 22%, transparent 62%);
+  -webkit-mask-image:linear-gradient(to bottom, #000 0 78%, transparent 100%);
+          mask-image:linear-gradient(to bottom, #000 0 78%, transparent 100%);
+}
+/* `.ground` is a direct child, so this must exclude it — otherwise it inherits
+   `position: relative`, `inset: 0` stops applying, and the ground collapses to a
+   zero-height box that paints nothing at all. That is exactly what happened. */
+.sheet > *:not(.ground){ position:relative; z-index:1; }
+
+.head{ display:flex; align-items:center; justify-content:space-between;
+       padding-bottom:var(--s2); border-bottom:1px solid var(--rule); }
+/* 83px wide would stretch it: the artwork's viewBox is 216x144, aspect 1.5, so
+   at 47px tall it must be 70.5px wide. A mismatched box distorts his mark. */
+.head .mark{ width:70.5px; height:47px; color:var(--fg); }
+.head .url{ font-family:"Plex Mono",monospace; font-size:var(--t-small); font-weight:600;
+            color:var(--muted); letter-spacing:.01em; }
+
+.eyebrow{ font-size:var(--t-small); font-weight:600; text-transform:uppercase;
+          letter-spacing:.1em; color:var(--accent-text); margin:var(--s4) 0 0; }
+
+h1{ font-size:var(--t-h1); line-height:var(--lead-h); letter-spacing:-.018em; font-weight:700;
+    text-wrap:balance; margin:var(--s2) 0 0; max-width:var(--measure); }
+
+.lede{ font-size:var(--t-lede); line-height:var(--lead); color:var(--muted);
+       margin:var(--s3) 0 0; max-width:var(--measure); }
+
+.two{ display:grid; grid-template-columns:1fr 1.618fr; gap:var(--s5);
+      margin-top:var(--s4); padding-top:var(--s3); border-top:1px solid var(--rule); }
+.two > *{ min-width:0; }
+/* flex column so the QR's margin-top:auto can bottom-anchor against the grid
+   row, whose height is set by the taller prose column */
+.two > :first-child{ display:flex; flex-direction:column; }
+
+h2{ font-size:var(--t-h2); line-height:var(--lead-h); letter-spacing:-.018em; font-weight:650;
+    margin:0 0 var(--s2); }
+.contents{ font-size:var(--t-small); padding:0; margin:0; }
+.contents li{ list-style:none; padding:var(--s1) 0; border-bottom:1px solid var(--rule);
+              display:flex; justify-content:space-between; gap:var(--s2); }
+.contents li:last-child{ border-bottom:0; }
+.contents .name{ font-weight:600; }
+.contents .what{ color:var(--muted); text-align:right; }
+
+p{ margin:0 0 var(--s2); }
+p:last-child{ margin-bottom:0; }
+.body p{ color:var(--muted); }
+.body p strong{ color:var(--fg); font-weight:650; }
+
+/* No max-width here: it would clamp the border-top too, leaving the rule short
+   of the column and reading as an unfinished flourish. The column is already
+   narrower than a comfortable measure. */
+.closing{ margin-top:var(--s4); padding-top:var(--s3); border-top:1px solid var(--rule);
+          font-size:var(--t-small); color:var(--muted); }
+.qr{ margin-top:auto; padding-top:var(--s4); }
+.qr img{ display:block; width:1.15in; height:1.15in; }
+.qr figcaption{ font-family:"Plex Mono",monospace; font-size:var(--t-small); font-weight:600;
+                color:var(--muted); margin-top:var(--s1); }
+
+.chips{ display:flex; flex-wrap:wrap; gap:var(--s1); margin-top:var(--s3); }
+.chip{ font-family:"Plex Mono",monospace; font-size:var(--t-small); font-weight:600;
+       color:var(--fg); border:1px solid var(--ghost-line); border-radius:999px;
+       padding:3px 11px; }
+/* The accent appears once in the eyebrow; echoing it on the pills keeps it from
+   reading as a leftover. Low strength — these are labels, not controls. */
+.chip{ border-color:hsl(var(--hue) var(--accent-s) 58% / .45); }
+
+/* Only the contact sits here — the URL is already in the masthead, and repeating
+   it reads as filler. Right-aligned so the footer needs one baseline, not two. */
+.foot{ margin-top:var(--s3); padding-top:var(--s3); border-top:1px solid var(--rule);
+       display:flex; justify-content:flex-end; }
+.foot .c{ font-family:"Plex Mono",monospace; font-size:var(--t-small); font-weight:600; }
+.foot .c a{ color:var(--fg); text-decoration:none; }
+.foot .c span{ color:var(--rule); margin:0 8px; }
+</style>
+</head>
+<body>
+<div class="sheet">
+  <div class="ground"></div>
+
+  <header class="head">
+    <svg class="mark" viewBox="18 0 216 144" role="img" aria-label="Aaron Clayton">
+      <path fill="currentColor" d="M18,0v144h156.02H234V0H18z M134.625,5.76c-11.049,4.608-20.677,12.123-28.068,21.392L94.207,5.76H134.625z M23.76,5.76
+	h63.796L23.76,114.156V5.76z M23.76,138.24v-12.564L90.44,11.232l73.603,127.008H23.76z M228.24,138.24h-37.131
+	c8.688-4.032,16.502-9.352,23.037-15.979l-5.17-3.13c-10.599,10.28-24.039,16.538-38.531,18.176L109.666,31.996
+	c1.927-2.587,4.054-5.07,6.376-7.392c12.512-12.512,29.146-19.41,46.838-19.41c17.347,0,33.673,6.622,46.096,18.671l5.17-2.699
+	c-6.527-6.621-14.328-11.95-23.005-15.406h37.099V138.24z"/>
+    </svg>
+    <div class="url">aaronc.ca</div>
+  </header>
+
+  <p class="eyebrow">Aaron Clayton · Niagara, Canada</p>
+
+  <h1>UX-minded systems engineer.</h1>
+
+  <p class="lede">I make complex systems people actually use, then take the manual work out of them.</p>
+
+  <div class="two">
+    <div>
+      <h2>On the site</h2>
+      <ul class="contents">
+        <li><span class="name">What I do</span><span class="what">three pillars</span></li>
+        <li><span class="name">Selected work</span><span class="what">three systems</span></li>
+        <li><span class="name">How I work</span><span class="what">four steps</span></li>
+        <li><span class="name">Contact</span><span class="what">a short form</span></li>
+      </ul>
+      <p class="closing">Happy to hear from people working on interesting problems.</p>
+      <figure class="qr">
+        <img src="/print/qr.svg" alt="QR code linking to aaronc.ca" width="110" height="110">
+        <figcaption>aaronc.ca</figcaption>
+      </figure>
+    </div>
+    <div class="body">
+      <h2>What it is</h2>
+      <p>The site is a working description of what I do: I take systems that are complicated,
+         manual or half-abandoned — and make them something people can operate without a
+         manual. <strong>Design work where the interface meets the infrastructure,</strong> and
+         automation where the interface stops making sense.</p>
+      <p>It is hand-written. <strong>No framework, no build step, no third-party requests, no
+         tracking.</strong> Four files and a font directory. It works with JavaScript disabled —
+         everything the scripts do is enhancement, never load-bearing.</p>
+      <p>Three case studies are written up in full, including one where the first design failed
+         on architecture rather than code, and what that changed.</p>
+      <div class="chips">
+        <span class="chip">no build step</span>
+        <span class="chip">no dependencies</span>
+        <span class="chip">works without JS</span>
+        <span class="chip">no tracking</span>
+      </div>
+    </div>
+  </div>
+
+  <footer class="foot">
+    <div class="c">
+      <a href="mailto:aaronc@protonmail.ch">aaronc@protonmail.ch</a><span>·</span><a href="https://github.com/aclayton">github.com/aclayton</a>
+    </div>
+  </footer>
+</div>
+</body>
+</html>
