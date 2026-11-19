@@ -1,0 +1,15 @@
+/* Platform-coloured marks — render sources.
+   A deliberate departure from the system: the field is a third-party brand colour.
+   Nothing here belongs in style.css. */
+:root { --field: #181717; --mark: #ffffff; }
+html, body { margin: 0; padding: 0; height: 100%; }
+body {
+  width: 100vw; height: 100vh; overflow: hidden;
+  background: var(--field); color: var(--mark);
+  display: grid; place-items: center;
+  -webkit-print-color-adjust: exact; print-color-adjust: exact;
+}
+/* Same 74% as the profile avatars: the largest the mark can sit and stay clear
+   of the inscribed circle every platform crops to. */
+.mark { display: block; width: 74%; height: auto; aspect-ratio: 216/144;
+        color: var(--mark); }

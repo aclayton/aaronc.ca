@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>vesica — architecture</title>
+<meta name="description" content="What vesica actually implements, what crosses the boundary between the installer and the shared home, and what is still missing.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/style.css">
+
+<style>
+  /* Page-scoped. Every value is one of the site's own tokens. */
+
+  /* ---- the boundary: three columns, the middle one is the crossing ---- */
+  .boundary {
+    display: grid; gap: var(--s3);
+    grid-template-columns: 1fr 1.1fr 1fr;
+    margin-top: var(--s4);
+  }
+  .boundary > * { min-width: 0; }
+  @media (max-width: 54rem) { .boundary { grid-template-columns: 1fr; } }
+
+  .side {
+    padding: var(--s3);
+    border: 1px solid var(--rule); border-radius: var(--s1);
+    background: var(--bg);
+  }
+  .side h3 { margin: 0 0 var(--s1); font-size: var(--t-h3); }
+  .side .who {
+    font-family: var(--font-mono); font-size: var(--t-small);
+    color: var(--muted); display: block; margin-bottom: var(--s2);
+  }
+  .side ul { margin: 0; padding-left: 1.1rem; }
+  .side li { margin-bottom: .35rem; }
+  .side.quiet { background: var(--surface); }
+  .side .verdict {
+    display: block; margin-top: var(--s2); padding-top: var(--s2);
+    border-top: 1px solid var(--rule);
+    font-size: var(--t-small);
+  }
+
+  /* ---- a numbered sequence with a hairline spine ---- */
+  ol.seq { list-style: none; padding: 0; margin: var(--s4) 0 0;
+           display: grid; gap: var(--s3); }
+  ol.seq > li { display: grid; grid-template-columns: 2.6rem 1fr; gap: var(--s2);
+                min-width: 0; }
+  ol.seq .n {
+    font-family: var(--font-mono); font-size: var(--t-small); font-weight: 600;
+    color: var(--muted); border-top: 1px solid var(--hairline);
+    padding-top: .35rem;
+  }
+  ol.seq .body { min-width: 0; border-top: 1px solid var(--rule); padding-top: .35rem; }
+  ol.seq h3 { margin: 0 0 .2rem; font-size: var(--t-body); font-weight: 600; }
+  ol.seq p { margin: 0; }
+
+  /* ---- generic data tables ---- */
+  table.t { width: 100%; border-collapse: collapse; font-size: var(--t-small); }
+  table.t th, table.t td { text-align: left; vertical-align: top;
+    padding: var(--s2) var(--s3); border-bottom: 1px solid var(--rule); }
+  table.t thead th { font-size: .6875rem; font-weight: 600; letter-spacing: .1em;
+    text-transform: uppercase; color: var(--muted); border-bottom: 1px solid var(--fg); }
+  table.t th[scope=row] { font-weight: 400; }
+  table.t code, .mono {
+    font-family: var(--font-mono); font-size: .75rem; }
+  table.t td code { display: block; margin-top: .2rem; color: var(--muted); }
+  .scrollw { overflow-x: auto; }
+
+  /* ---- state markers: solid ink = present, hairline ring = missing ---- */
+  .st { display: inline-flex; align-items: center; gap: .45rem; white-space: nowrap; }
+  .st::before {
+    content: ""; width: .55rem; height: .55rem; border-radius: 50%;
+    flex: none;
+  }
+  .st.yes::before { background: var(--fg); }
+  .st.part::before { background: color-mix(in srgb, var(--fg) 55%, transparent); }
+  .st.no::before  { border: 1px solid var(--ghost-line); }
+  .st.no { color: var(--muted); }
+
+  /* ---- the crate grid ---- */
+  .crates { display: grid; gap: var(--s2); margin-top: var(--s3);
+            grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); }
+  .crates > * { min-width: 0; }
+  .crate { padding: var(--s3); border: 1px solid var(--rule);
+           border-radius: var(--s1); background: var(--bg);
+           display: flex; flex-direction: column; gap: .35rem; }
+  .crate h3 { margin: 0; font-family: var(--font-mono);
+              font-size: var(--t-small); font-weight: 600; }
+  .crate p { margin: 0; font-size: var(--t-small); }
+  .crate .st { font-size: .75rem; }
+
+  /* ---- the ledger ---- */
+  ol.ledger { counter-reset: l; list-style: none; padding: 0;
+              margin: var(--s3) 0 0; display: grid; gap: var(--s2); }
+  ol.ledger > li { counter-increment: l; display: grid;
+                   grid-template-columns: 2.2rem 1fr; gap: var(--s2);
+                   min-width: 0; font-size: var(--t-small); }
+  ol.ledger > li::before {
+    content: counter(l); font-family: var(--font-mono); font-weight: 600;
+    color: var(--muted);
+  }
+  ol.ledger .body { min-width: 0; }
+
+  /* ---- two-up lists ---- */
+  .twoup { display: grid; gap: var(--s4); grid-template-columns: 1fr 1fr;
+           margin-top: var(--s3); }
+  .twoup > * { min-width: 0; }
+  @media (max-width: 48rem) { .twoup { grid-template-columns: 1fr; } }
+  .twoup h3 { margin: 0 0 var(--s2); font-size: var(--t-h3); }
+  ul.plain { list-style: none; padding: 0; margin: 0;
+             display: grid; gap: .45rem; font-size: var(--t-small); }
+  ul.plain li { display: grid; grid-template-columns: 1.05rem 1fr;
+                gap: .55rem; min-width: 0; }
+  ul.plain .x, ul.plain .v { font-family: var(--font-mono); color: var(--muted); }
+
+  .callout {
+    margin-top: var(--s4); padding: var(--s3) var(--s4);
+    border-left: 2px solid var(--accent-fill);
+    background: var(--accent-wash);
+    border-radius: 0 var(--s1) var(--s1) 0;
+  }
+  .callout p { margin: 0; }
+  .callout p + p { margin-top: var(--s2); }
+
+  .kv { display: grid; grid-template-columns: auto 1fr; gap: .35rem var(--s3);
+        margin: 0; font-size: var(--t-small); }
+  .kv dt { color: var(--muted); white-space: nowrap; }
+  .kv dd { margin: 0; font-family: var(--font-mono); font-size: .75rem;
+           overflow-wrap: anywhere; }
+
+  @media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
+</style>
+</head>
+
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site">
+  <nav aria-label="Main">
+    <a class="brand" href="/">Aaron Clayton</a>
+    <ul>
+      <li><a href="/">Site</a></li>
+      <li><a href="#shape">Shape</a></li>
+      <li><a href="#gaps">Gaps</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main id="main">
+
+  <section class="hero">
+    <p class="eyebrow">Local · tailnet only</p>
+    <h1>vesica</h1>
+    <p class="lede">One installer that gives every developer on a team the same agent setup: team rules, shared skills, role agents and model configuration for Claude Code, OpenCode, Copilot CLI, Codex and Hermes &mdash; with a personal vault the agents use as shared memory.</p>
+    <p class="note"><strong>What this page is.</strong> A drawing of the code that exists in the repository today, taken from its own architecture and onboarding notes rather than from the plan. The plan is larger than the code, and the difference is the most useful thing on this page &mdash; so it is drawn rather than omitted. The project describes itself as a prototype that should not yet be pointed at a real profile.</p>
+    <p class="note">On this page: <a href="#shape">the boundary</a> ·
+      <a href="#flow">the executable flow</a> ·
+      <a href="#crates">the crates</a> ·
+      <a href="#safety">the safety ledger</a> ·
+      <a href="#identity">the rename</a> ·
+      <a href="#gaps">what is missing</a> ·
+      <a href="#measured">what was measured</a>.</p>
+  </section>
+
+  <section id="shape">
+    <h2>The boundary</h2>
+    <p>The whole design is one rule: <strong>the installer holds no team content.</strong> Everything a team writes lives in a separate shared-home repository, and the installer's only job is to wire that repository into each machine. Privacy is a property of where the content lives, not of a policy about who may read it.</p>
+
+    <div class="boundary">
+
+      <div class="side">
+        <h3>The installer</h3>
+        <span class="who">ac-gls/vesica</span>
+        <ul>
+          <li>The CLI and its crates</li>
+          <li>The bootstrap script</li>
+          <li>Fixture data, used by tests only</li>
+        </ul>
+        <span class="verdict"><strong>Holds no team content.</strong> It is safe to publish; the repository is public.</span>
+      </div>
+
+      <div class="side quiet">
+        <h3>What crosses</h3>
+        <span class="who">and nothing else does</span>
+        <ul>
+          <li><code>AGENTS.md</code> &rarr; a symlink at <code>~/Team</code></li>
+          <li><code>AGENTS.md</code> &rarr; a managed import block in the Claude Code and Codex instruction files</li>
+          <li><code>Agents/Skills/*/SKILL.md</code> &rarr; skill symlinks into <code>.agents/skills</code> and <code>.claude/skills</code></li>
+        </ul>
+        <span class="verdict">Three shapes only: a symlink, a managed text block, and skill links. Every one is recorded in a manifest so it can be undone.</span>
+      </div>
+
+      <div class="side">
+        <h3>The shared home</h3>
+        <span class="who">a separate, usually private repository</span>
+        <ul>
+          <li><code>AGENTS.md</code> &mdash; the team rules</li>
+          <li><code>Agents/</code> &mdash; skills, roles, conventions</li>
+          <li><code>Knowledge/</code> <code>Decisions/</code> <code>Standards/</code></li>
+          <li><code>Templates/</code> <code>Repos/</code></li>
+          <li><code>agent-home.toml</code> and a catalog</li>
+        </ul>
+        <span class="verdict"><strong>Holds all team content.</strong> Removing the installer leaves this intact; that is the point of the split.</span>
+      </div>
+
+    </div>
+
+    <div class="callout">
+      <p><strong>Why the split is drawn this way.</strong> The installer repository is public and contains nothing worth protecting, so it can be shared, forked and read by anyone. The content that must not leak never enters it. The privacy comes from the shape rather than from discipline &mdash; which is the only kind that survives a busy week.</p>
+    </div>
+  </section>
+
+  <section id="flow" class="band">
+    <div>
+      <h2>The executable flow</h2>
+      <p>Six commands, of which three write and three only read. The writing ones share a transaction.</p>
+
+      <div class="scrollw">
+      <table class="t">
+        <thead><tr><th scope="col">command</th><th scope="col">what it does</th><th scope="col">writes?</th></tr></thead>
+        <tbody>
+          <tr>
+            <th scope="row"><code>doctor</code></th>
+            <td>Parses the team config and catalog; reports WSL status; can emit a JSON report and list the repositories a profile claims.</td>
+            <td><span class="st no">no</span></td>
+          </tr>
+          <tr>
+            <th scope="row"><code>install</code></th>
+            <td>Builds a plan, preflights the destinations, backs up existing instruction files, executes the supported actions, saves the manifest.</td>
+            <td><span class="st yes">yes</span></td>
+          </tr>
+          <tr>
+            <th scope="row"><code>status</code></th>
+            <td>Reads the install manifest and reports the entries it records.</td>
+            <td><span class="st no">no</span></td>
+          </tr>
+          <tr>
+            <th scope="row"><code>uninstall</code></th>
+            <td>Verifies hashes and links, then removes or restores <em>only</em> what it can verify. Anything modified or ambiguous is kept and reported.</td>
+            <td><span class="st yes">yes</span></td>
+          </tr>
+          <tr>
+            <th scope="row"><code>lint</code></th>
+            <td>Read-only checks over a shared home, with diagnostics that never print the matched text.</td>
+            <td><span class="st no">no</span></td>
+          </tr>
+          <tr>
+            <th scope="row"><code>vault-scan</code></th>
+            <td>Recursively checks bounded-size UTF-8 files for common credential patterns, by path and line only.</td>
+            <td><span class="st no">no</span></td>
+          </tr>
+        </tbody>
+      </table>
+      </div>
+
+      <h3 style="margin-top:var(--s5)">What <code>install</code> does, in order</h3>
+      <ol class="seq">
+        <li>
+          <span class="n">01</span>
+          <span class="body">
+            <h3>Plan</h3>
+            <p>The team config and catalog are parsed and validated. Credential-like keys are rejected here, before anything touches a disk.</p>
+          </span>
+        </li>
+        <li>
+          <span class="n">02</span>
+          <span class="body">
+            <h3>Preflight</h3>
+            <p>Every planned destination and the state directory are checked with symlink-aware metadata. An unmanaged collision, or a manifest-managed target that has been modified, <strong>fails closed</strong> &mdash; the install stops rather than proceeding.</p>
+          </span>
+        </li>
+        <li>
+          <span class="n">03</span>
+          <span class="body">
+            <h3>Back up</h3>
+            <p>Existing Claude and Codex instruction files are backed up before any managed block is added. A repeat install reuses the backup it already recorded.</p>
+          </span>
+        </li>
+        <li>
+          <span class="n">04</span>
+          <span class="body">
+            <h3>Execute</h3>
+            <p>The supported actions run: the <code>~/Team</code> symlink, the managed imports, the skill links. Symlinks are only ever created at an absent destination, or accepted if they already point the right way.</p>
+          </span>
+        </li>
+        <li>
+          <span class="n">05</span>
+          <span class="body">
+            <h3>Commit the manifest</h3>
+            <p>Targets, source paths, backups and hashes are written to the manifest through a unique temp file, restrictive permissions, a flush, then a rename. Steps 04 and 05 share one rollback transaction: if the manifest cannot commit, the actions are reversed in order.</p>
+          </span>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <section id="crates">
+    <h2>The crates</h2>
+    <p>Seven members in one workspace. The two marked as placeholders are the honest edge of the code: declared, and not yet doing the work their names promise.</p>
+
+    <div class="crates">
+      <article class="crate">
+        <h3>ah-core</h3>
+        <p>Team and catalog parsing and validation; the action planner and executor; the manifest model.</p>
+        <p><span class="st yes">implemented</span></p>
+      </article>
+      <article class="crate">
+        <h3>ah-config</h3>
+        <p>Recursive JSONC and TOML merges, managed text blocks, and a safe symlink primitive.</p>
+        <p><span class="st yes">implemented</span></p>
+      </article>
+      <article class="crate">
+        <h3>ah-agents</h3>
+        <p>Deterministic discovery of skill directories containing a <code>SKILL.md</code>.</p>
+        <p><span class="st yes">implemented</span></p>
+      </article>
+      <article class="crate">
+        <h3>ah-vault</h3>
+        <p>The bounded credential-pattern scanner and the read-only shared-home lint rules.</p>
+        <p><span class="st yes">implemented</span></p>
+      </article>
+      <article class="crate">
+        <h3>ah-wsl</h3>
+        <p>WSL kernel detection, with an override so CI can run outside WSL. No Windows interop steps yet.</p>
+        <p><span class="st part">detection only</span></p>
+      </article>
+      <article class="crate">
+        <h3>ah-herdr</h3>
+        <p>A placeholder. The runtime client is not implemented.</p>
+        <p><span class="st no">placeholder</span></p>
+      </article>
+      <article class="crate">
+        <h3>vesica</h3>
+        <p>The binary itself, wiring the six workflows above.</p>
+        <p><span class="st yes">implemented</span></p>
+      </article>
+    </div>
+
+    <h3 style="margin-top:var(--s5)">The lint rules, by id</h3>
+    <p class="note">Diagnostics carry a relative path, a line number and one of these ids &mdash; never the matched text. The check is a heuristic, and the project says so: a clean scan is not proof that a vault holds no secrets.</p>
+    <div class="scrollw">
+    <table class="t">
+      <thead><tr><th scope="col">rule</th><th scope="col">checks for</th></tr></thead>
+      <tbody>
+        <tr><th scope="row"><code>VSH006</code></th><td>Credential-shaped patterns. The same scanner <code>vault-scan</code> runs.</td></tr>
+        <tr><th scope="row"><code>VSH007</code></th><td>Email addresses, heuristically &mdash; the check that keeps personal addresses out of shared notes.</td></tr>
+        <tr><th scope="row"><code>VSH008</code></th><td>Frontmatter that is valid YAML.</td></tr>
+        <tr><th scope="row"><code>VSH009</code></th><td>Required frontmatter fields, including an owner and tags.</td></tr>
+        <tr><th scope="row"><code>VSH010</code></th><td>An allowed value for authority.</td></tr>
+        <tr><th scope="row"><code>VSH011</code></th><td>A required source on mirror and digest notes.</td></tr>
+        <tr><th scope="row"><span class="mono">&mdash;</span></th><td>Also: area README coverage, a 1&nbsp;MB file cap, internal wiki links that resolve, and personal paths.</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </section>
+
+  <section id="safety" class="band">
+    <div>
+      <h2>The safety ledger</h2>
+      <p>The nine rules the installer holds itself to. They are all of the same kind: refuse to guess, record what was done, and never destroy something that changed underneath you.</p>
+
+      <ol class="ledger">
+        <li><span class="body">The shared home holds team content; the installer repository holds none.</span></li>
+        <li><span class="body">Parsing rejects credential-like keys before any action is planned.</span></li>
+        <li><span class="body">All destinations and the manifest are preflighted with symlink-aware metadata. An unmanaged collision, or a managed target that was modified, <strong>fails closed</strong>.</span></li>
+        <li><span class="body">Existing instruction files are backed up before managed blocks are written. A repeat install reuses its recorded backup.</span></li>
+        <li><span class="body">Action execution and manifest persistence share one rollback transaction. If the commit fails, actions are reversed in order, and intervening edits are reported rather than overwritten.</span></li>
+        <li><span class="body">Manifest writes go to a uniquely created temp file, with restrictive permissions, then flush, sync and rename. A pre-existing temp file or symlink is neither followed nor replaced.</span></li>
+        <li><span class="body">The manifest records targets, sources, backups and hashes. Uninstall touches only entries it can verify; modified or ambiguous content is retained and reported.</span></li>
+        <li><span class="body">Symlinks are created only where nothing exists, or accepted if already correct. An existing user destination is never replaced.</span></li>
+        <li><span class="body">Secret-scan output contains locations only. Files are capped at 2&nbsp;MB and symlinks are not traversed.</span></li>
+      </ol>
+
+      <div class="callout">
+        <p><strong>The limit of the guarantee, in the project's own words.</strong> The transaction cannot succeed if the operating system refuses a rollback, or if a user replaces a file at the same moment. Rollback is best-effort: it preserves and reports what it finds, and a rollback error may still leave partial state. Windows and WSL end-to-end behaviour is unverified.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="identity">
+    <h2>The rename, and what still carries the old name</h2>
+    <p>The installed program is <code>vesica</code>. The paths that an existing install depends on were deliberately <em>not</em> renamed, so that an earlier installation is not orphaned. The result is a compatibility table rather than a clean sweep &mdash; and the historical identifiers are the ones that matter to anyone migrating.</p>
+
+    <div class="twoup">
+      <div>
+        <h3>Renamed</h3>
+        <ul class="plain">
+          <li><span class="v">&rsaquo;</span><span>The CLI and the installed binary: <code>vesica</code></span></li>
+          <li><span class="v">&rsaquo;</span><span>The repository name, and the product identity</span></li>
+          <li><span class="v">&rsaquo;</span><span>The environment variables read first: <code>VESICA_*</code></span></li>
+          <li><span class="v">&rsaquo;</span><span>Uninstall understands both the old and the new managed blocks</span></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Still on the old name, on purpose</h3>
+        <ul class="plain">
+          <li><span class="x">&times;</span><span>The shared-home config: <code>agent-home.toml</code></span></li>
+          <li><span class="x">&times;</span><span>The manifest: <code>~/.config/agent-home/manifest.json</code></span></li>
+          <li><span class="x">&times;</span><span>Legacy variables still accepted: <code>AGENT_HOME_REPO</code>, <code>AGENT_HOME_ROOT</code>, <code>AGENT_HOME_ALLOW_NON_WSL</code></span></li>
+          <li><span class="x">&times;</span><span>The internal crate prefixes, <code>ah-*</code></span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="callout">
+      <p><strong>One exception worth knowing.</strong> Every other path here keeps the old name for compatibility, but <strong>the public download URL does not.</strong> The README's install command points at a version tag that does not exist yet, so the command in the repository's own front page currently fails. That is a release-publishing gap, not a rename problem &mdash; see what was measured, below.</p>
+    </div>
+  </section>
+
+  <section id="gaps" class="band">
+    <div>
+      <h2>What is missing</h2>
+      <p>This is the most important section on the page. The plan describes a complete multi-agent installer for Windows and WSL; the code is a working local slice of it. Drawn side by side, because a drawing that hid the gap would be a worse drawing.</p>
+
+      <div class="twoup">
+        <div>
+          <h3>Wired and working</h3>
+          <ul class="plain">
+            <li><span class="v">&rsaquo;</span><span>The <code>~/Team</code> symlink from the shared home</span></li>
+            <li><span class="v">&rsaquo;</span><span>Managed instruction blocks for <strong>Claude Code</strong> and <strong>Codex</strong></span></li>
+            <li><span class="v">&rsaquo;</span><span>Skill-directory discovery, linked into <code>.agents/skills</code> and <code>.claude/skills</code></span></li>
+            <li><span class="v">&rsaquo;</span><span>The full install / status / uninstall cycle, with a manifest</span></li>
+            <li><span class="v">&rsaquo;</span><span>Read-only lint and the credential scan</span></li>
+            <li><span class="v">&rsaquo;</span><span>Profile selection, recorded and reported</span></li>
+            <li><span class="v">&rsaquo;</span><span>WSL detection, with a CI override</span></li>
+          </ul>
+        </div>
+        <div>
+          <h3>Named in the plan, not in the code</h3>
+          <ul class="plain">
+            <li><span class="x">&times;</span><span>Harness wiring for <strong>OpenCode, Copilot CLI and Hermes</strong> &mdash; three of the five named agents</span></li>
+            <li><span class="x">&times;</span><span>Role-agent rendering, Foundry setup and probes, and Herdr</span></li>
+            <li><span class="x">&times;</span><span>Cloning a private team home; profile-specific repository installation</span></li>
+            <li><span class="x">&times;</span><span>Per-profile skill selection &mdash; every profile currently links the same set</span></li>
+            <li><span class="x">&times;</span><span>Windows profile discovery, drvfs and OneDrive validation, <code>winget</code>, Obsidian, scheduled tasks</span></li>
+            <li><span class="x">&times;</span><span>Update, signed release verification, and a full multi-action rollback</span></li>
+            <li><span class="x">&times;</span><span>Any end-to-end Windows and WSL validation at all</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="callout">
+        <p><strong>What the project says must happen before a real pilot.</strong> Resolve the private-repository and Foundry prerequisites; finish the missing integrations and their tests; run it on a disposable Windows and WSL profile; verify the release artifacts; and obtain explicit release approval. That list is the project's own, and it is the honest answer to &ldquo;can we use it yet&rdquo; &mdash; no.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="measured">
+    <h2>What was measured</h2>
+    <p>Each of these was read from the live repository, not from the plan or from memory.</p>
+
+    <div class="scrollw">
+    <table class="t">
+      <thead><tr><th scope="col">checked</th><th scope="col">result</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">Shape</th><td>57 files across 7 crates; one workspace. MIT licensed.</td></tr>
+        <tr><th scope="row">Last push</th><td><code>2026-11-16 22:05 UTC</code> &mdash; the same day this was drawn.</td></tr>
+        <tr><th scope="row">Continuous integration</th><td><code>fmt --check</code>, <code>clippy -D warnings</code> and the workspace tests, plus ShellCheck and the network-free installer integration tests.</td></tr>
+        <tr><th scope="row">Pull requests</th><td>Ten. Eight merged, <strong>two open</strong> &mdash; both on install safety (<code>task/B1-install-parity</code>, <code>task/B1-install-transaction</code>).</td></tr>
+        <tr><th scope="row">Toolchain</th><td>Pinned to <code>1.100.0</code>, released four days before this page. The pin is real, not a typo.</td></tr>
+        <tr><th scope="row">Secrets in the tree</th><td>None. No env files, keys or credential-shaped files anywhere in the repository.</td></tr>
+        <tr><th scope="row">The documented install</th><td><strong>Broken.</strong> The README's command points at <code>v0.1.0</code>; there is no such tag and no release. The URL returns 404 while the branch URL returns 200. Until a release is cut, the only path that works is the local fixture trial.</td></tr>
+        <tr><th scope="row">Ownership</th><td>Currently on the <em>work</em> account, and the account is named in five places: the repository's homepage and description, the README install URL, the workspace <code>repository</code> field, <code>CODEOWNERS</code>, and the bootstrap script's default.</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <h3 style="margin-top:var(--s5)">How the project verifies itself</h3>
+    <p class="note">From the repository root &mdash; these are the checks the architecture note names, and they are the ones CI runs.</p>
+    <dl class="kv">
+      <dt>format</dt><dd>cargo fmt --all -- --check</dd>
+      <dt>test</dt><dd>cargo test --workspace --quiet</dd>
+      <dt>lint</dt><dd>cargo clippy --workspace --all-targets -- -D warnings</dd>
+      <dt>build</dt><dd>cargo build -p vesica</dd>
+      <dt>installer</dt><dd>bash tests/install.sh</dd>
+      <dt>shell</dt><dd>shellcheck install.sh tests/install.sh</dd>
+      <dt>whitespace</dt><dd>git diff --check</dd>
+    </dl>
+  </section>
+
+</main>
+
+<footer class="site">
+  <svg class="mark-foot" viewBox="18 0 216 144" aria-hidden="true" focusable="false">
+    <path fill="currentColor" d="M18,0v144h156.02H234V0H18z M134.625,5.76c-11.049,4.608-20.677,12.123-28.068,21.392L94.207,5.76H134.625z M23.76,5.76
+	h63.796L23.76,114.156V5.76z M23.76,138.24v-12.564L90.44,11.232l73.603,127.008H23.76z M228.24,138.24h-37.131
+	c8.688-4.032,16.502-9.352,23.037-15.979l-5.17-3.13c-10.599,10.28-24.039,16.538-38.531,18.176L109.666,31.996
+	c1.927-2.587,4.054-5.07,6.376-7.392c12.512-12.512,29.146-19.41,46.838-19.41c17.347,0,33.673,6.622,46.096,18.671l5.17-2.699
+	c-6.527-6.621-14.328-11.95-23.005-15.406h37.099V138.24z"/>
+  </svg>
+  <p>Aaron Clayton · Niagara, Canada</p>
+  <p><a href="https://github.com/aclayton" rel="me">GitHub</a></p>
+</footer>
+
+<script src="/accent.js" defer></script>
+
+</body>
+</html>

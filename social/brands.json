@@ -1,0 +1,25 @@
+{
+  "_note": "Platform brand colours, SOURCED not remembered. Read by BOTH build-platforms.py (the preview page + render sources) and build-index.py (the asset index download list), so the two cannot disagree. These are third-party brand colours and a deliberate departure from the design system — nothing here belongs in style.css. Contrast for the reversed mark is solved against WCAG 1.4.11's 3:1 (a mark is a non-text graphic), never eyeballed.",
+  "sources": {
+    "simple-icons": "simple-icons.json (3472 brands) — github/x/telegram/bluesky/mastodon/discord/reddit/youtube/instagram/facebook/stackoverflow/npm/signal",
+    "linkedin": "linkedin.com/legal/api-terms-of-use carries #0077B5; #0A66C2 is the current brand blue. Both are in circulation, so both are listed.",
+    "absent": "linkedin and slack are trademark-restricted in Simple Icons, hence the manual lookup above."
+  },
+  "brands": [
+    { "name": "GitHub",         "hex": "#181717", "src": "Simple Icons" },
+    { "name": "X",              "hex": "#000000", "src": "Simple Icons" },
+    { "name": "LinkedIn",       "hex": "#0A66C2", "src": "current brand blue" },
+    { "name": "LinkedIn (old)", "hex": "#0077B5", "src": "linkedin.com/legal/api-terms-of-use" },
+    { "name": "Telegram",       "hex": "#26A5E4", "src": "Simple Icons" },
+    { "name": "Bluesky",        "hex": "#1185FE", "src": "Simple Icons" },
+    { "name": "Mastodon",       "hex": "#6364FF", "src": "Simple Icons" },
+    { "name": "Discord",        "hex": "#5865F2", "src": "Simple Icons" },
+    { "name": "Reddit",         "hex": "#FF4500", "src": "Simple Icons" },
+    { "name": "YouTube",        "hex": "#FF0000", "src": "Simple Icons" },
+    { "name": "Instagram",      "hex": "#FF0069", "src": "Simple Icons" },
+    { "name": "Facebook",       "hex": "#0866FF", "src": "Simple Icons" },
+    { "name": "Stack Overflow", "hex": "#F58025", "src": "Simple Icons" },
+    { "name": "npm",            "hex": "#CB3837", "src": "Simple Icons" },
+    { "name": "Signal",         "hex": "#3B45FD", "src": "Simple Icons" }
+  ]
+}

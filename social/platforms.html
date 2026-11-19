@@ -1,0 +1,313 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Platform-coloured marks</title>
+<meta name="robots" content="noindex, nofollow, noarchive">
+<style>
+@font-face { font-family:"Plex Sans"; src:url("/fonts/plex-sans.woff2") format("woff2-variations");
+             font-weight:400 700; font-display:swap; }
+@font-face { font-family:"Plex Mono"; src:url("/fonts/plex-mono-400.woff2") format("woff2");
+             font-weight:400; font-display:swap; }
+@font-face { font-family:"Plex Mono"; src:url("/fonts/plex-mono-600.woff2") format("woff2");
+             font-weight:600; font-display:swap; }
+:root {
+  --s1:.5rem; --s2:.8125rem; --s3:1.3125rem; --s4:2.125rem; --s5:3.4375rem; --s6:5.5625rem;
+  --container:55.625rem;
+  --bg:#f7f6fa; --surface:#eeebf6; --fg:#191725; --muted:#5e5a72; --rule:#dcd6ea;
+  --font-sans:"Plex Sans", system-ui, sans-serif;
+  --font-mono:"Plex Mono", ui-monospace, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root { --bg:#0b0910; --surface:#141120; --fg:#e9e6f2; --muted:#9a94ae; --rule:#272137; }
+}
+* { box-sizing:border-box; }
+body { margin:0; background:var(--bg); color:var(--fg); font-family:var(--font-sans);
+       font-size:1rem; line-height:1.618; padding:var(--s5) var(--s4) var(--s6); }
+main, header, footer { max-width:var(--container); margin-inline:auto; }
+h1 { font-size:2.618rem; line-height:1.272; letter-spacing:-.018em; margin:0 0 var(--s2); }
+h2 { font-size:1.618rem; margin:var(--s6) 0 var(--s2); letter-spacing:-.018em; }
+h3 { font-size:1.272rem; margin:0 0 var(--s1); letter-spacing:-.018em; }
+.lede { color:var(--muted); max-width:calc(var(--container)/1.618); margin:0 0 var(--s4); }
+.note { margin:0; font-size:.8125rem; color:var(--muted); }
+.mono, code { font-family:var(--font-mono); }
+.src { font-size:.75rem; }
+.caveat { border-left:6px solid var(--fg); padding:var(--s3) var(--s4); margin:0 0 var(--s5);
+          background:var(--surface); border-radius:0 6px 6px 0; font-size:.875rem; }
+.caveat p { margin:0 0 var(--s1); }
+.grid { display:grid; gap:var(--s4); grid-template-columns:repeat(auto-fit,minmax(17rem,1fr)); }
+.grid > * { min-width:0; }
+.card { border:1px solid var(--rule); border-radius:6px; padding:var(--s4);
+        background:var(--surface); display:flex; flex-direction:column; gap:var(--s2); }
+.row3 { display:grid; grid-template-columns:repeat(3,1fr); gap:var(--s2); }
+figure { margin:0; }
+.disc { display:grid; place-items:center; aspect-ratio:1; border-radius:50%;
+        border:1px solid var(--rule); }
+.disc.paper { background:#f7f6fa; }
+.disc.night { background:#0b0910; }
+.mark { width:74%; height:auto; aspect-ratio:216/144; display:block; }
+figcaption { color:var(--muted); font-size:.6875rem; margin-top:.3rem; line-height:1.4; }
+.meta { display:flex; align-items:center; gap:var(--s2); margin:0; font-size:.8125rem; flex-wrap:wrap; }
+.hexchip { display:inline-block; width:18px; height:18px; border-radius:4px;
+           border:1px solid color-mix(in srgb, currentColor 22%, transparent); }
+.flag { font-size:.6875rem; font-weight:600; text-transform:uppercase; letter-spacing:.08em;
+        padding:1px 7px; border-radius:99px; }
+.mono.ok { color:#1b5e20; font-weight:600; }
+.mono.no { color:#8c1d18; font-weight:600; }
+@media (prefers-color-scheme: dark) {
+  .mono.ok { color:#81c784; } .mono.no { color:#ff8a80; }
+}
+footer { margin:var(--s6) auto 0; padding-top:var(--s3); border-top:1px solid var(--rule);
+         color:var(--muted); font-size:.8125rem; }
+footer p { margin:0 0 var(--s1); }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Platform-coloured marks</h1>
+  <p class="lede">The mark in each platform's own brand colour, three ways: reversed out of a
+  brand field, and drawn as the mark on his paper and night grounds.</p>
+
+  <div class="caveat">
+    <p><strong>A deliberate departure from the system.</strong> His palette is six neutrals and one
+    rotating accent. These are third-party brand colours, used because the point is to sit beside a
+    platform's chrome. They are experiments — <strong>nothing here belongs in
+    <code>style.css</code></strong>.</p>
+    <p>Brand hexes are sourced, not remembered: Simple Icons for most, LinkedIn from their own
+    page. The reversed-mark colour is <strong>solved per brand</strong> against WCAG 1.4.11's 3:1
+    for a non-text graphic — which is what a mark is — not chosen by eye.</p>
+    <p>Second caveat: an avatar in a platform's exact brand colour can read as implying an
+    affiliation. Worth a thought before it becomes the profile picture on a site that lists no
+    employer.</p>
+  </div>
+</header>
+
+<main>
+  <div class="grid">
+
+      <article class="card" id="github">
+        <div class="row3">
+          <figure><span class="disc " style="background:#181717;color:#ffffff"><svg class="mark" viewBox="18 0 216 144" aria-hidden="true" focusable="false"><path fill="currentColor" d="M18,0v144h156.02H234V0H18z M134.625,5.76c-11.049,4.608-20.677,12.123-28.068,21.392L94.207,5.76H134.625z M23.76,5.76 h63.796L23.76,114.156V5.76z M23.76,138.24v-12.564L90.44,11.232l73.603,127.008H23.76z M228.24,138.24h-37.131 c8.688-4.032,16.502-9.352,23.037-15.979l-5.17-3.13c-10.599,10.28-24.039,16.538-38.531,18.176L109.666,31.996 c1.927-2.587,4.054-5.07,6.376-7.392c12.512-12.512,29.146-19.41,46.838-19.41c17.347,0,33.673,6.622,46.096,18.671l5.17-2.699 c-6.527-6.621-14.328-11.95-23.005-15.406h37.099V138.24z"/></svg></span><figcaption>brand field<br><span class="mono ok">17.89:1</span></figcaption></figure>
+          <figure><span class="disc paper" style="background:#f7f6fa;color:#181717"><svg class="mark" viewBox="18 0 216 144" aria-hidden="true" focusable="false"><path fill="currentColor" d="M18,0v144h156.02H234V0H18z M134.625,5.76c-11.049,4.608-20.677,12.123-28.068,21.392L94.207,5.76H134.625z M23.76,5.76 h63.796L23.76,114.156V5.76z M23.76,138.24v-12.564L90.44,11.232l73.603,127.008H23.76z M228.24,138.24h-37.131 c8.688-4.032,16.502-9.352,23.037-15.979l-5.17-3.13c-10.599,10.28-24.039,16.538-38.531,18.176L109.666,31.996 c1.927-2.587,4.054-5.07,6.376-7.392c12.512-12.512,29.146-19.41,46.838-19.41c17.347,0,33.673,6.622,46.096,18.671l5.17-2.699 c-6.527-6.621-14.328-11.95-23.005-15.406h37.099V138.24z"/></svg></span><figcaption>on paper<br><span class="mono ok">16.63:1</span></figcaption></figure>
+          <figure><span class="disc night" style="background:#0b0910;color:#181717"><svg class="mark" viewBox="18 0 216 144" aria-hidden="true" focusable="false"><path fill="currentColor" d="M18,0v144h156.02H234V0H18z M134.625,5.76c-11.049,4.608-20.677,12.123-28.068,21.392L94.207,5.76H134.625z M23.76,5.76 h63.796L23.76,114.156V5.76z M23.76,138.24v-12.564L90.44,11.232l73.603,127.008H23.76z M228.24,138.24h-37.131 c8.688-4.032,16.502-9.352,23.037-15.979l-5.17-3.13c-10.599,10.28-24.039,16.538-38.531,18.176L109.666,31.996 c1.927-2.587,4.054-5.07,6.376-7.392c12.512-12.512,29.146-19.41,46.838-19.41c17.347,0,33.673,6.622,46.096,18.671l5.17-2.699 c-6.527-6.621-14.328-11.95-23.005-15.406h37.099V138.24z"/></svg></span><figcaption>on night<br><span class="mono no">1.11:1</span></figcaption></figure>
+        </div>
+
+        <h3>GitHub</h3>
+        <p class="meta">
+          <span class="hexchip" style="background:#181717"></span>
+          <code>#181717</code>
+        </p>
+        <p class="note">works: brand field, brand mark on paper. <span class="src">Simple Icons</span></p>
+      </article>
+      <article class="card" id="x">
+        <div class="row3">
+          <figure><span class="disc " style="background:#000000;color:#ffffff"><svg class="mark" viewBox="18 0 216 144" aria-hidden="true" focusable="false"><path fill="currentColor" d="M18,0v144h156.02H234V0H18z M134.625,5.76c-11.049,4.608-20.677,12.123-28.068,21.392L94.207,5.76H134.625z M23.76,5.76 h63.796L23.76,114.156V5.76z M23.76,138.24v-12.564L90.44,11.232l73.603,127.008H23.76z M228.24,138.24h-37.131 c8.688-4.032,16.502-9.352,23.037-15.979l-5.17-3.13c-10.599,10.28-24.039,16.538-38.531,18.176L109.666,31.996 c1.927-2.587,4.054-5.07,6.376-7.392c12.512-12.512,29.146-19.41,46.838-19.41c17.347,0,33.673,6.622,46.096,18.671l5.17-2.699 c-6.527-6.621-14.328-11.95-23.005-15.406h37.099V138.24z"/></svg></span><figcaption>brand field<br><span class="mono ok">21.00:1</span></figcaption></figure>
+          <figure><span class="disc paper" style="background:#f7f6fa;color:#000000"><svg class="mark" viewBox="18 0 216 144" aria-hidden="true" focusable="false"><path fill="currentColor" d="M18,0v144h156.02H234V0H18z M134.625,5.76c-11.049,4.608-20.677,12.123-28.068,21.392L94.207,5.76H134.625z M23.76,5.76 h63.796L23.76,114.156V5.76z M23.76,138.24v-12.564L90.44,11.232l73.603,127.008H23.76z M228.24,138.24h-37.131 c8.688-4.032,16.502-9.352,23.037-15.979l-5.17-3.13c-10.599,10.28-24.039,16.538-38.531,18.176L109.666,31.996 c1.927-2.587,4.054-5.07,6.376-7.392c12.512-12.512,29.146-19.41,46.838-19.41c17.347,0,33.673,6.622,46.096,18.671l5.17-2.699 c-6.527-6.621-14.328-11.95-23.005-15.406h37.099V138.24z"/></svg></span><figcaption>on paper<br><span class="mono ok">19.52:1</span></figcaption></figure>
+          <figure><span class="disc night" style="background:#0b0910;color:#000000"><svg class="mark" viewBox="18 0 216 144" aria-hidden="true" focusable="false"><path fill="currentColor" d="M18,0v144h156.02H234V0H18z M134.625,5.76c-11.049,4.608-20.677,12.123-28.068,21.392L94.207,5.76H134.625z M23.76,5.76 h63.796L23.76,114.156V5.76z M23.76,138.24v-12.564L90.44,11.232l73.603,127.008H23.76z M228.24,138.24h-37.131 c8.688-4.032,16.502-9.352,23.037-15.979l-5.17-3.13c-10.599,10.28-24.039,16.538-38.531,18.176L109.666,31.996 c1.927-2.587,4.054-5.07,6.376-7.392c12.512-12.512,29.146-19.41,46.838-19.41c17.347,0,33.673,6.622,46.096,18.671l5.17-2.699 c-6.527-6.621-14.328-11.95-23.005-15.406h37.099V138.24z"/></svg></span><figcaption>on night<br><span class="mono no">1.06:1</span></figcaption></figure>
+        </div>
+
+        <h3>X</h3>
+        <p class="meta">
+          <span class="hexchip" style="background:#000000"></span>
+          <code>#000000</code>
+        </p>
+        <p class="note">works: brand field, brand mark on paper. <span class="src">Simple Icons</span></p>
+      </article>
+      <article class="card" id="linkedin">
+        <div class="row3">
+          <figure><span class="disc " style="background:#0A66C2;color:#ffffff"><svg class="mark" viewBox="18 0 216 144" aria-hidden="true" focusable="false"><path fill="currentColor" d="M18,0v144h156.02H234V0H18z M134.625,5.76c-11.049,4.608-20.677,12.123-28.068,21.392L94.207,5.76H134.625z M23.76,5.76 h63.796L23.76,114.156V5.76z M23.76,138.24v-12.564L90.44,11.232l73.603,127.008H23.76z M228.24,138.24h-37.131 c8.688-4.032,16.502-9.352,23.037-15.979l-5.17-3.13c-10.599,10.28-24.039,16.538-38.531,18.176L109.666,31.996 c1.927-2.587,4.054-5.07,6.376-7.392c12.512-12.512,29.146-19.41,46.838-19.41c17.347,0,33.673,6.622,46.096,18.671l5.17-2.699 c-6.527-6.621-14.328-11.95-23.005-15.406h37.099V138.24z"/></svg></span><figcaption>brand field<br><span class="mono ok">5.69:1</span></figcaption></figure>
+          <figure><span class="disc paper" style="background:#f7f6fa;color:#0A66C2"><svg class="mark" viewBox="18 0 216 144" aria-hidden="true" focusable="false"><path fill="currentColor" d="M18,0v144h156.02H234V0H18z M134.625,5.76c-11.049,4.608-20.677,12.123-28.068,21.392L94.207,5.76H134.625z M23.76,5.76 h63.796L23.76,114.156V5.76z M23.76,138.24v-12.564L90.44,11.232l73.603,127.008H23.76z M228.24,138.24h-37.131 c8.688-4.032,16.502-9.352,23.037-15.979l-5.17-3.13c-10.599,10.28-24.039,16.538-38.531,18.176L109.666,31.996 c1.927-2.587,4.054-5.07,6.376-7.392c12.512-12.512,29.146-19.41,46.838-19.41c17.347,0,33.673,6.622,46.096,18.671l5.17-2.699 c-6.527-6.621-14.328-11.95-23.005-15.406h37.099V138.24z"/></svg></span><figcaption>on paper<br><span class="mono ok">5.29:1</span></figcaption></figure>
+          <figure><span class="disc night" style="background:#0b0910;color:#0A66C2"><svg class="mark" viewBox="18 0 216 144" aria-hidden="true" focusable="false"><path fill="currentColor" d="M18,0v144h156.02H234V0H18z M134.625,5.76c-11.049,4.608-20.677,12.123-28.068,21.392L94.207,5.76H134.625z M23.76,5.76 h63.796L23.76,114.156V5.76z M23.76,138.24v-12.564L90.44,11.232l73.603,127.008H23.76z M228.24,138.24h-37.131 c8.688-4.032,16.502-9.352,23.037-15.979l-5.17-3.13c-10.599,10.28-24.039,16.538-38.531,18.176L109.666,31.996 c1.927-2.587,4.054-5.07,6.376-7.392c12.512-12.512,29.146-19.41,46.838-19.41c17.347,0,33.673,6.622,46.096,18.671l5.17-2.699 c-6.527-6.621-14.328-11.95-23.005-15.406h37.099V138.24z"/></svg></span><figcaption>on night<br><span class="mono ok">3.48:1</span></figcaption></figure>
+        </div>
+
+        <h3>LinkedIn</h3>
+        <p class="meta">
+          <span class="hexchip" style="background:#0A66C2"></span>
+          <code>#0A66C2</code>
+        </p>
+        <p class="note">works: brand field, brand mark on paper, brand mark on night. <span class="src">brand blue (current) — see the legacy row below</span></p>
+      </article>
+      <article class="card" id="linkedin-old">
+        <div class="row3">
+          <figure><span class="disc " style="background:#0077B5;color:#ffffff"><svg class="mark" viewBox="18 0 216 144" aria-hidden="true" focusable="false"><path fill="currentColor" d="M18,0v144h156.02H234V0H18z M134.625,5.76c-11.049,4.608-20.677,12.123-28.068,21.392L94.207,5.76H134.625z M23.76,5.76 h63.796L23.76,114.156V5.76z M23.76,138.24v-12.564L90.44,11.232l73.603,127.008H23.76z M228.24,138.24h-37.131 c8.688-4.032,16.502-9.352,23.037-15.979l-5.17-3.13c-10.599,10.28-24.039,16.538-38.531,18.176L109.666,31.996 c1.927-2.587,4.054-5.07,6.376-7.392c12.512-12.512,29.146-19.41,46.838-19.41c17.347,0,33.673,6.622,46.096,18.671l5.17-2.699 c-6.527-6.621-14.328-11.95-23.005-15.406h37.099V138.24z"/></svg></span><figcaption>brand field<br><span class="mono ok">4.88:1</span></figcaption></figure>
+          <figure><span class="disc paper" style="background:#f7f6fa;color:#0077B5"><svg class="mark" viewBox="18 0 216 144" aria-hidden="true" focusable="false"><path fill="currentColor" d="M18,0v144h156.02H234V0H18z M134.625,5.76c-11.049,4.608-20.677,12.123-28.068,21.392L94.207,5.76H134.625z M23.76,5.76 h63.796L23.76,114.156V5.76z M23.76,138.24v-12.564L90.44,11.232l73.603,127.008H23.76z M228.24,138.24h-37.131 c8.688-4.032,16.502-9.352,23.037-15.979l-5.17-3.13c-10.599,10.28-24.039,16.538-38.531,18.176L109.666,31.996 c1.927-2.587,4.054-5.07,6.376-7.392c12.512-12.512,29.146-19.41,46.838-19.41c17.347,0,33.673,6.622,46.096,18.671l5.17-2.699 c-6.527-6.621-14.328-11.95-23.005-15.406h37.099V138.24z"/></svg></span><figcaption>on paper<br><span class="mono ok">4.53:1</span></figcaption></figure>
+          <figure><span class="disc night" style="background:#0b0910;color:#0077B5"><svg class="mark" viewBox="18 0 216 144" aria-hidden="true" focusable="false"><path fill="currentColor" d="M18,0v144h156.02H234V0H18z M134.625,5.76c-11.049,4.608-20.677,12.123-28.068,21.392L94.207,5.76H134.625z M23.76,5.76 h63.796L23.76,114.156V5.76z M23.76,138.24v-12.564L90.44,11.232l73.603,127.008H23.76z M228.24,138.24h-37.131 c8.688-4.032,16.502-9.352,23.037-15.979l-5.17-3.13c-10.599,10.28-24.039,16.538-38.531,18.176L109.666,31.996 c1.927-2.587,4.054-5.07,6.376-7.392c12.512-12.512,29.146-19.41,46.838-19.41c17.347,0,33.673,6.622,46.096,18.671l5.17-2.699 c-6.527-6.621-14.328-11.95-23.005-15.406h37.099V138.24z"/></svg></span><figcaption>on night<br><span class="mono ok">4.06:1</span></figcaption></figure>
+        </div>
+
+        <h3>LinkedIn (old)</h3>
+        <p class="meta">
+          <span class="hexchip" style="background:#0077B5"></span>
+          <code>#0077B5</code>
+        </p>
+        <p class="note">works: brand field, brand mark on paper, brand mark on night. <span class="src">read off linkedin.com/legal/api-terms-of-use</span></p>
+      </article>
+      <article class="card" id="telegram">
+        <div class="row3">
+          <figure><span class="disc " style="background:#26A5E4;color:#191725"><svg class="mark" viewBox="18 0 216 144" aria-hidden="true" focusable="false"><path fill="currentColor" d="M18,0v144h156.02H234V0H18z M134.625,5.76c-11.049,4.608-20.677,12.123-28.068,21.392L94.207,5.76H134.625z M23.76,5.76 h63.796L23.76,114.156V5.76z M23.76,138.24v-12.564L90.44,11.232l73.603,127.008H23.76z M228.24,138.24h-37.131 c8.688-4.032,16.502-9.352,23.037-15.979l-5.17-3.13c-10.599,10.28-24.039,16.538-38.531,18.176L109.666,31.996 c1.927-2.587,4.054-5.07,6.376-7.392c12.512-12.512,29.146-19.41,46.838-19.41c17.347,0,33.673,6.622,46.096,18.671l5.17-2.699 c-6.527-6.621-14.328-11.95-23.005-15.406h37.099V138.24z"/></svg></span><figcaption>brand field<br><span class="mono ok">6.37:1</span></figcaption></figure>
+          <figure><span class="disc paper" style="background:#f7f6fa;color:#26A5E4"><svg class="mark" viewBox="18 0 216 144" aria-hidden="true" focusable="false"><path fill="currentColor" d="M18,0v144h156.02H234V0H18z M134.625,5.76c-11.049,4.608-20.677,12.123-28.068,21.392L94.207,5.76H134.625z M23.76,5.76 h63.796L23.76,114.156V5.76z M23.76,138.24v-12.564L90.44,11.232l73.603,127.008H23.76z M228.24,138.24h-37.131 c8.688-4.032,16.502-9.352,23.037-15.979l-5.17-3.13c-10.599,10.28-24.039,16.538-38.531,18.176L109.666,31.996 c1.927-2.587,4.054-5.07,6.376-7.392c12.512-12.512,29.146-19.41,46.838-19.41c17.347,0,33.673,6.622,46.096,18.671l5.17-2.699 c-6.527-6.621-14.328-11.95-23.005-15.406h37.099V138.24z"/></svg></span><figcaption>on paper<br><span class="mono no">2.57:1</span></figcaption></figure>
+          <figure><span class="disc night" style="background:#0b0910;color:#26A5E4"><svg class="mark" viewBox="18 0 216 144" aria-hidden="true" focusable="false"><path fill="currentColor" d="M18,0v144h156.02H234V0H18z M134.625,5.76c-11.049,4.608-20.677,12.123-28.068,21.392L94.207,5.76H134.625z M23.76,5.76 h63.796L23.76,114.156V5.76z M23.76,138.24v-12.564L90.44,11.232l73.603,127.008H23.76z M228.24,138.24h-37.131 c8.688-4.032,16.502-9.352,23.037-15.979l-5.17-3.13c-10.599,10.28-24.039,16.538-38.531,18.176L109.666,31.996 c1.927-2.587,4.054-5.07,6.376-7.392c12.512-12.512,29.146-19.41,46.838-19.41c17.347,0,33.673,6.622,46.096,18.671l5.17-2.699 c-6.527-6.621-14.328-11.95-23.005-15.406h37.099V138.24z"/></svg></span><figcaption>on night<br><span class="mono ok">7.15:1</span></figcaption></figure>
+        </div>
+
+        <h3>Telegram</h3>
+        <p class="meta">
+          <span class="hexchip" style="background:#26A5E4"></span>
+          <code>#26A5E4</code>
+        </p>
+        <p class="note">works: brand field, brand mark on night. <span class="src">Simple Icons</span></p>
+      </article>
+      <article class="card" id="bluesky">
+        <div class="row3">
+          <figure><span class="disc " style="background:#1185FE;color:#191725"><svg class="mark" viewBox="18 0 216 144" aria-hidden="true" focusable="false"><path fill="currentColor" d="M18,0v144h156.02H234V0H18z M134.625,5.76c-11.049,4.608-20.677,12.123-28.068,21.392L94.207,5.76H134.625z M23.76,5.76 h63.796L23.76,114.156V5.76z M23.76,138.24v-12.564L90.44,11.232l73.603,127.008H23.76z M228.24,138.24h-37.131 c8.688-4.032,16.502-9.352,23.037-15.979l-5.17-3.13c-10.599,10.28-24.039,16.538-38.531,18.176L109.666,31.996 c1.927-2.587,4.054-5.07,6.376-7.392c12.512-12.512,29.146-19.41,46.838-19.41c17.347,0,33.673,6.622,46.096,18.671l5.17-2.699 c-6.527-6.621-14.328-11.95-23.005-15.406h37.099V138.24z"/></svg></span><figcaption>brand field<br><span class="mono ok">4.88:1</span></figcaption></figure>
+          <figure><span class="disc paper" style="background:#f7f6fa;color:#1185FE"><svg class="mark" viewBox="18 0 216 144" aria-hidden="true" focusable="false"><path fill="currentColor" d="M18,0v144h156.02H234V0H18z M134.625,5.76c-11.049,4.608-20.677,12.123-28.068,21.392L94.207,5.76H134.625z M23.76,5.76 h63.796L23.76,114.156V5.76z M23.76,138.24v-12.564L90.44,11.232l73.603,127.008H23.76z M228.24,138.24h-37.131 c8.688-4.032,16.502-9.352,23.037-15.979l-5.17-3.13c-10.599,10.28-24.039,16.538-38.531,18.176L109.666,31.996 c1.927-2.587,4.054-5.07,6.376-7.392c12.512-12.512,29.146-19.41,46.838-19.41c17.347,0,33.673,6.622,46.096,18.671l5.17-2.699 c-6.527-6.621-14.328-11.95-23.005-15.406h37.099V138.24z"/></svg></span><figcaption>on paper<br><span class="mono ok">3.36:1</span></figcaption></figure>
+          <figure><span class="disc night" style="background:#0b0910;color:#1185FE"><svg class="mark" viewBox="18 0 216 144" aria-hidden="true" focusable="false"><path fill="currentColor" d="M18,0v144h156.02H234V0H18z M134.625,5.76c-11.049,4.608-20.677,12.123-28.068,21.392L94.207,5.76H134.625z M23.76,5.76 h63.796L23.76,114.156V5.76z M23.76,138.24v-12.564L90.44,11.232l73.603,127.008H23.76z M228.24,138.24h-37.131 c8.688-4.032,16.502-9.352,23.037-15.979l-5.17-3.13c-10.599,10.28-24.039,16.538-38.531,18.176L109.666,31.996 c1.927-2.587,4.054-5.07,6.376-7.392c12.512-12.512,29.146-19.41,46.838-19.41c17.347,0,33.673,6.622,46.096,18.671l5.17-2.699 c-6.527-6.621-14.328-11.95-23.005-15.406h37.099V138.24z"/></svg></span><figcaption>on night<br><span class="mono ok">5.48:1</span></figcaption></figure>
+        </div>
+
+        <h3>Bluesky</h3>
+        <p class="meta">
+          <span class="hexchip" style="background:#1185FE"></span>
+          <code>#1185FE</code>
+        </p>
+        <p class="note">works: brand field, brand mark on paper, brand mark on night. <span class="src">Simple Icons</span></p>
+      </article>
+      <article class="card" id="mastodon">
+        <div class="row3">
+          <figure><span class="disc " style="background:#6364FF;color:#ffffff"><svg class="mark" viewBox="18 0 216 144" aria-hidden="true" focusable="false"><path fill="currentColor" d="M18,0v144h156.02H234V0H18z M134.625,5.76c-11.049,4.608-20.677,12.123-28.068,21.392L94.207,5.76H134.625z M23.76,5.76 h63.796L23.76,114.156V5.76z M23.76,138.24v-12.564L90.44,11.232l73.603,127.008H23.76z M228.24,138.24h-37.131 c8.688-4.032,16.502-9.352,23.037-15.979l-5.17-3.13c-10.599,10.28-24.039,16.538-38.531,18.176L109.666,31.996 c1.927-2.587,4.054-5.07,6.376-7.392c12.512-12.512,29.146-19.41,46.838-19.41c17.347,0,33.673,6.622,46.096,18.671l5.17-2.699 c-6.527-6.621-14.328-11.95-23.005-15.406h37.099V138.24z"/></svg></span><figcaption>brand field<br><span class="mono ok">4.38:1</span></figcaption></figure>
+          <figure><span class="disc paper" style="background:#f7f6fa;color:#6364FF"><svg class="mark" viewBox="18 0 216 144" aria-hidden="true" focusable="false"><path fill="currentColor" d="M18,0v144h156.02H234V0H18z M134.625,5.76c-11.049,4.608-20.677,12.123-28.068,21.392L94.207,5.76H134.625z M23.76,5.76 h63.796L23.76,114.156V5.76z M23.76,138.24v-12.564L90.44,11.232l73.603,127.008H23.76z M228.24,138.24h-37.131 c8.688-4.032,16.502-9.352,23.037-15.979l-5.17-3.13c-10.599,10.28-24.039,16.538-38.531,18.176L109.666,31.996 c1.927-2.587,4.054-5.07,6.376-7.392c12.512-12.512,29.146-19.41,46.838-19.41c17.347,0,33.673,6.622,46.096,18.671l5.17-2.699 c-6.527-6.621-14.328-11.95-23.005-15.406h37.099V138.24z"/></svg></span><figcaption>on paper<br><span class="mono ok">4.07:1</span></figcaption></figure>
+          <figure><span class="disc night" style="background:#0b0910;color:#6364FF"><svg class="mark" viewBox="18 0 216 144" aria-hidden="true" focusable="false"><path fill="currentColor" d="M18,0v144h156.02H234V0H18z M134.625,5.76c-11.049,4.608-20.677,12.123-28.068,21.392L94.207,5.76H134.625z M23.76,5.76 h63.796L23.76,114.156V5.76z M23.76,138.24v-12.564L90.44,11.232l73.603,127.008H23.76z M228.24,138.24h-37.131 c8.688-4.032,16.502-9.352,23.037-15.979l-5.17-3.13c-10.599,10.28-24.039,16.538-38.531,18.176L109.666,31.996 c1.927-2.587,4.054-5.07,6.376-7.392c12.512-12.512,29.146-19.41,46.838-19.41c17.347,0,33.673,6.622,46.096,18.671l5.17-2.699 c-6.527-6.621-14.328-11.95-23.005-15.406h37.099V138.24z"/></svg></span><figcaption>on night<br><span class="mono ok">4.52:1</span></figcaption></figure>
+        </div>
+
+        <h3>Mastodon</h3>
+        <p class="meta">
+          <span class="hexchip" style="background:#6364FF"></span>
+          <code>#6364FF</code>
+        </p>
+        <p class="note">works: brand field, brand mark on paper, brand mark on night. <span class="src">Simple Icons</span></p>
+      </article>
+      <article class="card" id="discord">
+        <div class="row3">
+          <figure><span class="disc " style="background:#5865F2;color:#ffffff"><svg class="mark" viewBox="18 0 216 144" aria-hidden="true" focusable="false"><path fill="currentColor" d="M18,0v144h156.02H234V0H18z M134.625,5.76c-11.049,4.608-20.677,12.123-28.068,21.392L94.207,5.76H134.625z M23.76,5.76 h63.796L23.76,114.156V5.76z M23.76,138.24v-12.564L90.44,11.232l73.603,127.008H23.76z M228.24,138.24h-37.131 c8.688-4.032,16.502-9.352,23.037-15.979l-5.17-3.13c-10.599,10.28-24.039,16.538-38.531,18.176L109.666,31.996 c1.927-2.587,4.054-5.07,6.376-7.392c12.512-12.512,29.146-19.41,46.838-19.41c17.347,0,33.673,6.622,46.096,18.671l5.17-2.699 c-6.527-6.621-14.328-11.95-23.005-15.406h37.099V138.24z"/></svg></span><figcaption>brand field<br><span class="mono ok">4.61:1</span></figcaption></figure>
+          <figure><span class="disc paper" style="background:#f7f6fa;color:#5865F2"><svg class="mark" viewBox="18 0 216 144" aria-hidden="true" focusable="false"><path fill="currentColor" d="M18,0v144h156.02H234V0H18z M134.625,5.76c-11.049,4.608-20.677,12.123-28.068,21.392L94.207,5.76H134.625z M23.76,5.76 h63.796L23.76,114.156V5.76z M23.76,138.24v-12.564L90.44,11.232l73.603,127.008H23.76z M228.24,138.24h-37.131 c8.688-4.032,16.502-9.352,23.037-15.979l-5.17-3.13c-10.599,10.28-24.039,16.538-38.531,18.176L109.666,31.996 c1.927-2.587,4.054-5.07,6.376-7.392c12.512-12.512,29.146-19.41,46.838-19.41c17.347,0,33.673,6.622,46.096,18.671l5.17-2.699 c-6.527-6.621-14.328-11.95-23.005-15.406h37.099V138.24z"/></svg></span><figcaption>on paper<br><span class="mono ok">4.28:1</span></figcaption></figure>
+          <figure><span class="disc night" style="background:#0b0910;color:#5865F2"><svg class="mark" viewBox="18 0 216 144" aria-hidden="true" focusable="false"><path fill="currentColor" d="M18,0v144h156.02H234V0H18z M134.625,5.76c-11.049,4.608-20.677,12.123-28.068,21.392L94.207,5.76H134.625z M23.76,5.76 h63.796L23.76,114.156V5.76z M23.76,138.24v-12.564L90.44,11.232l73.603,127.008H23.76z M228.24,138.24h-37.131 c8.688-4.032,16.502-9.352,23.037-15.979l-5.17-3.13c-10.599,10.28-24.039,16.538-38.531,18.176L109.666,31.996 c1.927-2.587,4.054-5.07,6.376-7.392c12.512-12.512,29.146-19.41,46.838-19.41c17.347,0,33.673,6.622,46.096,18.671l5.17-2.699 c-6.527-6.621-14.328-11.95-23.005-15.406h37.099V138.24z"/></svg></span><figcaption>on night<br><span class="mono ok">4.30:1</span></figcaption></figure>
+        </div>
+
+        <h3>Discord</h3>
+        <p class="meta">
+          <span class="hexchip" style="background:#5865F2"></span>
+          <code>#5865F2</code>
+        </p>
+        <p class="note">works: brand field, brand mark on paper, brand mark on night. <span class="src">Simple Icons</span></p>
+      </article>
+      <article class="card" id="reddit">
+        <div class="row3">
+          <figure><span class="disc " style="background:#FF4500;color:#191725"><svg class="mark" viewBox="18 0 216 144" aria-hidden="true" focusable="false"><path fill="currentColor" d="M18,0v144h156.02H234V0H18z M134.625,5.76c-11.049,4.608-20.677,12.123-28.068,21.392L94.207,5.76H134.625z M23.76,5.76 h63.796L23.76,114.156V5.76z M23.76,138.24v-12.564L90.44,11.232l73.603,127.008H23.76z M228.24,138.24h-37.131 c8.688-4.032,16.502-9.352,23.037-15.979l-5.17-3.13c-10.599,10.28-24.039,16.538-38.531,18.176L109.666,31.996 c1.927-2.587,4.054-5.07,6.376-7.392c12.512-12.512,29.146-19.41,46.838-19.41c17.347,0,33.673,6.622,46.096,18.671l5.17-2.699 c-6.527-6.621-14.328-11.95-23.005-15.406h37.099V138.24z"/></svg></span><figcaption>brand field<br><span class="mono ok">5.13:1</span></figcaption></figure>
+          <figure><span class="disc paper" style="background:#f7f6fa;color:#FF4500"><svg class="mark" viewBox="18 0 216 144" aria-hidden="true" focusable="false"><path fill="currentColor" d="M18,0v144h156.02H234V0H18z M134.625,5.76c-11.049,4.608-20.677,12.123-28.068,21.392L94.207,5.76H134.625z M23.76,5.76 h63.796L23.76,114.156V5.76z M23.76,138.24v-12.564L90.44,11.232l73.603,127.008H23.76z M228.24,138.24h-37.131 c8.688-4.032,16.502-9.352,23.037-15.979l-5.17-3.13c-10.599,10.28-24.039,16.538-38.531,18.176L109.666,31.996 c1.927-2.587,4.054-5.07,6.376-7.392c12.512-12.512,29.146-19.41,46.838-19.41c17.347,0,33.673,6.622,46.096,18.671l5.17-2.699 c-6.527-6.621-14.328-11.95-23.005-15.406h37.099V138.24z"/></svg></span><figcaption>on paper<br><span class="mono ok">3.20:1</span></figcaption></figure>
+          <figure><span class="disc night" style="background:#0b0910;color:#FF4500"><svg class="mark" viewBox="18 0 216 144" aria-hidden="true" focusable="false"><path fill="currentColor" d="M18,0v144h156.02H234V0H18z M134.625,5.76c-11.049,4.608-20.677,12.123-28.068,21.392L94.207,5.76H134.625z M23.76,5.76 h63.796L23.76,114.156V5.76z M23.76,138.24v-12.564L90.44,11.232l73.603,127.008H23.76z M228.24,138.24h-37.131 c8.688-4.032,16.502-9.352,23.037-15.979l-5.17-3.13c-10.599,10.28-24.039,16.538-38.531,18.176L109.666,31.996 c1.927-2.587,4.054-5.07,6.376-7.392c12.512-12.512,29.146-19.41,46.838-19.41c17.347,0,33.673,6.622,46.096,18.671l5.17-2.699 c-6.527-6.621-14.328-11.95-23.005-15.406h37.099V138.24z"/></svg></span><figcaption>on night<br><span class="mono ok">5.75:1</span></figcaption></figure>
+        </div>
+
+        <h3>Reddit</h3>
+        <p class="meta">
+          <span class="hexchip" style="background:#FF4500"></span>
+          <code>#FF4500</code>
+        </p>
+        <p class="note">works: brand field, brand mark on paper, brand mark on night. <span class="src">Simple Icons</span></p>
+      </article>
+      <article class="card" id="youtube">
+        <div class="row3">
+          <figure><span class="disc " style="background:#FF0000;color:#191725"><svg class="mark" viewBox="18 0 216 144" aria-hidden="true" focusable="false"><path fill="currentColor" d="M18,0v144h156.02H234V0H18z M134.625,5.76c-11.049,4.608-20.677,12.123-28.068,21.392L94.207,5.76H134.625z M23.76,5.76 h63.796L23.76,114.156V5.76z M23.76,138.24v-12.564L90.44,11.232l73.603,127.008H23.76z M228.24,138.24h-37.131 c8.688-4.032,16.502-9.352,23.037-15.979l-5.17-3.13c-10.599,10.28-24.039,16.538-38.531,18.176L109.666,31.996 c1.927-2.587,4.054-5.07,6.376-7.392c12.512-12.512,29.146-19.41,46.838-19.41c17.347,0,33.673,6.622,46.096,18.671l5.17-2.699 c-6.527-6.621-14.328-11.95-23.005-15.406h37.099V138.24z"/></svg></span><figcaption>brand field<br><span class="mono ok">4.41:1</span></figcaption></figure>
+          <figure><span class="disc paper" style="background:#f7f6fa;color:#FF0000"><svg class="mark" viewBox="18 0 216 144" aria-hidden="true" focusable="false"><path fill="currentColor" d="M18,0v144h156.02H234V0H18z M134.625,5.76c-11.049,4.608-20.677,12.123-28.068,21.392L94.207,5.76H134.625z M23.76,5.76 h63.796L23.76,114.156V5.76z M23.76,138.24v-12.564L90.44,11.232l73.603,127.008H23.76z M228.24,138.24h-37.131 c8.688-4.032,16.502-9.352,23.037-15.979l-5.17-3.13c-10.599,10.28-24.039,16.538-38.531,18.176L109.666,31.996 c1.927-2.587,4.054-5.07,6.376-7.392c12.512-12.512,29.146-19.41,46.838-19.41c17.347,0,33.673,6.622,46.096,18.671l5.17-2.699 c-6.527-6.621-14.328-11.95-23.005-15.406h37.099V138.24z"/></svg></span><figcaption>on paper<br><span class="mono ok">3.72:1</span></figcaption></figure>
+          <figure><span class="disc night" style="background:#0b0910;color:#FF0000"><svg class="mark" viewBox="18 0 216 144" aria-hidden="true" focusable="false"><path fill="currentColor" d="M18,0v144h156.02H234V0H18z M134.625,5.76c-11.049,4.608-20.677,12.123-28.068,21.392L94.207,5.76H134.625z M23.76,5.76 h63.796L23.76,114.156V5.76z M23.76,138.24v-12.564L90.44,11.232l73.603,127.008H23.76z M228.24,138.24h-37.131 c8.688-4.032,16.502-9.352,23.037-15.979l-5.17-3.13c-10.599,10.28-24.039,16.538-38.531,18.176L109.666,31.996 c1.927-2.587,4.054-5.07,6.376-7.392c12.512-12.512,29.146-19.41,46.838-19.41c17.347,0,33.673,6.622,46.096,18.671l5.17-2.699 c-6.527-6.621-14.328-11.95-23.005-15.406h37.099V138.24z"/></svg></span><figcaption>on night<br><span class="mono ok">4.95:1</span></figcaption></figure>
+        </div>
+
+        <h3>YouTube</h3>
+        <p class="meta">
+          <span class="hexchip" style="background:#FF0000"></span>
+          <code>#FF0000</code>
+        </p>
+        <p class="note">works: brand field, brand mark on paper, brand mark on night. <span class="src">Simple Icons</span></p>
+      </article>
+      <article class="card" id="instagram">
+        <div class="row3">
+          <figure><span class="disc " style="background:#FF0069;color:#191725"><svg class="mark" viewBox="18 0 216 144" aria-hidden="true" focusable="false"><path fill="currentColor" d="M18,0v144h156.02H234V0H18z M134.625,5.76c-11.049,4.608-20.677,12.123-28.068,21.392L94.207,5.76H134.625z M23.76,5.76 h63.796L23.76,114.156V5.76z M23.76,138.24v-12.564L90.44,11.232l73.603,127.008H23.76z M228.24,138.24h-37.131 c8.688-4.032,16.502-9.352,23.037-15.979l-5.17-3.13c-10.599,10.28-24.039,16.538-38.531,18.176L109.666,31.996 c1.927-2.587,4.054-5.07,6.376-7.392c12.512-12.512,29.146-19.41,46.838-19.41c17.347,0,33.673,6.622,46.096,18.671l5.17-2.699 c-6.527-6.621-14.328-11.95-23.005-15.406h37.099V138.24z"/></svg></span><figcaption>brand field<br><span class="mono ok">4.58:1</span></figcaption></figure>
+          <figure><span class="disc paper" style="background:#f7f6fa;color:#FF0069"><svg class="mark" viewBox="18 0 216 144" aria-hidden="true" focusable="false"><path fill="currentColor" d="M18,0v144h156.02H234V0H18z M134.625,5.76c-11.049,4.608-20.677,12.123-28.068,21.392L94.207,5.76H134.625z M23.76,5.76 h63.796L23.76,114.156V5.76z M23.76,138.24v-12.564L90.44,11.232l73.603,127.008H23.76z M228.24,138.24h-37.131 c8.688-4.032,16.502-9.352,23.037-15.979l-5.17-3.13c-10.599,10.28-24.039,16.538-38.531,18.176L109.666,31.996 c1.927-2.587,4.054-5.07,6.376-7.392c12.512-12.512,29.146-19.41,46.838-19.41c17.347,0,33.673,6.622,46.096,18.671l5.17-2.699 c-6.527-6.621-14.328-11.95-23.005-15.406h37.099V138.24z"/></svg></span><figcaption>on paper<br><span class="mono ok">3.58:1</span></figcaption></figure>
+          <figure><span class="disc night" style="background:#0b0910;color:#FF0069"><svg class="mark" viewBox="18 0 216 144" aria-hidden="true" focusable="false"><path fill="currentColor" d="M18,0v144h156.02H234V0H18z M134.625,5.76c-11.049,4.608-20.677,12.123-28.068,21.392L94.207,5.76H134.625z M23.76,5.76 h63.796L23.76,114.156V5.76z M23.76,138.24v-12.564L90.44,11.232l73.603,127.008H23.76z M228.24,138.24h-37.131 c8.688-4.032,16.502-9.352,23.037-15.979l-5.17-3.13c-10.599,10.28-24.039,16.538-38.531,18.176L109.666,31.996 c1.927-2.587,4.054-5.07,6.376-7.392c12.512-12.512,29.146-19.41,46.838-19.41c17.347,0,33.673,6.622,46.096,18.671l5.17-2.699 c-6.527-6.621-14.328-11.95-23.005-15.406h37.099V138.24z"/></svg></span><figcaption>on night<br><span class="mono ok">5.14:1</span></figcaption></figure>
+        </div>
+
+        <h3>Instagram</h3>
+        <p class="meta">
+          <span class="hexchip" style="background:#FF0069"></span>
+          <code>#FF0069</code>
+        </p>
+        <p class="note">works: brand field, brand mark on paper, brand mark on night. <span class="src">Simple Icons</span></p>
+      </article>
+      <article class="card" id="facebook">
+        <div class="row3">
+          <figure><span class="disc " style="background:#0866FF;color:#ffffff"><svg class="mark" viewBox="18 0 216 144" aria-hidden="true" focusable="false"><path fill="currentColor" d="M18,0v144h156.02H234V0H18z M134.625,5.76c-11.049,4.608-20.677,12.123-28.068,21.392L94.207,5.76H134.625z M23.76,5.76 h63.796L23.76,114.156V5.76z M23.76,138.24v-12.564L90.44,11.232l73.603,127.008H23.76z M228.24,138.24h-37.131 c8.688-4.032,16.502-9.352,23.037-15.979l-5.17-3.13c-10.599,10.28-24.039,16.538-38.531,18.176L109.666,31.996 c1.927-2.587,4.054-5.07,6.376-7.392c12.512-12.512,29.146-19.41,46.838-19.41c17.347,0,33.673,6.622,46.096,18.671l5.17-2.699 c-6.527-6.621-14.328-11.95-23.005-15.406h37.099V138.24z"/></svg></span><figcaption>brand field<br><span class="mono ok">4.82:1</span></figcaption></figure>
+          <figure><span class="disc paper" style="background:#f7f6fa;color:#0866FF"><svg class="mark" viewBox="18 0 216 144" aria-hidden="true" focusable="false"><path fill="currentColor" d="M18,0v144h156.02H234V0H18z M134.625,5.76c-11.049,4.608-20.677,12.123-28.068,21.392L94.207,5.76H134.625z M23.76,5.76 h63.796L23.76,114.156V5.76z M23.76,138.24v-12.564L90.44,11.232l73.603,127.008H23.76z M228.24,138.24h-37.131 c8.688-4.032,16.502-9.352,23.037-15.979l-5.17-3.13c-10.599,10.28-24.039,16.538-38.531,18.176L109.666,31.996 c1.927-2.587,4.054-5.07,6.376-7.392c12.512-12.512,29.146-19.41,46.838-19.41c17.347,0,33.673,6.622,46.096,18.671l5.17-2.699 c-6.527-6.621-14.328-11.95-23.005-15.406h37.099V138.24z"/></svg></span><figcaption>on paper<br><span class="mono ok">4.48:1</span></figcaption></figure>
+          <figure><span class="disc night" style="background:#0b0910;color:#0866FF"><svg class="mark" viewBox="18 0 216 144" aria-hidden="true" focusable="false"><path fill="currentColor" d="M18,0v144h156.02H234V0H18z M134.625,5.76c-11.049,4.608-20.677,12.123-28.068,21.392L94.207,5.76H134.625z M23.76,5.76 h63.796L23.76,114.156V5.76z M23.76,138.24v-12.564L90.44,11.232l73.603,127.008H23.76z M228.24,138.24h-37.131 c8.688-4.032,16.502-9.352,23.037-15.979l-5.17-3.13c-10.599,10.28-24.039,16.538-38.531,18.176L109.666,31.996 c1.927-2.587,4.054-5.07,6.376-7.392c12.512-12.512,29.146-19.41,46.838-19.41c17.347,0,33.673,6.622,46.096,18.671l5.17-2.699 c-6.527-6.621-14.328-11.95-23.005-15.406h37.099V138.24z"/></svg></span><figcaption>on night<br><span class="mono ok">4.11:1</span></figcaption></figure>
+        </div>
+
+        <h3>Facebook</h3>
+        <p class="meta">
+          <span class="hexchip" style="background:#0866FF"></span>
+          <code>#0866FF</code>
+        </p>
+        <p class="note">works: brand field, brand mark on paper, brand mark on night. <span class="src">Simple Icons</span></p>
+      </article>
+      <article class="card" id="stack-overflow">
+        <div class="row3">
+          <figure><span class="disc " style="background:#F58025;color:#191725"><svg class="mark" viewBox="18 0 216 144" aria-hidden="true" focusable="false"><path fill="currentColor" d="M18,0v144h156.02H234V0H18z M134.625,5.76c-11.049,4.608-20.677,12.123-28.068,21.392L94.207,5.76H134.625z M23.76,5.76 h63.796L23.76,114.156V5.76z M23.76,138.24v-12.564L90.44,11.232l73.603,127.008H23.76z M228.24,138.24h-37.131 c8.688-4.032,16.502-9.352,23.037-15.979l-5.17-3.13c-10.599,10.28-24.039,16.538-38.531,18.176L109.666,31.996 c1.927-2.587,4.054-5.07,6.376-7.392c12.512-12.512,29.146-19.41,46.838-19.41c17.347,0,33.673,6.622,46.096,18.671l5.17-2.699 c-6.527-6.621-14.328-11.95-23.005-15.406h37.099V138.24z"/></svg></span><figcaption>brand field<br><span class="mono ok">6.72:1</span></figcaption></figure>
+          <figure><span class="disc paper" style="background:#f7f6fa;color:#F58025"><svg class="mark" viewBox="18 0 216 144" aria-hidden="true" focusable="false"><path fill="currentColor" d="M18,0v144h156.02H234V0H18z M134.625,5.76c-11.049,4.608-20.677,12.123-28.068,21.392L94.207,5.76H134.625z M23.76,5.76 h63.796L23.76,114.156V5.76z M23.76,138.24v-12.564L90.44,11.232l73.603,127.008H23.76z M228.24,138.24h-37.131 c8.688-4.032,16.502-9.352,23.037-15.979l-5.17-3.13c-10.599,10.28-24.039,16.538-38.531,18.176L109.666,31.996 c1.927-2.587,4.054-5.07,6.376-7.392c12.512-12.512,29.146-19.41,46.838-19.41c17.347,0,33.673,6.622,46.096,18.671l5.17-2.699 c-6.527-6.621-14.328-11.95-23.005-15.406h37.099V138.24z"/></svg></span><figcaption>on paper<br><span class="mono no">2.44:1</span></figcaption></figure>
+          <figure><span class="disc night" style="background:#0b0910;color:#F58025"><svg class="mark" viewBox="18 0 216 144" aria-hidden="true" focusable="false"><path fill="currentColor" d="M18,0v144h156.02H234V0H18z M134.625,5.76c-11.049,4.608-20.677,12.123-28.068,21.392L94.207,5.76H134.625z M23.76,5.76 h63.796L23.76,114.156V5.76z M23.76,138.24v-12.564L90.44,11.232l73.603,127.008H23.76z M228.24,138.24h-37.131 c8.688-4.032,16.502-9.352,23.037-15.979l-5.17-3.13c-10.599,10.28-24.039,16.538-38.531,18.176L109.666,31.996 c1.927-2.587,4.054-5.07,6.376-7.392c12.512-12.512,29.146-19.41,46.838-19.41c17.347,0,33.673,6.622,46.096,18.671l5.17-2.699 c-6.527-6.621-14.328-11.95-23.005-15.406h37.099V138.24z"/></svg></span><figcaption>on night<br><span class="mono ok">7.54:1</span></figcaption></figure>
+        </div>
+
+        <h3>Stack Overflow</h3>
+        <p class="meta">
+          <span class="hexchip" style="background:#F58025"></span>
+          <code>#F58025</code>
+        </p>
+        <p class="note">works: brand field, brand mark on night. <span class="src">Simple Icons</span></p>
+      </article>
+      <article class="card" id="npm">
+        <div class="row3">
+          <figure><span class="disc " style="background:#CB3837;color:#ffffff"><svg class="mark" viewBox="18 0 216 144" aria-hidden="true" focusable="false"><path fill="currentColor" d="M18,0v144h156.02H234V0H18z M134.625,5.76c-11.049,4.608-20.677,12.123-28.068,21.392L94.207,5.76H134.625z M23.76,5.76 h63.796L23.76,114.156V5.76z M23.76,138.24v-12.564L90.44,11.232l73.603,127.008H23.76z M228.24,138.24h-37.131 c8.688-4.032,16.502-9.352,23.037-15.979l-5.17-3.13c-10.599,10.28-24.039,16.538-38.531,18.176L109.666,31.996 c1.927-2.587,4.054-5.07,6.376-7.392c12.512-12.512,29.146-19.41,46.838-19.41c17.347,0,33.673,6.622,46.096,18.671l5.17-2.699 c-6.527-6.621-14.328-11.95-23.005-15.406h37.099V138.24z"/></svg></span><figcaption>brand field<br><span class="mono ok">5.05:1</span></figcaption></figure>
+          <figure><span class="disc paper" style="background:#f7f6fa;color:#CB3837"><svg class="mark" viewBox="18 0 216 144" aria-hidden="true" focusable="false"><path fill="currentColor" d="M18,0v144h156.02H234V0H18z M134.625,5.76c-11.049,4.608-20.677,12.123-28.068,21.392L94.207,5.76H134.625z M23.76,5.76 h63.796L23.76,114.156V5.76z M23.76,138.24v-12.564L90.44,11.232l73.603,127.008H23.76z M228.24,138.24h-37.131 c8.688-4.032,16.502-9.352,23.037-15.979l-5.17-3.13c-10.599,10.28-24.039,16.538-38.531,18.176L109.666,31.996 c1.927-2.587,4.054-5.07,6.376-7.392c12.512-12.512,29.146-19.41,46.838-19.41c17.347,0,33.673,6.622,46.096,18.671l5.17-2.699 c-6.527-6.621-14.328-11.95-23.005-15.406h37.099V138.24z"/></svg></span><figcaption>on paper<br><span class="mono ok">4.69:1</span></figcaption></figure>
+          <figure><span class="disc night" style="background:#0b0910;color:#CB3837"><svg class="mark" viewBox="18 0 216 144" aria-hidden="true" focusable="false"><path fill="currentColor" d="M18,0v144h156.02H234V0H18z M134.625,5.76c-11.049,4.608-20.677,12.123-28.068,21.392L94.207,5.76H134.625z M23.76,5.76 h63.796L23.76,114.156V5.76z M23.76,138.24v-12.564L90.44,11.232l73.603,127.008H23.76z M228.24,138.24h-37.131 c8.688-4.032,16.502-9.352,23.037-15.979l-5.17-3.13c-10.599,10.28-24.039,16.538-38.531,18.176L109.666,31.996 c1.927-2.587,4.054-5.07,6.376-7.392c12.512-12.512,29.146-19.41,46.838-19.41c17.347,0,33.673,6.622,46.096,18.671l5.17-2.699 c-6.527-6.621-14.328-11.95-23.005-15.406h37.099V138.24z"/></svg></span><figcaption>on night<br><span class="mono ok">3.92:1</span></figcaption></figure>
+        </div>
+
+        <h3>npm</h3>
+        <p class="meta">
+          <span class="hexchip" style="background:#CB3837"></span>
+          <code>#CB3837</code>
+        </p>
+        <p class="note">works: brand field, brand mark on paper, brand mark on night. <span class="src">Simple Icons</span></p>
+      </article>
+      <article class="card" id="signal">
+        <div class="row3">
+          <figure><span class="disc " style="background:#3B45FD;color:#ffffff"><svg class="mark" viewBox="18 0 216 144" aria-hidden="true" focusable="false"><path fill="currentColor" d="M18,0v144h156.02H234V0H18z M134.625,5.76c-11.049,4.608-20.677,12.123-28.068,21.392L94.207,5.76H134.625z M23.76,5.76 h63.796L23.76,114.156V5.76z M23.76,138.24v-12.564L90.44,11.232l73.603,127.008H23.76z M228.24,138.24h-37.131 c8.688-4.032,16.502-9.352,23.037-15.979l-5.17-3.13c-10.599,10.28-24.039,16.538-38.531,18.176L109.666,31.996 c1.927-2.587,4.054-5.07,6.376-7.392c12.512-12.512,29.146-19.41,46.838-19.41c17.347,0,33.673,6.622,46.096,18.671l5.17-2.699 c-6.527-6.621-14.328-11.95-23.005-15.406h37.099V138.24z"/></svg></span><figcaption>brand field<br><span class="mono ok">6.08:1</span></figcaption></figure>
+          <figure><span class="disc paper" style="background:#f7f6fa;color:#3B45FD"><svg class="mark" viewBox="18 0 216 144" aria-hidden="true" focusable="false"><path fill="currentColor" d="M18,0v144h156.02H234V0H18z M134.625,5.76c-11.049,4.608-20.677,12.123-28.068,21.392L94.207,5.76H134.625z M23.76,5.76 h63.796L23.76,114.156V5.76z M23.76,138.24v-12.564L90.44,11.232l73.603,127.008H23.76z M228.24,138.24h-37.131 c8.688-4.032,16.502-9.352,23.037-15.979l-5.17-3.13c-10.599,10.28-24.039,16.538-38.531,18.176L109.666,31.996 c1.927-2.587,4.054-5.07,6.376-7.392c12.512-12.512,29.146-19.41,46.838-19.41c17.347,0,33.673,6.622,46.096,18.671l5.17-2.699 c-6.527-6.621-14.328-11.95-23.005-15.406h37.099V138.24z"/></svg></span><figcaption>on paper<br><span class="mono ok">5.65:1</span></figcaption></figure>
+          <figure><span class="disc night" style="background:#0b0910;color:#3B45FD"><svg class="mark" viewBox="18 0 216 144" aria-hidden="true" focusable="false"><path fill="currentColor" d="M18,0v144h156.02H234V0H18z M134.625,5.76c-11.049,4.608-20.677,12.123-28.068,21.392L94.207,5.76H134.625z M23.76,5.76 h63.796L23.76,114.156V5.76z M23.76,138.24v-12.564L90.44,11.232l73.603,127.008H23.76z M228.24,138.24h-37.131 c8.688-4.032,16.502-9.352,23.037-15.979l-5.17-3.13c-10.599,10.28-24.039,16.538-38.531,18.176L109.666,31.996 c1.927-2.587,4.054-5.07,6.376-7.392c12.512-12.512,29.146-19.41,46.838-19.41c17.347,0,33.673,6.622,46.096,18.671l5.17-2.699 c-6.527-6.621-14.328-11.95-23.005-15.406h37.099V138.24z"/></svg></span><figcaption>on night<br><span class="mono ok">3.26:1</span></figcaption></figure>
+        </div>
+
+        <h3>Signal</h3>
+        <p class="meta">
+          <span class="hexchip" style="background:#3B45FD"></span>
+          <code>#3B45FD</code>
+        </p>
+        <p class="note">works: brand field, brand mark on paper, brand mark on night. <span class="src">Simple Icons</span></p>
+      </article>
+  </div>
+</main>
+
+<footer>
+  <p>The mark is read from <code>logo.svg</code> at build time; brand colours from
+  <code>simple-icons.json</code> (3472 brands) and, for LinkedIn, their own published page.
+  Contrast is WCAG relative luminance.</p>
+  <p>Rebuild with <code>python3 build-platforms.py</code>. Once a winner is picked, add it as a
+  <code>platform-&lt;slug&gt;.html</code> render source and run it through <code>render.sh</code> +
+  <code>round-crop.py</code>, the same pipeline the profile avatars use.</p>
+</footer>
+
+</body>
+</html>

@@ -1,12 +1,7 @@
-# Paths that must never be committed.
-#
-# This repository is PUBLIC, and `publish = "."` in netlify.toml means everything in
-# this directory is also served by the website — so each path below is both left out of
-# git and 404-guarded in netlify.toml.
+# This branch is the superset: it carries the site PLUS the working material that the
+# deploy branch deliberately leaves out. Do NOT merge this branch into master — that
+# would drag these paths back into the deployed directory.
 
-NOTES.md
-social/
-vesica/
 
 # Noise
 __pycache__/

@@ -1,0 +1,67 @@
+/* Profile images — square, for GitHub / X / LinkedIn.
+   Same system as the site. Scales to any square: SCALE=2 for a retina master,
+   SCALE=1 for an exact upload size. Nothing here draws text, so no @font-face.
+
+   The ground is a soft tonal field only — no construction rings, no shapes. */
+
+:root{
+  --hue: 268;
+  --accent-s: 62%;
+  --fill-l: 58%;
+
+  --bg: #f7f6fa;
+  --fg: #191725;
+  --mark: #191725;
+
+  /* the field's own lightness and strength */
+  --wash-l: 58%;
+  --wash-a: .13;
+}
+
+html, body{ margin: 0; padding: 0; height: 100%; }
+
+body{
+  width: 100vw; height: 100vh; overflow: hidden;
+  background: var(--bg); color: var(--fg);
+  display: grid; place-items: center; position: relative;
+  -webkit-print-color-adjust: exact; print-color-adjust: exact;
+}
+
+/* The tonal field. Percentages, so it holds at any render size.
+   BOTH stops carry the hue — the `transparent` keyword interpolates through
+   transparent-black and leaves a grey halo on a coloured ground. */
+body::before{
+  content: ''; position: absolute; inset: 0; z-index: 0; pointer-events: none;
+  background: radial-gradient(circle at 50% 50%,
+    hsl(var(--hue) var(--accent-s) var(--wash-l) / var(--wash-a)) 0%,
+    hsl(var(--hue) var(--accent-s) var(--wash-l) / 0) 78%);
+}
+
+/* The mark fills 74% of the canvas width — the largest it can sit and stay
+   clear of the inscribed circle that every avatar gets cropped to. */
+.mark{
+  position: relative; z-index: 1; display: block;
+  width: 74%; height: auto; aspect-ratio: 216/144;
+  color: var(--mark);
+}
+
+/* ── variants ──────────────────────────────────────────────────────────── */
+
+/* on the dark ground */
+.dark{ --bg: #0b0910; --fg: #e9e6f2; --mark: #e9e6f2; --wash-l: 66%; --wash-a: .16; }
+
+/* The mark reversed out of a flat accent field: the colour IS the ground, so
+   there is no separate wash. */
+.solid{ --bg: hsl(var(--hue) var(--accent-s) var(--fill-l)); --mark: #ffffff; --wash-a: 0; }
+
+/* The seven solved pairs, exactly as the site's stylesheet defines them —
+   hue, saturation and fill lightness pinned per hue so each carries the same
+   contrast against its white mark. Do not hand-tune one without re-solving
+   the rest. */
+.h0{ --hue:  46; --accent-s: 82%; --fill-l: 30%; }
+.h1{ --hue: 268; --accent-s: 62%; --fill-l: 58%; }
+.h2{ --hue:  10; --accent-s: 68%; --fill-l: 48%; }
+.h3{ --hue:  30; --accent-s: 78%; --fill-l: 38%; }
+.h4{ --hue: 222; --accent-s: 68%; --fill-l: 56%; }
+.h5{ --hue: 152; --accent-s: 56%; --fill-l: 32%; }
+.h6{ --hue: 340; --accent-s: 60%; --fill-l: 52%; }

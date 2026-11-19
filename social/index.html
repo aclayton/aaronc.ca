@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Profile &amp; social assets — Aaron Clayton</title>
+<meta name="description" content="Profile pictures and social cards, rendered from the mark at 2x and measured against the pixels.">
+<!-- This page lives inside the deployable site directory but is for local use.
+     If this directory is ever published, exclude social/ first. -->
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/style.css">
+
+<style>
+  /* Page-scoped: the asset index. Every value comes from the site's own tokens
+     and its spacing sequence. Nothing new is introduced. */
+  .assets {
+    display: grid; gap: var(--s4);
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+    margin-top: var(--s4);
+  }
+  .assets > * { min-width: 0; }
+
+  .asset {
+    display: flex; flex-direction: column; gap: var(--s2);
+    padding: var(--s3);
+    border: 1px solid var(--rule); border-radius: var(--s1);
+    background: var(--bg);
+  }
+  /* the square alongside its round crop, so the crop is judged, not imagined */
+  .pair { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s2); }
+  .pair img, .asset.wide img {
+    display: block; width: 100%; height: auto;
+    object-fit: contain;
+    border: 1px solid var(--rule); border-radius: var(--s1);
+  }
+  .pair img { aspect-ratio: 1; }
+  .pair .rnd { border-radius: 50%; }
+  .asset.wide img { aspect-ratio: 2; }
+  .asset h3 { margin: 0; }
+  .asset p { margin: 0; }
+  .asset .stack { font-family: var(--font-mono); font-size: var(--t-small); color: var(--muted); }
+
+  .dl { list-style: none; display: flex; flex-wrap: wrap; gap: var(--s1) var(--s3);
+        padding: 0; margin: var(--s1) 0 0; }
+  .dl li { margin: 0; font-family: var(--font-mono); font-size: var(--t-small); }
+
+  /* the correspondences inside each accent card */
+  dl.cresp { display: grid; grid-template-columns: auto 1fr; gap: .1rem var(--s2);
+             margin: 0; font-size: var(--t-small); }
+  dl.cresp dt { color: var(--muted); white-space: nowrap; }
+  dl.cresp dd { margin: 0; }
+
+  /* the palette tables — identical markup to the private dashboard, one parser */
+  table.pal { width: 100%; border-collapse: collapse; font-size: var(--t-small); }
+  table.pal th, table.pal td { text-align: left; vertical-align: middle;
+    padding: var(--s2) var(--s3); border-bottom: 1px solid var(--rule); }
+  table.pal thead th { font-size: .6875rem; font-weight: 600; letter-spacing: .1em;
+    text-transform: uppercase; color: var(--muted); border-bottom: 1px solid var(--fg); }
+  table.pal th[scope=row] { font-weight: 400; }
+  table.pal code { font-family: var(--font-mono); font-size: .75rem; }
+  .alias { display: block; margin-top: .1rem; }
+  .desc { display: block; color: var(--muted); font-size: .75rem; }
+  table.pal td code { display: block; margin-top: .25rem; color: var(--muted); }
+  .swatch { display: block; height: 26px; border-radius: var(--s1);
+             border: 1px solid color-mix(in srgb, currentColor 18%, transparent); }
+  /* Each column sits on its own theme's plate, so a light token is judged on
+     light and a dark one on dark. Both columns follow prefers-color-scheme
+     otherwise, and one of them is then always telling a lie. */
+  .plate-light { background: #f7f6fa; color: #191725; }
+  .plate-dark  { background: #0b0910; color: #e9e6f2; }
+  .plate-light code, .plate-dark code { color: color-mix(in srgb, currentColor 62%, transparent); }
+  .chip2 { display: grid; place-items: center; min-height: 34px; width: 100%;
+            border-radius: var(--s1);
+            border: 1px solid color-mix(in srgb, currentColor 18%, transparent);
+            font-size: var(--t-small); }
+  .chips { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s2); }
+  .chipset { display: block; min-width: 0; }
+  .capl { display: block; color: var(--muted); font-size: .6875rem;
+           font-family: var(--font-mono); margin-top: .25rem; }
+
+  /* platform marks — brand colour chip + the solved contrast for the mark */
+  .asset .meta { display: flex; align-items: center; gap: var(--s2); margin: 0;
+                  font-size: var(--t-small); flex-wrap: wrap; }
+  .hexchip { display: inline-block; width: 18px; height: 18px; border-radius: 4px;
+              border: 1px solid var(--rule); }
+  .asset .meta code { font-family: var(--font-mono); font-size: .75rem; }
+  .ratio { font-family: var(--font-mono); font-size: .6875rem; font-weight: 600; }
+  .ratio.ok { color: #1b5e20; }
+  .ratio.no { color: #8c1d18; }
+  @media (prefers-color-scheme: dark) {
+    .ratio.ok { color: #81c784; } .ratio.no { color: #ff8a80; }
+  }
+</style>
+</head>
+
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site">
+  <nav aria-label="Main">
+    <a class="brand" href="/">Aaron Clayton</a>
+    <ul>
+      <li><a href="/">Site</a></li>
+      <li><a href="#palette">Palette</a></li>
+      <li><a href="platforms.html">Marks</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main id="main">
+
+  <section class="hero">
+    <p class="eyebrow">Local · tailnet only</p>
+    <h1>Profile &amp; social assets</h1>
+    <p class="lede">The whole palette, the mark at every size the profiles need, and all seven accent fields. Rendered at 2&times;, then decoded and measured — not judged by eye.</p>
+    <div class="cta">
+      <a class="btn" href="profile-assets-2026-11-16.zip" download>Download all (zip)</a>
+      <a class="btn ghost" href="/">Back to the site</a>
+    </div>
+    <p class="note" style="margin-top:var(--s3)">Every tile shows the square beside its round crop. <strong>GitHub, X and LinkedIn crop the square for you — upload the square.</strong> The round files have a transparent background, for surfaces that want a circle cut in the artwork: decks, documents, favicons.</p>
+    <p class="note">Each accent field also carries what it corresponds to. <strong>This page is local-only and must never be published</strong> — it sits in the deployable tree, so <span class="nowrap">netlify.toml</span> forces <span class="nowrap">/social/*</span> to a 404 to keep the names off the live site.</p>
+    <p class="note">On this page: <a href="#palette">the palette</a> ·
+      <a href="#neutral">neutral grounds</a> ·
+      <a href="platforms.html">platform-coloured marks</a> ·
+      <a href="#hues">accent fields</a> ·
+      <a href="#card">social card</a> ·
+      <a href="#checked">what was measured</a>.</p>
+  </section>
+
+  <section id="palette">
+    <h2>The palette</h2>
+    <p>Every colour token in the system, parsed out of <span class="nowrap">style.css</span> each time this page is built. Nothing here is copied by hand, so a token added there appears here — and the same parser feeds the private dashboard, so the two cannot disagree.</p>
+
+    <h3>Neutral surfaces</h3>
+    <p class="note">Six roles, two themes. A cool neutral ground tinted toward the violet passage.</p>
+    <table class="pal">
+      <thead><tr><th>role</th><th>light</th><th>dark</th></tr></thead>
+      <tbody>
+      <tr>
+        <th scope="row"><code>--bg</code><span class="alias">page</span><span class="desc">the page ground</span></th>
+        <td class="plate-light"><span class="swatch" style="background:#f7f6fa"></span><code>#f7f6fa</code></td>
+        <td class="plate-dark"><span class="swatch" style="background:#0b0910"></span><code>#0b0910</code></td>
+      </tr>
+      <tr>
+        <th scope="row"><code>--surface</code><span class="alias">band</span><span class="desc">full-width bands, cards</span></th>
+        <td class="plate-light"><span class="swatch" style="background:#eeebf6"></span><code>#eeebf6</code></td>
+        <td class="plate-dark"><span class="swatch" style="background:#141120"></span><code>#141120</code></td>
+      </tr>
+      <tr>
+        <th scope="row"><code>--surface-2</code><span class="alias">surface 2</span><span class="desc">hover fills, ghost-button rest</span></th>
+        <td class="plate-light"><span class="swatch" style="background:#e4dff0"></span><code>#e4dff0</code></td>
+        <td class="plate-dark"><span class="swatch" style="background:#1e1930"></span><code>#1e1930</code></td>
+      </tr>
+      <tr>
+        <th scope="row"><code>--fg</code><span class="alias">ink</span><span class="desc">body text, the mark</span></th>
+        <td class="plate-light"><span class="swatch" style="background:#191725"></span><code>#191725</code></td>
+        <td class="plate-dark"><span class="swatch" style="background:#e9e6f2"></span><code>#e9e6f2</code></td>
+      </tr>
+      <tr>
+        <th scope="row"><code>--muted</code><span class="alias">muted</span><span class="desc">secondary text, labels</span></th>
+        <td class="plate-light"><span class="swatch" style="background:#5e5a72"></span><code>#5e5a72</code></td>
+        <td class="plate-dark"><span class="swatch" style="background:#9a94ae"></span><code>#9a94ae</code></td>
+      </tr>
+      <tr>
+        <th scope="row"><code>--rule</code><span class="alias">rule</span><span class="desc">hairline rules and borders</span></th>
+        <td class="plate-light"><span class="swatch" style="background:#dcd6ea"></span><code>#dcd6ea</code></td>
+        <td class="plate-dark"><span class="swatch" style="background:#272137"></span><code>#272137</code></td>
+      </tr>
+      </tbody>
+    </table>
+
+    <h3>Role tokens</h3>
+    <p class="note">Derived, not literal — each is a formula over the day's hue, so all seven hues are solved to equal contrast. Sampled on the resting hue (268). Each column sits on a plate of its own theme, because both columns would otherwise follow the reader's theme and one of them would be telling a lie.</p>
+    <table class="pal">
+      <thead><tr><th>token</th><th>light</th><th>dark</th></tr></thead>
+      <tbody>
+      <tr>
+        <th scope="row"><code>--accent-fill</code><span class="desc">the fill of anything carrying a label</span></th>
+        <td class="plate-light"><span class="chip2" style="background:hsl(268 62% 58%)"><b style="color:#ffffff">Aa</b></span><code>hsl(hue sat 58%)</code></td>
+        <td class="plate-dark"><span class="chip2" style="background:hsl(268 62% 71%)"><b style="color:#120f1a">Aa</b></span><code>hsl(hue sat 71%)</code></td>
+      </tr>
+      <tr>
+        <th scope="row"><code>--accent-text</code><span class="desc">links and toned text on the ground</span></th>
+        <td class="plate-light"><span class="chip2" style="background:hsl(268 62% 54%)"><b style="color:hsl(268 62% 54%)">Aa link</b></span><code>hsl(hue sat 54%)</code></td>
+        <td class="plate-dark"><span class="chip2" style="background:hsl(268 62% 63%)"><b style="color:hsl(268 62% 63%)">Aa link</b></span><code>hsl(hue sat 63%)</code></td>
+      </tr>
+      <tr>
+        <th scope="row"><code>--accent-wash</code><span class="desc">the day's wash laid over a ground</span></th>
+        <td class="plate-light"><span class="chip2" style="background:hsl(268 55% 95%)"></span><code>95% lightness</code></td>
+        <td class="plate-dark"><span class="chip2" style="background:hsl(268 40% 12%)"></span><code>12% lightness</code></td>
+      </tr>
+      <tr>
+        <th scope="row"><code>--hairline</code><span class="desc">construction lines — ink, never the rule colour</span></th>
+        <td class="plate-light"><span class="chip2" style="background:color-mix(in srgb, var(--fg) 22%, transparent)"></span><code>ink 22%</code></td>
+        <td class="plate-dark"><span class="chip2" style="background:color-mix(in srgb, var(--fg) 22%, transparent)"></span><code>ink 22%</code></td>
+      </tr>
+      <tr>
+        <th scope="row"><code>--ghost-line</code><span class="desc">the boundary of a secondary control (wants 3:1)</span></th>
+        <td class="plate-light"><span class="chip2" style="background:color-mix(in srgb, var(--fg) 50%, transparent)"></span><code>ink 50% · 3.33:1</code></td>
+        <td class="plate-dark"><span class="chip2" style="background:color-mix(in srgb, var(--fg) 50%, transparent)"></span><code>ink 50% · 4.55:1</code></td>
+      </tr>
+      <tr>
+        <th scope="row"><code>--fill-ink</code><span class="desc">the label colour that sits on a fill</span></th>
+        <td class="plate-light"><span class="chip2" style="background:#ffffff"><b style="color:#191725">Aa</b></span><code>#ffffff</code></td>
+        <td class="plate-dark"><span class="chip2" style="background:#120f1a"><b style="color:#e9e6f2">Aa</b></span><code>#120f1a</code></td>
+      </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="neutral">
+    <h2>Neutral grounds</h2>
+    <p>No colour of their own beyond the tonal field. For where the surface should stay quiet.</p>
+
+    <div class="assets">
+
+      <article class="asset">
+        <div class="pair">
+          <img class="rnd" src="profile-round-light-460.png" alt="Round crop of the mark on the pale ground." width="460" height="460" loading="lazy" decoding="async">
+          <img src="profile-light-460.png" alt="The mark in dark ink on a pale ground." width="460" height="460" loading="lazy" decoding="async">
+        </div>
+        <h3>Paper</h3>
+        <p class="note">Ink mark on the light ground. For a light surface — the site, a document, a PDF.</p>
+        <p class="stack">920 · 460 · 400 · round 920 · round 460</p>
+        <ul class="dl">
+          <li><a href="profile-light-920.png" download>920</a></li>
+          <li><a href="profile-light-460.png" download>460</a></li>
+          <li><a href="profile-light-400.png" download>400</a></li>
+          <li><a href="profile-round-light-920.png" download>round 920</a></li>
+          <li><a href="profile-round-light-460.png" download>round 460</a></li>
+        </ul>
+      </article>
+
+      <article class="asset">
+        <div class="pair">
+          <img class="rnd" src="profile-round-dark-460.png" alt="Round crop of the mark on the near-black ground." width="460" height="460" loading="lazy" decoding="async">
+          <img src="profile-dark-460.png" alt="The mark in pale ink on a near-black ground." width="460" height="460" loading="lazy" decoding="async">
+        </div>
+        <h3>Night</h3>
+        <p class="note">The same on the near-black ground. For a dark surface, or a profile read in dark mode most of the time.</p>
+        <p class="stack">920 · 460 · 400 · round 920 · round 460</p>
+        <ul class="dl">
+          <li><a href="profile-dark-920.png" download>920</a></li>
+          <li><a href="profile-dark-460.png" download>460</a></li>
+          <li><a href="profile-dark-400.png" download>400</a></li>
+          <li><a href="profile-round-dark-920.png" download>round 920</a></li>
+          <li><a href="profile-round-dark-460.png" download>round 460</a></li>
+        </ul>
+      </article>
+
+    </div>
+  </section>
+
+  <section id="hues" class="band">
+    <div>
+      <h2>Accent fields</h2>
+      <p>The seven accent hues with the mark reversed out of them — the same solved pairs the site's stylesheet carries, with hue, saturation and fill lightness pinned per hue so every one holds the same contrast against its white mark.</p>
+
+      <div class="assets">
+
+        <article class="asset" data-hue="46">
+          <div class="pair">
+            <img class="rnd" src="profile-round-hue-046-460.png" alt="Round crop of the mark on the hue 046 field." width="460" height="460" loading="lazy" decoding="async">
+            <img src="profile-hue-046-460.png" alt="The mark reversed out of the hue 046 field." width="460" height="460" loading="lazy" decoding="async">
+          </div>
+          <h3>046 <span class="note">— Sun</span></h3>
+          <p class="stack">920 · 460 · round 920 · round 460</p>
+          <div class="chips">
+            <span class="chipset"><span class="chip2" style="background:hsl(46 82% 30%);color:#ffffff"><b>Aa</b></span><span class="capl">light fill 30%</span></span>
+            <span class="chipset"><span class="chip2" style="background:hsl(46 82% 55%);color:#120f1a"><b>Aa</b></span><span class="capl">dark fill 55%</span></span>
+            <span class="chipset"><span class="chip2" style="background:#f7f6fa;color:hsl(46 82% 28%)"><b>Aa</b></span><span class="capl">light text 28%</span></span>
+            <span class="chipset"><span class="chip2" style="background:#0b0910;color:hsl(46 82% 55%)"><b>Aa</b></span><span class="capl">dark text 55%</span></span>
+          </div>
+          <dl class="cresp">
+            <dt>day</dt><dd>Sunday</dd>
+            <dt>colour</dt><dd>Gold / Yellow</dd>
+            <dt>incense</dt><dd>Olibanum (Frankincense)</dd>
+            <dt>god-name</dt><dd>YHVH Eloah ve-Daath</dd>
+            <dt>tarot</dt><dd>XIX — The Sun</dd>
+            <dt>sephira</dt><dd>Tiphareth (6)</dd>
+            <dt>path</dt><dd>Path 30 · Resh · Hod–Yesod</dd>
+          </dl>
+          <ul class="dl">
+            <li><a href="profile-hue-046-920.png" download>920</a></li>
+            <li><a href="profile-hue-046-460.png" download>460</a></li>
+            <li><a href="profile-round-hue-046-920.png" download>round 920</a></li>
+            <li><a href="profile-round-hue-046-460.png" download>round 460</a></li>
+          </ul>
+        </article>
+        <article class="asset" data-hue="268">
+          <div class="pair">
+            <img class="rnd" src="profile-round-hue-268-460.png" alt="Round crop of the mark on the hue 268 field." width="460" height="460" loading="lazy" decoding="async">
+            <img src="profile-hue-268-460.png" alt="The mark reversed out of the hue 268 field." width="460" height="460" loading="lazy" decoding="async">
+          </div>
+          <h3>268 <span class="note">— Moon</span> <span class="note">· resting</span></h3>
+          <p class="stack">920 · 460 · round 920 · round 460</p>
+          <div class="chips">
+            <span class="chipset"><span class="chip2" style="background:hsl(268 62% 58%);color:#ffffff"><b>Aa</b></span><span class="capl">light fill 58%</span></span>
+            <span class="chipset"><span class="chip2" style="background:hsl(268 62% 71%);color:#120f1a"><b>Aa</b></span><span class="capl">dark fill 71%</span></span>
+            <span class="chipset"><span class="chip2" style="background:#f7f6fa;color:hsl(268 62% 54%)"><b>Aa</b></span><span class="capl">light text 54%</span></span>
+            <span class="chipset"><span class="chip2" style="background:#0b0910;color:hsl(268 62% 63%)"><b>Aa</b></span><span class="capl">dark text 63%</span></span>
+          </div>
+          <dl class="cresp">
+            <dt>day</dt><dd>Monday</dd>
+            <dt>colour</dt><dd>Silver / Pale Violet</dd>
+            <dt>incense</dt><dd>Jasmine, Camphor</dd>
+            <dt>god-name</dt><dd>Shaddai El Chai</dd>
+            <dt>tarot</dt><dd>II — The Priestess</dd>
+            <dt>sephira</dt><dd>Yesod (9)</dd>
+            <dt>path</dt><dd>Path 13 · Gimel · Kether–Tiphareth</dd>
+          </dl>
+          <ul class="dl">
+            <li><a href="profile-hue-268-920.png" download>920</a></li>
+            <li><a href="profile-hue-268-460.png" download>460</a></li>
+            <li><a href="profile-round-hue-268-920.png" download>round 920</a></li>
+            <li><a href="profile-round-hue-268-460.png" download>round 460</a></li>
+          </ul>
+        </article>
+        <article class="asset" data-hue="10">
+          <div class="pair">
+            <img class="rnd" src="profile-round-hue-010-460.png" alt="Round crop of the mark on the hue 010 field." width="460" height="460" loading="lazy" decoding="async">
+            <img src="profile-hue-010-460.png" alt="The mark reversed out of the hue 010 field." width="460" height="460" loading="lazy" decoding="async">
+          </div>
+          <h3>010 <span class="note">— Mars</span></h3>
+          <p class="stack">920 · 460 · round 920 · round 460</p>
+          <div class="chips">
+            <span class="chipset"><span class="chip2" style="background:hsl(10 68% 48%);color:#ffffff"><b>Aa</b></span><span class="capl">light fill 48%</span></span>
+            <span class="chipset"><span class="chip2" style="background:hsl(10 68% 67%);color:#120f1a"><b>Aa</b></span><span class="capl">dark fill 67%</span></span>
+            <span class="chipset"><span class="chip2" style="background:#f7f6fa;color:hsl(10 68% 44%)"><b>Aa</b></span><span class="capl">light text 44%</span></span>
+            <span class="chipset"><span class="chip2" style="background:#0b0910;color:hsl(10 68% 55%)"><b>Aa</b></span><span class="capl">dark text 55%</span></span>
+          </div>
+          <dl class="cresp">
+            <dt>day</dt><dd>Tuesday</dd>
+            <dt>colour</dt><dd>Red / Scarlet</dd>
+            <dt>incense</dt><dd>Dragon's Blood, Pepper</dd>
+            <dt>god-name</dt><dd>Elohim Gibor</dd>
+            <dt>tarot</dt><dd>XVI — The Tower</dd>
+            <dt>sephira</dt><dd>Geburah (5)</dd>
+            <dt>path</dt><dd>Path 27 · Peh · Netzach–Hod</dd>
+          </dl>
+          <ul class="dl">
+            <li><a href="profile-hue-010-920.png" download>920</a></li>
+            <li><a href="profile-hue-010-460.png" download>460</a></li>
+            <li><a href="profile-round-hue-010-920.png" download>round 920</a></li>
+            <li><a href="profile-round-hue-010-460.png" download>round 460</a></li>
+          </ul>
+        </article>
+        <article class="asset" data-hue="30">
+          <div class="pair">
+            <img class="rnd" src="profile-round-hue-030-460.png" alt="Round crop of the mark on the hue 030 field." width="460" height="460" loading="lazy" decoding="async">
+            <img src="profile-hue-030-460.png" alt="The mark reversed out of the hue 030 field." width="460" height="460" loading="lazy" decoding="async">
+          </div>
+          <h3>030 <span class="note">— Mercury</span></h3>
+          <p class="stack">920 · 460 · round 920 · round 460</p>
+          <div class="chips">
+            <span class="chipset"><span class="chip2" style="background:hsl(30 78% 38%);color:#ffffff"><b>Aa</b></span><span class="capl">light fill 38%</span></span>
+            <span class="chipset"><span class="chip2" style="background:hsl(30 78% 55%);color:#120f1a"><b>Aa</b></span><span class="capl">dark fill 55%</span></span>
+            <span class="chipset"><span class="chip2" style="background:#f7f6fa;color:hsl(30 78% 34%)"><b>Aa</b></span><span class="capl">light text 34%</span></span>
+            <span class="chipset"><span class="chip2" style="background:#0b0910;color:hsl(30 78% 55%)"><b>Aa</b></span><span class="capl">dark text 55%</span></span>
+          </div>
+          <dl class="cresp">
+            <dt>day</dt><dd>Wednesday</dd>
+            <dt>colour</dt><dd>Orange / Yellow-Orange</dd>
+            <dt>incense</dt><dd>Mastic, Storax</dd>
+            <dt>god-name</dt><dd>Elohim Tzabaoth</dd>
+            <dt>tarot</dt><dd>I — The Magus</dd>
+            <dt>sephira</dt><dd>Hod (8)</dd>
+            <dt>path</dt><dd>Path 12 · Beth · Kether–Binah</dd>
+          </dl>
+          <ul class="dl">
+            <li><a href="profile-hue-030-920.png" download>920</a></li>
+            <li><a href="profile-hue-030-460.png" download>460</a></li>
+            <li><a href="profile-round-hue-030-920.png" download>round 920</a></li>
+            <li><a href="profile-round-hue-030-460.png" download>round 460</a></li>
+          </ul>
+        </article>
+        <article class="asset" data-hue="222">
+          <div class="pair">
+            <img class="rnd" src="profile-round-hue-222-460.png" alt="Round crop of the mark on the hue 222 field." width="460" height="460" loading="lazy" decoding="async">
+            <img src="profile-hue-222-460.png" alt="The mark reversed out of the hue 222 field." width="460" height="460" loading="lazy" decoding="async">
+          </div>
+          <h3>222 <span class="note">— Jupiter</span></h3>
+          <p class="stack">920 · 460 · round 920 · round 460</p>
+          <div class="chips">
+            <span class="chipset"><span class="chip2" style="background:hsl(222 68% 56%);color:#ffffff"><b>Aa</b></span><span class="capl">light fill 56%</span></span>
+            <span class="chipset"><span class="chip2" style="background:hsl(222 68% 69%);color:#120f1a"><b>Aa</b></span><span class="capl">dark fill 69%</span></span>
+            <span class="chipset"><span class="chip2" style="background:#f7f6fa;color:hsl(222 68% 52%)"><b>Aa</b></span><span class="capl">light text 52%</span></span>
+            <span class="chipset"><span class="chip2" style="background:#0b0910;color:hsl(222 68% 61%)"><b>Aa</b></span><span class="capl">dark text 61%</span></span>
+          </div>
+          <dl class="cresp">
+            <dt>day</dt><dd>Thursday</dd>
+            <dt>colour</dt><dd>Blue / Deep Purple</dd>
+            <dt>incense</dt><dd>Cedar, Saffron</dd>
+            <dt>god-name</dt><dd>El (AL)</dd>
+            <dt>tarot</dt><dd>X — Fortune</dd>
+            <dt>sephira</dt><dd>Chesed (4)</dd>
+            <dt>path</dt><dd>Path 21 · Kaph · Chesed–Netzach</dd>
+          </dl>
+          <ul class="dl">
+            <li><a href="profile-hue-222-920.png" download>920</a></li>
+            <li><a href="profile-hue-222-460.png" download>460</a></li>
+            <li><a href="profile-round-hue-222-920.png" download>round 920</a></li>
+            <li><a href="profile-round-hue-222-460.png" download>round 460</a></li>
+          </ul>
+        </article>
+        <article class="asset" data-hue="152">
+          <div class="pair">
+            <img class="rnd" src="profile-round-hue-152-460.png" alt="Round crop of the mark on the hue 152 field." width="460" height="460" loading="lazy" decoding="async">
+            <img src="profile-hue-152-460.png" alt="The mark reversed out of the hue 152 field." width="460" height="460" loading="lazy" decoding="async">
+          </div>
+          <h3>152 <span class="note">— Venus</span></h3>
+          <p class="stack">920 · 460 · round 920 · round 460</p>
+          <div class="chips">
+            <span class="chipset"><span class="chip2" style="background:hsl(152 56% 32%);color:#ffffff"><b>Aa</b></span><span class="capl">light fill 32%</span></span>
+            <span class="chipset"><span class="chip2" style="background:hsl(152 56% 55%);color:#120f1a"><b>Aa</b></span><span class="capl">dark fill 55%</span></span>
+            <span class="chipset"><span class="chip2" style="background:#f7f6fa;color:hsl(152 56% 30%)"><b>Aa</b></span><span class="capl">light text 30%</span></span>
+            <span class="chipset"><span class="chip2" style="background:#0b0910;color:hsl(152 56% 55%)"><b>Aa</b></span><span class="capl">dark text 55%</span></span>
+          </div>
+          <dl class="cresp">
+            <dt>day</dt><dd>Friday</dd>
+            <dt>colour</dt><dd>Emerald Green</dd>
+            <dt>incense</dt><dd>Benzoin, Rose</dd>
+            <dt>god-name</dt><dd>YHVH Tzabaoth</dd>
+            <dt>tarot</dt><dd>III — The Empress</dd>
+            <dt>sephira</dt><dd>Netzach (7)</dd>
+            <dt>path</dt><dd>Path 14 · Daleth · Chokmah–Binah</dd>
+          </dl>
+          <ul class="dl">
+            <li><a href="profile-hue-152-920.png" download>920</a></li>
+            <li><a href="profile-hue-152-460.png" download>460</a></li>
+            <li><a href="profile-round-hue-152-920.png" download>round 920</a></li>
+            <li><a href="profile-round-hue-152-460.png" download>round 460</a></li>
+          </ul>
+        </article>
+        <article class="asset" data-hue="340">
+          <div class="pair">
+            <img class="rnd" src="profile-round-hue-340-460.png" alt="Round crop of the mark on the hue 340 field." width="460" height="460" loading="lazy" decoding="async">
+            <img src="profile-hue-340-460.png" alt="The mark reversed out of the hue 340 field." width="460" height="460" loading="lazy" decoding="async">
+          </div>
+          <h3>340 <span class="note">— Saturn</span></h3>
+          <p class="stack">920 · 460 · round 920 · round 460</p>
+          <div class="chips">
+            <span class="chipset"><span class="chip2" style="background:hsl(340 60% 52%);color:#ffffff"><b>Aa</b></span><span class="capl">light fill 52%</span></span>
+            <span class="chipset"><span class="chip2" style="background:hsl(340 60% 69%);color:#120f1a"><b>Aa</b></span><span class="capl">dark fill 69%</span></span>
+            <span class="chipset"><span class="chip2" style="background:#f7f6fa;color:hsl(340 60% 46%)"><b>Aa</b></span><span class="capl">light text 46%</span></span>
+            <span class="chipset"><span class="chip2" style="background:#0b0910;color:hsl(340 60% 59%)"><b>Aa</b></span><span class="capl">dark text 59%</span></span>
+          </div>
+          <dl class="cresp">
+            <dt>day</dt><dd>Saturday</dd>
+            <dt>colour</dt><dd>Indigo / Black</dd>
+            <dt>incense</dt><dd>Myrrh, Civet</dd>
+            <dt>god-name</dt><dd>YHVH Elohim</dd>
+            <dt>tarot</dt><dd>XXI — The Universe</dd>
+            <dt>sephira</dt><dd>Binah (3)</dd>
+            <dt>path</dt><dd>Path 32 · Tau · Yesod–Malkuth</dd>
+          </dl>
+          <ul class="dl">
+            <li><a href="profile-hue-340-920.png" download>920</a></li>
+            <li><a href="profile-hue-340-460.png" download>460</a></li>
+            <li><a href="profile-round-hue-340-920.png" download>round 920</a></li>
+            <li><a href="profile-round-hue-340-460.png" download>round 460</a></li>
+          </ul>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="platforms">
+    <h2>Platform-coloured marks</h2>
+    <p>The mark reversed out of each platform's own brand colour. <strong>A deliberate departure from the system</strong> — these are other people's colours used so the mark sits beside a platform's chrome; they are not additions to the palette, and nothing here belongs in <span class="nowrap">style.css</span>. The brand hexes are sourced rather than remembered, and the mark colour is solved per brand against WCAG 1.4.11's 3:1 for a non-text graphic.</p>
+    <p class="note">On GitHub and X the mark is white on a near-black field — the same value that vanishes against your own night ground (1.11:1). Reversed out of a brand field is the one treatment that works for every platform here; <a href="platforms.html">the comparison page</a> shows the other two treatments and the four cases that fail. An avatar in a platform's exact brand colour can also read as implying an affiliation — worth a thought on a profile that lists no employer.</p>
+    <div class="cta" style="margin-top:var(--s3)">
+      <a class="btn" href="platform-assets-2026-11-16.zip" download>Download all platform marks (zip)</a>
+      <a class="btn ghost" href="platforms.html">Compare the treatments</a>
+    </div>
+
+    <div class="assets">
+
+        <article class="asset" data-platform="github">
+          <div class="pair">
+            <img class="rnd" src="platform-round-github-460.png" alt="Round crop of the mark on the GitHub brand field." width="460" height="460" loading="lazy" decoding="async">
+            <img src="platform-github-460.png" alt="The mark reversed out of the GitHub brand field." width="460" height="460" loading="lazy" decoding="async">
+          </div>
+          <h3>GitHub</h3>
+          <p class="meta">
+            <span class="hexchip" style="background:#181717"></span><code>#181717</code>
+            <span class="ratio ok">#ffffff · 17.89:1</span>
+          </p>
+          <p class="stack">920 · 460 · round 920 · round 460</p>
+          <ul class="dl">
+            <li><a href="platform-github-920.png" download>920</a></li>
+            <li><a href="platform-github-460.png" download>460</a></li>
+            <li><a href="platform-round-github-920.png" download>round 920</a></li>
+            <li><a href="platform-round-github-460.png" download>round 460</a></li>
+          </ul>
+          <p class="note">Simple Icons.</p>
+        </article>
+        <article class="asset" data-platform="x">
+          <div class="pair">
+            <img class="rnd" src="platform-round-x-460.png" alt="Round crop of the mark on the X brand field." width="460" height="460" loading="lazy" decoding="async">
+            <img src="platform-x-460.png" alt="The mark reversed out of the X brand field." width="460" height="460" loading="lazy" decoding="async">
+          </div>
+          <h3>X</h3>
+          <p class="meta">
+            <span class="hexchip" style="background:#000000"></span><code>#000000</code>
+            <span class="ratio ok">#ffffff · 21.00:1</span>
+          </p>
+          <p class="stack">920 · 460 · round 920 · round 460</p>
+          <ul class="dl">
+            <li><a href="platform-x-920.png" download>920</a></li>
+            <li><a href="platform-x-460.png" download>460</a></li>
+            <li><a href="platform-round-x-920.png" download>round 920</a></li>
+            <li><a href="platform-round-x-460.png" download>round 460</a></li>
+          </ul>
+          <p class="note">Simple Icons.</p>
+        </article>
+        <article class="asset" data-platform="linkedin">
+          <div class="pair">
+            <img class="rnd" src="platform-round-linkedin-460.png" alt="Round crop of the mark on the LinkedIn brand field." width="460" height="460" loading="lazy" decoding="async">
+            <img src="platform-linkedin-460.png" alt="The mark reversed out of the LinkedIn brand field." width="460" height="460" loading="lazy" decoding="async">
+          </div>
+          <h3>LinkedIn</h3>
+          <p class="meta">
+            <span class="hexchip" style="background:#0A66C2"></span><code>#0A66C2</code>
+            <span class="ratio ok">#ffffff · 5.69:1</span>
+          </p>
+          <p class="stack">920 · 460 · round 920 · round 460</p>
+          <ul class="dl">
+            <li><a href="platform-linkedin-920.png" download>920</a></li>
+            <li><a href="platform-linkedin-460.png" download>460</a></li>
+            <li><a href="platform-round-linkedin-920.png" download>round 920</a></li>
+            <li><a href="platform-round-linkedin-460.png" download>round 460</a></li>
+          </ul>
+          <p class="note">current brand blue.</p>
+        </article>
+        <article class="asset" data-platform="linkedin-old">
+          <div class="pair">
+            <img class="rnd" src="platform-round-linkedin-old-460.png" alt="Round crop of the mark on the LinkedIn (old) brand field." width="460" height="460" loading="lazy" decoding="async">
+            <img src="platform-linkedin-old-460.png" alt="The mark reversed out of the LinkedIn (old) brand field." width="460" height="460" loading="lazy" decoding="async">
+          </div>
+          <h3>LinkedIn (old)</h3>
+          <p class="meta">
+            <span class="hexchip" style="background:#0077B5"></span><code>#0077B5</code>
+            <span class="ratio ok">#ffffff · 4.88:1</span>
+          </p>
+          <p class="stack">920 · 460 · round 920 · round 460</p>
+          <ul class="dl">
+            <li><a href="platform-linkedin-old-920.png" download>920</a></li>
+            <li><a href="platform-linkedin-old-460.png" download>460</a></li>
+            <li><a href="platform-round-linkedin-old-920.png" download>round 920</a></li>
+            <li><a href="platform-round-linkedin-old-460.png" download>round 460</a></li>
+          </ul>
+          <p class="note">linkedin.com/legal/api-terms-of-use.</p>
+        </article>
+        <article class="asset" data-platform="telegram">
+          <div class="pair">
+            <img class="rnd" src="platform-round-telegram-460.png" alt="Round crop of the mark on the Telegram brand field." width="460" height="460" loading="lazy" decoding="async">
+            <img src="platform-telegram-460.png" alt="The mark reversed out of the Telegram brand field." width="460" height="460" loading="lazy" decoding="async">
+          </div>
+          <h3>Telegram</h3>
+          <p class="meta">
+            <span class="hexchip" style="background:#26A5E4"></span><code>#26A5E4</code>
+            <span class="ratio ok">#191725 · 6.37:1</span>
+          </p>
+          <p class="stack">920 · 460 · round 920 · round 460</p>
+          <ul class="dl">
+            <li><a href="platform-telegram-920.png" download>920</a></li>
+            <li><a href="platform-telegram-460.png" download>460</a></li>
+            <li><a href="platform-round-telegram-920.png" download>round 920</a></li>
+            <li><a href="platform-round-telegram-460.png" download>round 460</a></li>
+          </ul>
+          <p class="note">Simple Icons.</p>
+        </article>
+        <article class="asset" data-platform="bluesky">
+          <div class="pair">
+            <img class="rnd" src="platform-round-bluesky-460.png" alt="Round crop of the mark on the Bluesky brand field." width="460" height="460" loading="lazy" decoding="async">
+            <img src="platform-bluesky-460.png" alt="The mark reversed out of the Bluesky brand field." width="460" height="460" loading="lazy" decoding="async">
+          </div>
+          <h3>Bluesky</h3>
+          <p class="meta">
+            <span class="hexchip" style="background:#1185FE"></span><code>#1185FE</code>
+            <span class="ratio ok">#191725 · 4.88:1</span>
+          </p>
+          <p class="stack">920 · 460 · round 920 · round 460</p>
+          <ul class="dl">
+            <li><a href="platform-bluesky-920.png" download>920</a></li>
+            <li><a href="platform-bluesky-460.png" download>460</a></li>
+            <li><a href="platform-round-bluesky-920.png" download>round 920</a></li>
+            <li><a href="platform-round-bluesky-460.png" download>round 460</a></li>
+          </ul>
+          <p class="note">Simple Icons.</p>
+        </article>
+        <article class="asset" data-platform="mastodon">
+          <div class="pair">
+            <img class="rnd" src="platform-round-mastodon-460.png" alt="Round crop of the mark on the Mastodon brand field." width="460" height="460" loading="lazy" decoding="async">
+            <img src="platform-mastodon-460.png" alt="The mark reversed out of the Mastodon brand field." width="460" height="460" loading="lazy" decoding="async">
+          </div>
+          <h3>Mastodon</h3>
+          <p class="meta">
+            <span class="hexchip" style="background:#6364FF"></span><code>#6364FF</code>
+            <span class="ratio ok">#ffffff · 4.38:1</span>
+          </p>
+          <p class="stack">920 · 460 · round 920 · round 460</p>
+          <ul class="dl">
+            <li><a href="platform-mastodon-920.png" download>920</a></li>
+            <li><a href="platform-mastodon-460.png" download>460</a></li>
+            <li><a href="platform-round-mastodon-920.png" download>round 920</a></li>
+            <li><a href="platform-round-mastodon-460.png" download>round 460</a></li>
+          </ul>
+          <p class="note">Simple Icons.</p>
+        </article>
+        <article class="asset" data-platform="discord">
+          <div class="pair">
+            <img class="rnd" src="platform-round-discord-460.png" alt="Round crop of the mark on the Discord brand field." width="460" height="460" loading="lazy" decoding="async">
+            <img src="platform-discord-460.png" alt="The mark reversed out of the Discord brand field." width="460" height="460" loading="lazy" decoding="async">
+          </div>
+          <h3>Discord</h3>
+          <p class="meta">
+            <span class="hexchip" style="background:#5865F2"></span><code>#5865F2</code>
+            <span class="ratio ok">#ffffff · 4.61:1</span>
+          </p>
+          <p class="stack">920 · 460 · round 920 · round 460</p>
+          <ul class="dl">
+            <li><a href="platform-discord-920.png" download>920</a></li>
+            <li><a href="platform-discord-460.png" download>460</a></li>
+            <li><a href="platform-round-discord-920.png" download>round 920</a></li>
+            <li><a href="platform-round-discord-460.png" download>round 460</a></li>
+          </ul>
+          <p class="note">Simple Icons.</p>
+        </article>
+        <article class="asset" data-platform="reddit">
+          <div class="pair">
+            <img class="rnd" src="platform-round-reddit-460.png" alt="Round crop of the mark on the Reddit brand field." width="460" height="460" loading="lazy" decoding="async">
+            <img src="platform-reddit-460.png" alt="The mark reversed out of the Reddit brand field." width="460" height="460" loading="lazy" decoding="async">
+          </div>
+          <h3>Reddit</h3>
+          <p class="meta">
+            <span class="hexchip" style="background:#FF4500"></span><code>#FF4500</code>
+            <span class="ratio ok">#191725 · 5.13:1</span>
+          </p>
+          <p class="stack">920 · 460 · round 920 · round 460</p>
+          <ul class="dl">
+            <li><a href="platform-reddit-920.png" download>920</a></li>
+            <li><a href="platform-reddit-460.png" download>460</a></li>
+            <li><a href="platform-round-reddit-920.png" download>round 920</a></li>
+            <li><a href="platform-round-reddit-460.png" download>round 460</a></li>
+          </ul>
+          <p class="note">Simple Icons.</p>
+        </article>
+        <article class="asset" data-platform="youtube">
+          <div class="pair">
+            <img class="rnd" src="platform-round-youtube-460.png" alt="Round crop of the mark on the YouTube brand field." width="460" height="460" loading="lazy" decoding="async">
+            <img src="platform-youtube-460.png" alt="The mark reversed out of the YouTube brand field." width="460" height="460" loading="lazy" decoding="async">
+          </div>
+          <h3>YouTube</h3>
+          <p class="meta">
+            <span class="hexchip" style="background:#FF0000"></span><code>#FF0000</code>
+            <span class="ratio ok">#191725 · 4.41:1</span>
+          </p>
+          <p class="stack">920 · 460 · round 920 · round 460</p>
+          <ul class="dl">
+            <li><a href="platform-youtube-920.png" download>920</a></li>
+            <li><a href="platform-youtube-460.png" download>460</a></li>
+            <li><a href="platform-round-youtube-920.png" download>round 920</a></li>
+            <li><a href="platform-round-youtube-460.png" download>round 460</a></li>
+          </ul>
+          <p class="note">Simple Icons.</p>
+        </article>
+        <article class="asset" data-platform="instagram">
+          <div class="pair">
+            <img class="rnd" src="platform-round-instagram-460.png" alt="Round crop of the mark on the Instagram brand field." width="460" height="460" loading="lazy" decoding="async">
+            <img src="platform-instagram-460.png" alt="The mark reversed out of the Instagram brand field." width="460" height="460" loading="lazy" decoding="async">
+          </div>
+          <h3>Instagram</h3>
+          <p class="meta">
+            <span class="hexchip" style="background:#FF0069"></span><code>#FF0069</code>
+            <span class="ratio ok">#191725 · 4.58:1</span>
+          </p>
+          <p class="stack">920 · 460 · round 920 · round 460</p>
+          <ul class="dl">
+            <li><a href="platform-instagram-920.png" download>920</a></li>
+            <li><a href="platform-instagram-460.png" download>460</a></li>
+            <li><a href="platform-round-instagram-920.png" download>round 920</a></li>
+            <li><a href="platform-round-instagram-460.png" download>round 460</a></li>
+          </ul>
+          <p class="note">Simple Icons.</p>
+        </article>
+        <article class="asset" data-platform="facebook">
+          <div class="pair">
+            <img class="rnd" src="platform-round-facebook-460.png" alt="Round crop of the mark on the Facebook brand field." width="460" height="460" loading="lazy" decoding="async">
+            <img src="platform-facebook-460.png" alt="The mark reversed out of the Facebook brand field." width="460" height="460" loading="lazy" decoding="async">
+          </div>
+          <h3>Facebook</h3>
+          <p class="meta">
+            <span class="hexchip" style="background:#0866FF"></span><code>#0866FF</code>
+            <span class="ratio ok">#ffffff · 4.82:1</span>
+          </p>
+          <p class="stack">920 · 460 · round 920 · round 460</p>
+          <ul class="dl">
+            <li><a href="platform-facebook-920.png" download>920</a></li>
+            <li><a href="platform-facebook-460.png" download>460</a></li>
+            <li><a href="platform-round-facebook-920.png" download>round 920</a></li>
+            <li><a href="platform-round-facebook-460.png" download>round 460</a></li>
+          </ul>
+          <p class="note">Simple Icons.</p>
+        </article>
+        <article class="asset" data-platform="stack-overflow">
+          <div class="pair">
+            <img class="rnd" src="platform-round-stack-overflow-460.png" alt="Round crop of the mark on the Stack Overflow brand field." width="460" height="460" loading="lazy" decoding="async">
+            <img src="platform-stack-overflow-460.png" alt="The mark reversed out of the Stack Overflow brand field." width="460" height="460" loading="lazy" decoding="async">
+          </div>
+          <h3>Stack Overflow</h3>
+          <p class="meta">
+            <span class="hexchip" style="background:#F58025"></span><code>#F58025</code>
+            <span class="ratio ok">#191725 · 6.72:1</span>
+          </p>
+          <p class="stack">920 · 460 · round 920 · round 460</p>
+          <ul class="dl">
+            <li><a href="platform-stack-overflow-920.png" download>920</a></li>
+            <li><a href="platform-stack-overflow-460.png" download>460</a></li>
+            <li><a href="platform-round-stack-overflow-920.png" download>round 920</a></li>
+            <li><a href="platform-round-stack-overflow-460.png" download>round 460</a></li>
+          </ul>
+          <p class="note">Simple Icons.</p>
+        </article>
+        <article class="asset" data-platform="npm">
+          <div class="pair">
+            <img class="rnd" src="platform-round-npm-460.png" alt="Round crop of the mark on the npm brand field." width="460" height="460" loading="lazy" decoding="async">
+            <img src="platform-npm-460.png" alt="The mark reversed out of the npm brand field." width="460" height="460" loading="lazy" decoding="async">
+          </div>
+          <h3>npm</h3>
+          <p class="meta">
+            <span class="hexchip" style="background:#CB3837"></span><code>#CB3837</code>
+            <span class="ratio ok">#ffffff · 5.05:1</span>
+          </p>
+          <p class="stack">920 · 460 · round 920 · round 460</p>
+          <ul class="dl">
+            <li><a href="platform-npm-920.png" download>920</a></li>
+            <li><a href="platform-npm-460.png" download>460</a></li>
+            <li><a href="platform-round-npm-920.png" download>round 920</a></li>
+            <li><a href="platform-round-npm-460.png" download>round 460</a></li>
+          </ul>
+          <p class="note">Simple Icons.</p>
+        </article>
+        <article class="asset" data-platform="signal">
+          <div class="pair">
+            <img class="rnd" src="platform-round-signal-460.png" alt="Round crop of the mark on the Signal brand field." width="460" height="460" loading="lazy" decoding="async">
+            <img src="platform-signal-460.png" alt="The mark reversed out of the Signal brand field." width="460" height="460" loading="lazy" decoding="async">
+          </div>
+          <h3>Signal</h3>
+          <p class="meta">
+            <span class="hexchip" style="background:#3B45FD"></span><code>#3B45FD</code>
+            <span class="ratio ok">#ffffff · 6.08:1</span>
+          </p>
+          <p class="stack">920 · 460 · round 920 · round 460</p>
+          <ul class="dl">
+            <li><a href="platform-signal-920.png" download>920</a></li>
+            <li><a href="platform-signal-460.png" download>460</a></li>
+            <li><a href="platform-round-signal-920.png" download>round 920</a></li>
+            <li><a href="platform-round-signal-460.png" download>round 460</a></li>
+          </ul>
+          <p class="note">Simple Icons.</p>
+        </article>
+    </div>
+  </section>
+
+  <section id="card">
+    <h2>GitHub social card</h2>
+    <p>For a repository's Settings &rarr; Social preview. Points at <span class="nowrap">github.com/aclayton</span>; regenerate it if the code lands elsewhere.</p>
+
+    <div class="assets">
+      <article class="asset wide">
+        <img src="github-social-1280x640.png" alt="A wide card: the mark top left, the headline, and three chips." width="1280" height="640" loading="lazy" decoding="async">
+        <p class="stack">2560×1280 · 1280×640</p>
+        <ul class="dl">
+          <li><a href="github-social-1280x640.png" download>1280×640</a></li>
+          <li><a href="github-social-2560x1280.png" download>2560×1280</a></li>
+        </ul>
+      </article>
+    </div>
+  </section>
+
+  <section id="checked" class="band">
+    <div>
+      <h2>What was measured</h2>
+      <p>Each of these was checked by decoding the PNG and reading the pixels. A render that looks right is not evidence that it is.</p>
+      <ol class="steps">
+        <li><strong>Crop safe, everywhere.</strong> In all nine fields the mark sits at 74% of the canvas width, centred to 0.0px, and its furthest ink pixel reaches 203px from centre against a circle of 230 — 26px of clearance at 460, 52px at 920. Nothing is lost when a platform crops it round.</li>
+        <li><strong>The fields are the solved pairs.</strong> Each accent field was sampled at the corner and matched against the stylesheet's own hue, saturation and fill lightness: every one exact, to zero. The white mark is present in all seven.</li>
+        <li><strong>The ground is a field, not a shape.</strong> The largest jump between adjacent pixels is 1 on the neutral grounds and 0 on the accent fields. A hairline edge measures 20+ — so there is provably no ring left in the artwork.</li>
+        <li><strong>The round crops are the real crop.</strong> Corners fully transparent, centre opaque, and the opaque disc's radius lands within a pixel of half the canvas — the same circle a platform applies.</li>
+        <li><strong>Exact sizes.</strong> 400, 460 and 920 squares, round crops at 460, and the card at 1280&times;640 and 2560&times;1280.</li>
+      </ol>
+
+      <h3>Known limitation</h3>
+      <p class="note">The mark is wide and drawn in thin strokes, so it needs size to resolve. Below roughly 32px every variant reads as a smudge. A mark that stays legible at favicon size would be a separate drawing cut for that job, not a smaller copy of this one.</p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site">
+  <svg class="mark-foot" viewBox="18 0 216 144" aria-hidden="true" focusable="false">
+    <path fill="currentColor" d="M18,0v144h156.02H234V0H18z M134.625,5.76c-11.049,4.608-20.677,12.123-28.068,21.392L94.207,5.76H134.625z M23.76,5.76
+	h63.796L23.76,114.156V5.76z M23.76,138.24v-12.564L90.44,11.232l73.603,127.008H23.76z M228.24,138.24h-37.131
+	c8.688-4.032,16.502-9.352,23.037-15.979l-5.17-3.13c-10.599,10.28-24.039,16.538-38.531,18.176L109.666,31.996
+	c1.927-2.587,4.054-5.07,6.376-7.392c12.512-12.512,29.146-19.41,46.838-19.41c17.347,0,33.673,6.622,46.096,18.671l5.17-2.699
+	c-6.527-6.621-14.328-11.95-23.005-15.406h37.099V138.24z"/>
+  </svg>
+  <p>Aaron Clayton · Niagara, Canada</p>
+  <p><a href="https://github.com/aclayton" rel="me">GitHub</a></p>
+</footer>
+
+<script src="/accent.js" defer></script>
+
+</body>
+</html>

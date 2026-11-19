@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Where the manual work goes</title>
+<style>
+@font-face { font-family:"Plex Sans"; src:url("/print/fonts/plex-sans-400.woff2") format("woff2"); font-weight:400; font-display:block; }
+@font-face { font-family:"Plex Sans"; src:url("/print/fonts/plex-sans-600.woff2") format("woff2"); font-weight:600; font-display:block; }
+@font-face { font-family:"Plex Sans"; src:url("/print/fonts/plex-sans-700.woff2") format("woff2"); font-weight:700; font-display:block; }
+@font-face { font-family:"Plex Mono"; src:url("/fonts/plex-mono-400.woff2") format("woff2"); font-weight:400; font-display:block; }
+@font-face { font-family:"Plex Mono"; src:url("/fonts/plex-mono-600.woff2") format("woff2"); font-weight:600; font-display:block; }
+
+/* Diagram A — "where the manual work goes".
+   Four stages, four bars. The bar height is the number of manual touches at
+   that stage; the point is that the last two are zero. No client data, no
+   vendor names, no amounts — it is a shape, not a case. */
+:root{
+  --bg:#f7f6fa; --fg:#191725; --muted:#5e5a72; --rule:#dcd6ea;
+  --hue:268; --accent-s:62%;
+  --accent-text:hsl(var(--hue) var(--accent-s) 54%);
+  --accent-fill:hsl(var(--hue) var(--accent-s) 52%);
+  --accent-soft:hsl(var(--hue) var(--accent-s) 58% / .16);
+  --hairline:hsl(var(--hue) var(--accent-s) 40% / .30);
+  --mono:"Plex Mono",monospace;
+}
+*{ box-sizing:border-box; margin:0; padding:0; }
+body{ width:1600px; height:900px; overflow:hidden; background:var(--bg); color:var(--fg);
+      font-family:"Plex Sans",system-ui,sans-serif; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+.d{ position:relative; width:100%; height:100%; padding:64px 76px; display:flex; flex-direction:column; }
+.ground{ position:absolute; inset:0; z-index:0; pointer-events:none;
+  background:
+    radial-gradient(circle at 8% 4%, transparent 0 300px, var(--hairline) 300px 301.5px, transparent 301.5px),
+    radial-gradient(circle at 26.8% 4%, transparent 0 300px, var(--hairline) 300px 301.5px, transparent 301.5px);
+}
+.d > *:not(.ground){ position:relative; z-index:1; }
+
+.eyebrow{ font-family:var(--mono); font-size:15px; font-weight:600; letter-spacing:.1em;
+          text-transform:uppercase; color:var(--accent-text); }
+h1{ font-size:44px; line-height:1.15; letter-spacing:-.02em; font-weight:700; margin-top:16px; max-width:24ch; }
+.sub{ font-size:19px; color:var(--muted); margin-top:12px; max-width:52ch; }
+
+/* The plot sizes itself. A fixed height here was the bug: the tallest column
+   (number + bar + label + note) needs ~445px, so a 392px box made the content
+   overflow the body's 64px bottom padding and land 24px from the canvas edge.
+   Letting the height be intrinsic keeps the bars resting on their labels and
+   preserves the frame. */
+.plot{ display:grid; grid-template-columns:repeat(4,1fr); gap:34px; align-items:end;
+       margin-top:auto; padding-top:34px; border-top:1px solid var(--rule); }
+.col{ display:flex; flex-direction:column; justify-content:flex-end; }
+.bar{ border-radius:3px 3px 0 0; background:var(--accent-soft);
+      border:1px solid hsl(var(--hue) var(--accent-s) 52% / .45); border-bottom:0; }
+.bar.hot{ background:var(--accent-fill); border-color:var(--accent-fill); }
+.bar.zero{ height:5px !important; background:var(--rule); border-color:var(--rule); }
+.n{ font-family:var(--mono); font-size:34px; font-weight:600; margin-bottom:10px; }
+.name{ font-size:20px; font-weight:600; margin-top:18px; }
+.why{ font-size:15px; color:var(--muted); margin-top:6px; line-height:1.5; }
+</style>
+</head>
+<body>
+<div class="d">
+  <div class="ground"></div>
+
+  <div class="eyebrow">The shape of the work</div>
+  <h1>Where the manual work goes</h1>
+  <p class="sub">Every step that needed a person, counted stage by stage. The number that matters is the one at the end.</p>
+
+  <div class="plot">
+    <div class="col"><div class="n">14</div><div class="bar" style="height:312px"></div>
+      <div class="name">Ingest</div><div class="why">Files arrive by hand, from four sources, in three shapes.</div></div>
+    <div class="col"><div class="n">9</div><div class="bar" style="height:200px"></div>
+      <div class="name">Normalise</div><div class="why">Every source re-keyed before anything can be compared.</div></div>
+    <div class="col"><div class="n">2</div><div class="bar" style="height:45px"></div>
+      <div class="name">Match</div><div class="why">Two judgement calls left, and they are genuinely judgement.</div></div>
+    <div class="col"><div class="n">0</div><div class="bar zero"></div>
+      <div class="name">Surface</div><div class="why">The answer is already there. Nobody assembles it any more.</div></div>
+  </div>
+</div>
+</body>
+</html>
